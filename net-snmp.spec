@@ -435,7 +435,6 @@ install -d $RPM_BUILD_ROOT{/etc/{snmp,rc.d/init.d,sysconfig},/var/log}
 
 %{__make} install \
 	INSTALL_PREFIX=$RPM_BUILD_ROOT
-# DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
@@ -592,8 +591,6 @@ fi
 %attr(755,root,root) %{_bindir}/snmpvacm
 %attr(755,root,root) %{_bindir}/snmpwalk
 
-#%%{_datadir}/snmp/snmpconf/snmp.conf
-
 %{_mandir}/man1/snmpbulkget.1*
 %{_mandir}/man1/snmpbulkwalk.1*
 %{_mandir}/man1/snmpcmd.1*
@@ -644,10 +641,11 @@ fi
 %attr(755,root,root) %{_bindir}/traptoemail
 
 %files snmpconf
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/snmpconf
 %{_mandir}/man1/snmpconf.1*
 %{_datadir}/snmp/snmpconf-data
 
 %files tkmib
 %defattr(644,root,root,755)
-%attr(0755,root,root) %{_bindir}/tkmib
+%attr(755,root,root) %{_bindir}/tkmib
