@@ -47,7 +47,7 @@ BuildRequires:	automake
 BuildRequires:	elfutils-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-BuildRequires:	openssl-devel >= 0.9.7
+BuildRequires:	openssl-devel >= 0.9.7c
 %{!?_without_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 5.6.1
 BuildRequires:	rpm-devel >= 4.0
@@ -132,7 +132,7 @@ Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}
 Requires:	elfutils-devel
-Requires:	openssl-devel >= 0.9.7
+Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -203,7 +203,7 @@ Summary(ru):	Среда разработки для проекта UCD-SNMP
 Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-compat-libs = %{version}
-Requires:	openssl-devel >= 0.9.7
+Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	cmu-snmp-devel
 Obsoletes:	ucd-snmp-devel
 
