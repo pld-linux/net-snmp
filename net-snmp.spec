@@ -488,6 +488,7 @@ else
 	%banner %{name} -e <<EOF
 Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon.
 EOF
+#" vim
 fi
 touch %{logfile}
 chmod 640 %{logfile}
@@ -511,6 +512,7 @@ else
 	%banner %{name}-snmptrapd -e <<EOF
 Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon.
 EOF
+#" vim
 fi
 touch %{logfile}
 chmod 640 %{logfile}
