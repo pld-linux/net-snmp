@@ -29,6 +29,7 @@ Source4:	%{name}trapd.init
 Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
+# Source7-md5: 29949f1008f1a04d6efefd5b3ea607da
 Patch0:		%{name}-acinclude.patch
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-rpm-implicit-libs.patch
