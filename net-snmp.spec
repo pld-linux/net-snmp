@@ -348,17 +348,17 @@ snmpconf to prosty skrypt Perla pozwalaj±cy na tworzenie pliku
 konfiguracyjnego krok po kroku. Powinien byæ w miarê prosty w u¿yciu.
 
 %package tkmib
-Summary:	MIB browser in TK
-Summary(pl):	Przegl±darka MIB-ów w TK
+Summary:	MIB browser in Tk
+Summary(pl):	Przegl±darka MIB-ów w Tk
 Group:		Applications/System
 Requires:	perl-SNMP = %{version}-%{release}
 Requires:	perl-Tk
 
 %description tkmib
-MIB browser in TK.
+MIB browser in Tk.
 
 %description tkmib -l pl
-Przegl±darka MIB-ów w TK.
+Przegl±darka MIB-ów w Tk.
 
 %prep
 %setup -q -a7
