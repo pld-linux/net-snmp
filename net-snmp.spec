@@ -50,6 +50,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
+BuildRequires:	rpmbuild(macros) >= 1.176
 PreReq:		rc-scripts >= 0.2.0
 PreReq:		%{name}-libs = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
@@ -457,7 +458,9 @@ rm -rf $RPM_BUILD_ROOT
 if [ -f /var/lock/subsys/snmpd ]; then
 	/etc/rc.d/init.d/snmpd restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon." >&2
+	%banner %{name} -e << EOF
+Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon.
+EOF
 fi
 touch %{logfile}
 chmod 640 %{logfile}
@@ -478,7 +481,9 @@ fi
 if [ -f /var/lock/subsys/snmptrapd ]; then
 	/etc/rc.d/init.d/snmptrapd restart >&2
 else
-	echo "Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon." >&2
+	%banner %{name}-snmptrapd -e << EOF
+Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon.
+EOF
 fi
 touch %{logfile}
 chmod 640 %{logfile}
