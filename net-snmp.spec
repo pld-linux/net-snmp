@@ -22,6 +22,7 @@ Release:	0.4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
+# Source0-md5:	9fa8555c1a9d68008b3b0df52721ee82
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
