@@ -1,18 +1,18 @@
 #!/bin/sh
 #
-# snmpd		Simple Network Management Protocol (SNMP) Daemon
+# snmpd			Simple Network Management Protocol (SNMP) Daemon
 #
-# chkconfig:	345 50 50
+# chkconfig:		345 50 50
 #
-# description:	Simple Network Management Protocol (SNMP) Daemon
-# description(es): Servidor SNMP (Simple Network Management Protocol)
-# description(pt_BR): Servidor SNMP (Simple Network Management Protocol)
-# description(ru): äĹÍĎÎ SNMP (Simple Network Management Protocol)
-# description(uk): äĹÍĎÎ SNMP (Simple Network Management Protocol)
+# description:		Simple Network Management Protocol (SNMP) Daemon
+# description(es):	Servidor SNMP (Simple Network Management Protocol)
+# description(pt_BR):	Servidor SNMP (Simple Network Management Protocol)
+# description(ru):	äĹÍĎÎ SNMP (Simple Network Management Protocol)
+# description(uk):	äĹÍĎÎ SNMP (Simple Network Management Protocol)
 #
-# processname:	snmpd
-# config:	/etc/snmp/snmpd.local.conf
-# config:	/etc/snmp/snmpd.conf
+# processname:		snmpd
+# config:		/etc/snmp/snmpd.local.conf
+# config:		/etc/snmp/snmpd.conf
 
 
 # Source function library
@@ -28,9 +28,13 @@ LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
 [ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
 
 # Check that networking is up.
-if is_no "${NETWORKING}"; then
-	msg_network_down "snmpd"
-	exit 1
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down "snmpd"
+		exit 1
+	fi
+else
+	exit 0
 fi
 
 # See how we were called.
@@ -69,7 +73,7 @@ case "$1" in
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|status|restart|reload}"
+	msg_usage "$0 {start|stop|restart|reload|status}"
 	RETVAL=1
 esac
 
