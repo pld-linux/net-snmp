@@ -525,7 +525,7 @@ fi
 %{_includedir}/net-snmp
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
-%{_mandir}/man3/*
+%{_mandir}/man3/[!NS]*
 
 %files static
 %defattr(644,root,root,755)
