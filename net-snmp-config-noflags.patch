@@ -1,33 +1,34 @@
---- net-snmp-5.1/net-snmp-config.in.orig	2003-10-14 18:15:47.000000000 +0200
-+++ net-snmp-5.1/net-snmp-config.in	2003-11-18 20:29:20.152793512 +0100
-@@ -29,7 +29,7 @@
- 
- prefix=@prefix@
+diff -ur net-snmp-5.2.orig/net-snmp-config.in net-snmp-5.2/net-snmp-config.in
+--- net-snmp-5.2.orig/net-snmp-config.in	2004-10-09 01:02:26.000000000 +0200
++++ net-snmp-5.2/net-snmp-config.in	2004-12-29 20:45:58.950609320 +0100
+@@ -31,7 +31,7 @@
  exec_prefix=@exec_prefix@
+ includedir=@includedir@
+ libdir=@libdir@
 -NSC_LDFLAGS="@LDFLAGS@"
 +NSC_LDFLAGS=""
- NSC_LIBDIR=-L@libdir@
- NSC_LIBS="@LIBS@"
- NSC_AGENTLIBS="@AGENTLIBS@"
-@@ -66,10 +66,10 @@
+ NSC_INCLUDEDIR=${includedir}
+ NSC_LIBDIR=-L${libdir}
+ NSC_LIBS="@LIBS@ @WRAPLIBS@"
+@@ -89,10 +89,10 @@
        ;;
      #################################################### compile
      --base-cflags)
--      echo @CFLAGS@ @CPPFLAGS@ -I@includedir@
-+      echo @CPPFLAGS@ -I@includedir@
+-      echo @CFLAGS@ @CPPFLAGS@ -I${NSC_INCLUDEDIR}
++      echo @CPPFLAGS@ -I${NSC_INCLUDEDIR}
        ;;
-     --cflags)
--      echo @CFLAGS@ @DEVFLAGS@ @CPPFLAGS@ -I. -I@includedir@
-+      echo @DEVFLAGS@ @CPPFLAGS@ -I. -I@includedir@
+     --cflags|--cf*)
+-      echo @CFLAGS@ @DEVFLAGS@ @CPPFLAGS@ -I. -I${NSC_INCLUDEDIR}
++      echo @DEVFLAGS@ @CPPFLAGS@ -I. -I${NSC_INCLUDEDIR}
        ;;
      --srcdir)
        echo $NSC_SRCDIR
-@@ -409,7 +409,7 @@
+@@ -445,7 +445,7 @@
          echo "Ack.  Can't create $tmpfile."
  	exit 1
        fi
--      cmd="@CC@ $cflags @CFLAGS@ @DEVFLAGS@ -I. -I@includedir@ -o $outname $tmpfile $cfiles $NSC_LDFLAGS -L$NSC_EXEC_PREFIX/lib -lnetsnmpagent -lnetsnmphelpers -lnetsnmpmibs -lnetsnmp $NSC_AGENTLIBS $ldflags"
-+      cmd="@CC@ $cflags @DEVFLAGS@ -I. -I@includedir@ -o $outname $tmpfile $cfiles $NSC_LDFLAGS -L$NSC_EXEC_PREFIX/lib -lnetsnmpagent -lnetsnmphelpers -lnetsnmpmibs -lnetsnmp $NSC_AGENTLIBS $ldflags"
+-      cmd="@CC@ $cflags @CFLAGS@ @DEVFLAGS@ -I. -I${NSC_INCLUDEDIR} -o $outname $tmpfile $cfiles $NSC_LDFLAGS -L$NSC_EXEC_PREFIX/lib -lnetsnmpagent -lnetsnmphelpers -lnetsnmpmibs -lnetsnmp $NSC_AGENTLIBS $ldflags"
++      cmd="@CC@ $cflags @DEVFLAGS@ -I. -I${NSC_INCLUDEDIR} -o $outname $tmpfile $cfiles $NSC_LDFLAGS -L$NSC_EXEC_PREFIX/lib -lnetsnmpagent -lnetsnmphelpers -lnetsnmpmibs -lnetsnmp $NSC_AGENTLIBS $ldflags"
        echo "running: $cmd"
        `$cmd`
        if test "x$norm" != "x1" ; then
