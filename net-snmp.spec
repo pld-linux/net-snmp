@@ -26,15 +26,15 @@ Summary(ru):	îÁÂÏÒ ÕÔÉÌÉÔ ÄÌÑ ÐÒÏÔÏËÏÌÁ SNMP ÏÔ UC-Davis
 Summary(uk):	îÁÂ¦Ò ÕÔÉÌ¦Ô ÄÌÑ ÐÒÏÔÏËÏÌÕ SNMP ×¦Ä UC-Davis
 Name:		net-snmp
 Version:	5.0.7
-Release:	0.1
+Release:	0.2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
 Source1:	%{name}d.init
-#Source2:	%{name}d.conf
+Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
 Source4:	%{name}trapd.init
-#Source5:	%{name}trapd.conf
+Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
 Patch0:		%{name}-acinclude.patch
@@ -188,7 +188,6 @@ como: snmpwalk, snmptest e outros.
 Summary:	Network management utilities using SNMP, from the UCD-SNMP project
 Summary(pl):	Narzêdzia u¿ywaj±ce protoko³u SNMP
 Group:		Applications/System
-Requires:	%{name} = %{version}
 Requires:	perl-Term-ReadKey
 Requires:	perl-Tk
 Obsoletes:	cmu-snmp-utils
@@ -402,7 +401,6 @@ MIB browser in TK
 	--with-defaults \
 	--with-default-snmp-version=3 \
 	--enable-shared
-# ucd-snmp/diskio
 %{__make}
 
 # symlinks to allow build perl module w/o installed ucd-snmp
@@ -418,16 +416,16 @@ install -d $RPM_BUILD_ROOT/{etc/{snmp,rc.d/init.d,sysconfig},/var/log}
 
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
-#install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
-#:> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
+:> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
 :> $RPM_BUILD_ROOT%{logfile}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
-#install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
 
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
-#install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
+install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 
 #install agent/mibgroup/ipfwchains/IPFWCHAINS-MIB.txt \
@@ -488,8 +486,8 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmpd
 
 %dir %{_sysconfdir}/snmp
-#%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.conf
-#%attr(640,root,root) %config(missingok,noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.local.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.conf
+%attr(640,root,root) %config(missingok,noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.local.conf
 
 %attr(755,root,root) %{_sbindir}/snmpd
 
@@ -561,6 +559,7 @@ fi
 #%doc perl/SNMP/{BUG,README,TODO} perl/SNMP/examples
 %attr(755,root,root) %{_bindir}/snmpcheck
 %attr(755,root,root) %{_bindir}/snmpconf
+%attr(755,root,root) %{_bindir}/traptoemail
 %{_mandir}/man1/snmpconf.1*
 %{_datadir}/snmp/snmpconf-data
 #%{perl_sitearch}/SNMP.pm
@@ -574,7 +573,7 @@ fi
 %attr(755,root,root) %{_sbindir}/snmptrapd
 %attr(754,root,root) /etc/rc.d/init.d/snmptrapd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
-#%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
 %{_mandir}/man5/snmptrapd.conf.5*
 %{_mandir}/man8/snmptrapd.8*
 
