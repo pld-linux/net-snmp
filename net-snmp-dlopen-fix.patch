@@ -1,9 +1,9 @@
---- net-snmp-5.0.8/configure.in.orig	2003-05-17 15:51:58.000000000 +0200
-+++ net-snmp-5.0.8/configure.in	2003-05-17 17:26:14.000000000 +0200
+--- net-snmp-5.1/configure.in.orig	2003-05-17 15:51:58.000000000 +0200
++++ net-snmp-5.1/configure.in	2003-05-17 17:26:14.000000000 +0200
 @@ -1423,8 +1423,7 @@
- dnl Replace `main' with a function in -lkvm:
+ # Replace `main' with a function in -lkvm:
  AC_CHECK_LIB(kvm, kvm_read)
- dnl DYNAMIC MODULE SUPPORT
+ # DYNAMIC MODULE SUPPORT
 -AC_CHECK_LIB(dl, dlopen)
 -AC_CHECK_FUNCS(dlopen)
 +AC_CHECK_LIB(dl, dlopen, [AC_DEFINE([HAVE_DLOPEN],,[dlopen function])])

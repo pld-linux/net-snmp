@@ -17,12 +17,12 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
-Version:	5.0.9
+Version:	5.1
 Release:	0.1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	cecd5ec74f5c546c1ea7ed7987b5932b
+# Source0-md5:	14217471edb2b805b0e28c4c3cfd8c75
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -30,17 +30,16 @@ Source4:	%{name}trapd.init
 Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
-# Source7-md5: 29949f1008f1a04d6efefd5b3ea607da
+# Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
 Patch0:		%{name}-acinclude.patch
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-rpm-implicit-libs.patch
-Patch3:		%{name}-DESTDIR.patch
-Patch4:		%{name}-config-noflags.patch
-Patch5:		%{name}-dlopen-fix.patch
-Patch6:		%{name}-manpage.patch
-Patch7:		%{name}-link.patch
-Patch8:		%{name}-llinterfaces.patch
-Patch9:		%{name}-usr_local_bin_perl.patch
+Patch3:		%{name}-config-noflags.patch
+Patch4:		%{name}-dlopen-fix.patch
+Patch5:		%{name}-manpage.patch
+Patch6:		%{name}-link.patch
+Patch7:		%{name}-llinterfaces.patch
+Patch8:		%{name}-usr_local_bin_perl.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -381,9 +380,8 @@ Przegl╠darka MIB-Сw w TK.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p2
-%patch9 -p0
+%patch7 -p2
+%patch8 -p0
 
 %build
 %{__libtoolize}
@@ -429,9 +427,11 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{etc/{snmp,rc.d/init.d,sysconfig},/var/log}
+install -d $RPM_BUILD_ROOT{/etc/{snmp,rc.d/init.d,sysconfig},/var/log}
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	INSTALL_PREFIX=$RPM_BUILD_ROOT
+# DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
@@ -573,8 +573,10 @@ fi
 %attr(755,root,root) %{_bindir}/snmpbulkget
 %attr(755,root,root) %{_bindir}/snmpbulkwalk
 %attr(755,root,root) %{_bindir}/snmpdelta
+%attr(755,root,root) %{_bindir}/snmpdf
 %attr(755,root,root) %{_bindir}/snmpget
 %attr(755,root,root) %{_bindir}/snmpgetnext
+%attr(755,root,root) %{_bindir}/snmpinform
 %attr(755,root,root) %{_bindir}/snmpnetstat
 %attr(755,root,root) %{_bindir}/snmpset
 %attr(755,root,root) %{_bindir}/snmpstatus
@@ -583,10 +585,8 @@ fi
 %attr(755,root,root) %{_bindir}/snmptranslate
 %attr(755,root,root) %{_bindir}/snmptrap
 %attr(755,root,root) %{_bindir}/snmpusm
-%attr(755,root,root) %{_bindir}/snmpwalk
-%attr(755,root,root) %{_bindir}/snmpdf
-%attr(755,root,root) %{_bindir}/snmpinform
 %attr(755,root,root) %{_bindir}/snmpvacm
+%attr(755,root,root) %{_bindir}/snmpwalk
 
 #%%{_datadir}/snmp/snmpconf/snmp.conf
 
@@ -594,8 +594,10 @@ fi
 %{_mandir}/man1/snmpbulkwalk.1*
 %{_mandir}/man1/snmpcmd.1*
 %{_mandir}/man1/snmpdelta.1*
+%{_mandir}/man1/snmpdf.1*
 %{_mandir}/man1/snmpget.1*
 %{_mandir}/man1/snmpgetnext.1*
+%{_mandir}/man1/snmpinform.1*
 %{_mandir}/man1/snmpnetstat.1*
 %{_mandir}/man1/snmpset.1*
 %{_mandir}/man1/snmpstatus.1*
@@ -604,9 +606,8 @@ fi
 %{_mandir}/man1/snmptranslate.1*
 %{_mandir}/man1/snmptrap.1*
 %{_mandir}/man1/snmpusm.1*
+%{_mandir}/man1/snmpvacm.1*
 %{_mandir}/man1/snmpwalk.1*
-%{_mandir}/man1/snmpdf.1*
-%{_mandir}/man1/snmpinform.1*
 %{_mandir}/man5/snmp.conf.5*
 %{_mandir}/man5/snmp_config.5*
 
@@ -634,6 +635,7 @@ fi
 
 %files utils-perl
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/fixproc
 %attr(755,root,root) %{_bindir}/snmpcheck
 %attr(755,root,root) %{_bindir}/traptoemail
 
