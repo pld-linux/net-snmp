@@ -517,6 +517,7 @@ fi
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mib2c
+%attr(755,root,root) %{_bindir}/mib2c-update
 %attr(755,root,root) %{_bindir}/net-snmp-config
 %attr(755,root,root) %{_libdir}/libnet*[a-z].so
 %{_libdir}/libnet*.la
@@ -524,6 +525,7 @@ fi
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
 %{_mandir}/man3/[!NS]*
+%{_mandir}/man5/mib2c.conf.5*
 
 %files static
 %defattr(644,root,root,755)
@@ -550,6 +552,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/snmptrapd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
+%attr(755,root,root) %{_datadir}/snmp/snmp_perl_trapd.pl
 %{_mandir}/man5/snmptrapd.conf.5*
 %{_mandir}/man8/snmptrapd.8*
 
