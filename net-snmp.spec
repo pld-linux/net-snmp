@@ -31,10 +31,10 @@ License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
 Source1:	%{name}d.init
-Source2:	%{name}d.conf
+#Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
 Source4:	%{name}trapd.init
-Source5:	%{name}trapd.conf
+#Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
 Patch0:		%{name}-acinclude.patch
