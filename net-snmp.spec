@@ -38,6 +38,7 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-llinterfaces.patch
 Patch8:		%{name}-usr_local_bin_perl.patch
 Patch9:		%{name}-kernel_headers.patch
+Patch10:	%{name}-syntax.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -371,6 +372,7 @@ Przegl±darka MIB-ów w Tk.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 %{__libtoolize}
