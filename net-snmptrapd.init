@@ -17,6 +17,9 @@
 # Get network config
 . /etc/sysconfig/network
 
+# Define initial value:
+SNMPTRAPD_OPTIONS=""
+
 # Get service config
 [ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmptrapd
 
@@ -37,7 +40,7 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/snmptrapd ]; then
 		msg_starting "snmptrapd"
-		daemon /usr/sbin/snmptrapd
+		daemon /usr/sbin/snmptrapd $SNMPTRAPD_OPTIONS
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmptrapd
 	else
