@@ -82,7 +82,7 @@ zarz±dzania sieciami. Pakiet zawiera narzêdzia: rozbudowywalnego
 agenta, bibliotekê SNMP, narzêdzia do odpytywania oraz ustawiania
 informacji poprzez agentów SNMP, narzêdzia do generowania i obs³ugi
 pu³apek SNMP, wersjê komendy netstat u¿ywaj±c± SNMP, przegl±darkê mib
-w Tk/Perl, deamona, dokumentacjê itp.
+w Tk/Perl, demona, dokumentacjê itp.
 
 %description -l pt_BR
 Este pacote é derivado da implementação do Protocolo Simples de
