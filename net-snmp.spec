@@ -77,7 +77,7 @@ Gestión de Redes versión 2 (SNMPv2) de la Universidad Carnegie Mellon.
 Útil para administrar redes y hacer contabilidad.
 
 %description -l pl
-SNMP (Simple Network Management Protocol) jest protoko³ej u¿ywanym do
+SNMP (Simple Network Management Protocol) jest protoko³em u¿ywanym do
 zarz±dzania sieciami. Pakiet zawiera narzêdzia: rozbudowywalnego
 agenta, bibliotekê SNMP, narzêdzia do odpytywania oraz ustawiania
 informacji poprzez agentów SNMP, narzêdzia do generowania i obs³ugi
@@ -145,7 +145,7 @@ el SNMP de la UCD. Con este paquete es posible la creación de
 programas para uso en la gestión de redes.
 
 %description devel -l pl
-Pakiet zawiera pliki nag³ówkowe i bilioteki potrzebne do rozwoju
+Pakiet zawiera pliki nag³ówkowe i biblioteki potrzebne do rozwoju
 aplikacji u¿ywaj±cych protoko³u SNMP.
 
 %description devel -l pt_BR
@@ -204,7 +204,7 @@ el SNMP de la UCD. Con este paquete es posible la creación de
 programas para uso en la gestión de redes.
 
 %description compat-devel -l pl
-Pakiet zawiera pliki nag³ówkowe i bilioteki potrzebne do rozwoju
+Pakiet zawiera pliki nag³ówkowe i biblioteki potrzebne do rozwoju
 aplikacji u¿ywaj±cych protoko³u SNMP.
 
 %description compat-devel -l pt_BR
