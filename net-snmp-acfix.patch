@@ -17,3 +17,12 @@
  
      case $target_os in
  
+@@ -1942,7 +1941,7 @@
+ 
+ AC_MSG_RESULT([$ac_cv_type_ssize_t])
+ if test $ac_cv_type_ssize_t = yes; then
+-  AC_DEFINE(HAVE_SSIZE_T)
++  AC_DEFINE(HAVE_SSIZE_T,,[have ssize_t])
+ fi
+ 
+ # Check ps args
