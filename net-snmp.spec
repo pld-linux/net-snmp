@@ -511,7 +511,7 @@ fi
 
 %files compat-libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libnet*.so.*.*
+%attr(755,root,root) %{_libdir}/libsnmp.so.*.*
 
 %files utils
 %defattr(644,root,root,755)
