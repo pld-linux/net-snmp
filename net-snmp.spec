@@ -1,4 +1,25 @@
 # TODO:
+# - doesn't work (snmpd deadlock on send - tries to lock the same mutex twice)
+#   #4  0xb760f54e in siglongjmp () from /lib/tls/libpthread.so.0
+#   #5  0xb7e5e0cf in snmp_res_lock (groupID=0, resourceID=1) at mt_support.c:103
+#   #6  0xb7e45698 in snmp_sess_pointer (session=0x80ff868) at snmp_api.c:6975
+#   #7  0xb7e41aca in snmp_async_send (session=0x80ff868, pdu=0x8141848, callback=0, cb_data=0x0)
+#       at snmp_api.c:4564
+#   #8  0xb7e41a6d in snmp_send (session=0x80ff868, pdu=0x8141848) at snmp_api.c:4551
+#   #9  0xb7ebf6fd in netsnmp_wrap_up_request (asp=0x812d828, status=0) at snmp_agent.c:1627
+#   #10 0xb7ec12e3 in netsnmp_handle_request (asp=0x812d828, status=0) at snmp_agent.c:2996
+#   #11 0xb7ebfa65 in handle_snmp_packet (op=1, session=0x80ff868, reqid=628270607, pdu=0x81419b8,
+#       magic=0x0) at snmp_agent.c:1792
+#   #12 0xb7e42b1c in _sess_process_packet (sessp=0x812c970, sp=0x80ff868, isp=0x812c698,
+#       transport=0x8142028, opaque=0x812c1a0, olength=16,
+#       packetptr=0x8145cb8 "0f\002\001\0030\021\002\004c [Ç\002\003", length=104) at snmp_api.c:5208
+#   #13 0xb7e434e6 in _sess_read (sessp=0x812c970, fdset=0xbfffe0e0) at snmp_api.c:5606
+#   #14 0xb7e43535 in snmp_sess_read (sessp=0x812c970, fdset=0xbfffe0e0) at snmp_api.c:5625
+#   #15 0xb7e42c44 in snmp_read (fdset=0xbfffe0e0) at snmp_api.c:5260
+#   #16 0x0804bbe5 in receive () at snmpd.c:1149
+#   #17 0x0804b53d in main (argc=5, argv=0xbffff344) at snmpd.c:993
+# [res mutex with groupID=0, resourceID=1 already locked in snmp_read() at snmp_api.c:5258]
+#
 # - init scripts (which, what?)
 # - default configs
 # - review ucd-snmp-ia64.patch patch
