@@ -1,0 +1,76 @@
+#!/bin/sh
+#
+# snmpd		Simple Network Management Protocol (SNMP) Daemon
+#
+# chkconfig:	345 50 50
+#
+# description:	Simple Network Management Protocol (SNMP) Daemon
+# description(es): Servidor SNMP (Simple Network Management Protocol)
+# description(pt_BR): Servidor SNMP (Simple Network Management Protocol)
+# description(ru): äĹÍĎÎ SNMP (Simple Network Management Protocol)
+# description(uk): äĹÍĎÎ SNMP (Simple Network Management Protocol)
+#
+# processname:	snmpd
+# config:	/etc/snmp/snmpd.local.conf
+# config:	/etc/snmp/snmpd.conf
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+CONF_FILE=/etc/snmp/snmpd.conf
+LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
+
+# Get service config
+[ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
+
+# Check that networking is up.
+if is_no "${NETWORKING}"; then
+	msg_network_down "snmpd"
+	exit 1
+fi
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/snmpd ]; then
+		msg_starting "snmpd"
+		daemon /usr/bin/setsid /usr/sbin/snmpd \
+			$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
+			$( is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && \
+				echo "-s" ) </dev/null
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmpd
+	else
+		msg_already_running "snmpd"
+		RETVAL=1
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/snmpd ]; then
+		msg_stopping "snmpd"
+		killproc snmpd
+		rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
+	else
+		msg_not_running "snmpd"
+		RETVAL=1
+	fi	
+	;;
+  restart|reload)
+	$0 stop
+	$0 start
+	;;
+  status)
+	status snmpd
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|status|restart|reload}"
+	RETVAL=1
+esac
+
+exit $RETVAL

@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# ucd-snmptrapd	Simple Network Management Protocol (SNMP) Trap Daemon
+#
+# chkconfig:	345 51 51
+#
+# description:	Simple Network Management Protocol (SNMP) Trap Daemon
+#
+# processname:	snmptrapd
+# config:	/etc/snmp/snmptrapd.local.conf
+# config:	/etc/snmp/snmptrapd.conf
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config
+[ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmptrapd
+
+# Check that networking is up.
+if is_no "${NETWORKING}"; then
+	msg_network_down "snmptrapd"
+	exit 1
+fi
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/snmptrapd ]; then
+		msg_starting "snmptrapd"
+		daemon /usr/sbin/snmptrapd
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmptrapd
+	else
+		msg_already_running "snmptrapd"
+		exit 1
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/snmptrapd ]; then
+		msg_stopping "snmptrapd"
+		killproc snmptrapd
+		rm -f /var/lock/subsys/snmptrapd >/dev/null 2>&1
+	else
+		msg_not_running "snmptrapd"
+		exit 1
+	fi	
+	;;
+  restart|reload)
+	$0 stop
+	$0 start
+	;;
+  status)
+	status snmptrapd
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|status|restart|reload}"
+	exit 1
+esac
+
+exit $RETVAL
