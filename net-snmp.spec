@@ -6,14 +6,7 @@
 # - review Obsoletes:
 # - review Provides:
 # - review ucd patches:
-# -- link_libsnmp_with_libcrypto
-# -- noinstalled
 # -- ia64
-# -- include-netinet_in_h
-# -- dlopen-fix
-# -- glibc21
-# -- manpage
-# -- no_libelf
 # -- init_master-libwrap
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
@@ -24,7 +17,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.0.8
-Release:	0.1
+Release:	0.2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -40,6 +33,9 @@ Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-rpm-implicit-libs.patch
 Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}-config-noflags.patch
+Patch5:		%{name}-dlopen-fix.patch
+Patch6:		%{name}-manpage.patch
+Patch7:		%{name}-link.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -376,6 +372,9 @@ Przegl╠darka MIB-Сw w TK.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
 
 %build
 %{__libtoolize}
@@ -470,8 +469,8 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
-%post	compat -p /sbin/ldconfig
-%postun	compat -p /sbin/ldconfig
+%post	compat-libs -p /sbin/ldconfig
+%postun	compat-libs -p /sbin/ldconfig
 
 %post snmptrapd
 /sbin/chkconfig --add snmptrapd

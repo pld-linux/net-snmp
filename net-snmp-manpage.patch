@@ -1,0 +1,22 @@
+--- net-snmp-5.0.8/Makefile.top.orig	2003-03-05 21:08:26.000000000 +0100
++++ net-snmp-5.0.8/Makefile.top	2003-05-17 17:43:03.000000000 +0200
+@@ -27,7 +27,7 @@
+ snmplibdir	= $(datadir)/snmp
+ mibdir		= $(snmplibdir)/mibs
+ persistentdir	= @PERSISTENT_DIRECTORY@
+-
++sysconfdir	= @sysconfdir@
+ 
+ #
+ # Programs
+--- net-snmp-5.0.8/man/mib2c.1.def.orig	2003-02-25 19:20:33.000000000 +0100
++++ net-snmp-5.0.8/man/mib2c.1.def	2003-05-17 17:40:02.000000000 +0200
+@@ -35,7 +35,7 @@
+ .TP
+ .BI -c " CONFIGFILE"
+ Use CONFIGFILE when generating code.  These files will be searched for
+-first in the current directory and then in the DATADIR directory
++first in the current directory and then in the DATADIR/snmp directory
+ (which is where the default mib2c configuration files can be found).
+ .TP
+ .BI -f " OUTNAME"
