@@ -412,7 +412,7 @@ MIB browser in TK
 #ln -sf ../ucd-snmp-config.h ucd-snmp/ucd-snmp-config.h
 #cd perl/SNMP
 #echo "%{_datadir}/snmp/mibs" | perl Makefile.PL
-#%{__make} OPTIMIZE="%{rpmcflags}"
+#%%{__make} OPTIMIZE="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -436,7 +436,7 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 #	$RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
 #cd perl/SNMP
-#%{__make} install DESTDIR=$RPM_BUILD_ROOT
+#%%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -535,7 +535,7 @@ fi
 %attr(755,root,root) %{_bindir}/snmpinform
 %attr(755,root,root) %{_bindir}/snmpvacm
 
-#%{_datadir}/snmp/snmpconf/snmp.conf
+#%%{_datadir}/snmp/snmpconf/snmp.conf
 
 %{_mandir}/man1/snmpbulkget.1*
 %{_mandir}/man1/snmpbulkwalk.1*
@@ -565,10 +565,10 @@ fi
 %attr(755,root,root) %{_bindir}/traptoemail
 %{_mandir}/man1/snmpconf.1*
 %{_datadir}/snmp/snmpconf-data
-#%{perl_sitearch}/SNMP.pm
+#%%{perl_sitearch}/SNMP.pm
 #%dir %{perl_sitearch}/auto/SNMP
-#%{perl_sitearch}/auto/SNMP/autosplit.ix
-#%{perl_sitearch}/auto/SNMP/SNMP.bs
+#%%{perl_sitearch}/auto/SNMP/autosplit.ix
+#%%{perl_sitearch}/auto/SNMP/SNMP.bs
 #%attr(755,root,root) %{perl_sitearch}/auto/SNMP/SNMP.so
 
 %files snmptrapd
