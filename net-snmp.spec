@@ -116,12 +116,34 @@ SNMP, утил╕ти для запросу та встановлення ╕нформац╕╖ в╕д NMP-агент╕в,
 Summary:	NET SNMP libraries
 Summary(pl):	Biblioteki SNMP
 Group:		Libraries
+Obsoletes:	ucd-snmp-libs
+Requires:	%{name}-mibs = %{version}
 
 %description libs
 NET SNMP libraries.
 
 %description libs -l pl
 Biblioteki SNMP.
+
+%package compat-libs
+Summary:	UCD SNMP libraries
+Summary(pl):	Biblioteki SNMP
+Group:		Libraries
+Obsoletes:	ucd-snmp-libs
+Requires:	%{name}-mibs = %{version}
+
+%description compat-libs
+UCD SNMP libraries.
+
+%description compat-libs -l pl
+Biblioteki SNMP.
+
+%package mibs
+Summary:	MIB database
+Group:		Applications/System
+
+%description mibs
+MIB database
 
 %package utils
 Summary:	Network management utilities using SNMP, from the NET-SNMP project
@@ -209,6 +231,7 @@ Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}
 Requires:	openssl-devel
+Obsoletes:	ucd-snmp-devel
 
 %description devel
 The ucd-snmp-devel package contains the development libraries and
@@ -251,6 +274,7 @@ Summary(ru):	Статические библиотеки для проекта UCD-SNMP
 Summary(uk):	Статичн╕ б╕бл╕отеки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
+Obsoletes:	ucd-snmp-static
 
 %description static
 Static UCD-SNMP libraries.
@@ -398,13 +422,13 @@ install -d $RPM_BUILD_ROOT/{etc/{snmp,rc.d/init.d,sysconfig},/var/log}
 #:> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
 :> $RPM_BUILD_ROOT%{logfile}
 
-#install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
 #install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
-#install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
 
-#install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
 #install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
-#install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
+install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 
 #install agent/mibgroup/ipfwchains/IPFWCHAINS-MIB.txt \
 #	$RPM_BUILD_ROOT%{_datadir}/snmp/mibs
@@ -416,43 +440,43 @@ install -d $RPM_BUILD_ROOT/{etc/{snmp,rc.d/init.d,sysconfig},/var/log}
 rm -rf $RPM_BUILD_ROOT
 
 %post
-#/sbin/chkconfig --add snmpd
-#if [ -f /var/lock/subsys/snmpd ]; then
-#	/etc/rc.d/init.d/snmpd restart >&2
-#else
-#	echo "Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon." >&2
-#fi
+/sbin/chkconfig --add snmpd
+if [ -f /var/lock/subsys/snmpd ]; then
+	/etc/rc.d/init.d/snmpd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon." >&2
+fi
 touch %{logfile}
 chmod 640 %{logfile}
 
-#%preun
-#if [ "$1" = "0" ]; then
-#	if [ -f /var/lock/subsys/snmpd ]; then
-#		/etc/rc.d/init.d/snmpd stop >&2
-#	fi
-#	/sbin/chkconfig --del snmpd
-#fi
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/snmpd ]; then
+		/etc/rc.d/init.d/snmpd stop >&2
+	fi
+	/sbin/chkconfig --del snmpd
+fi
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
 %post snmptrapd
-#/sbin/chkconfig --add snmptrapd
-#if [ -f /var/lock/subsys/snmptrapd ]; then
-#	/etc/rc.d/init.d/snmptrapd restart >&2
-#else
-#	echo "Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon." >&2
-#fi
+/sbin/chkconfig --add snmptrapd
+if [ -f /var/lock/subsys/snmptrapd ]; then
+	/etc/rc.d/init.d/snmptrapd restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon." >&2
+fi
 touch %{logfile}
 chmod 640 %{logfile}
 
-#%preun snmptrapd
-#if [ "$1" = "0" ]; then
-#	if [ -f /var/lock/subsys/snmptrapd ]; then
-#		/etc/rc.d/init.d/snmptrapd stop >&2
-#	fi
-#	/sbin/chkconfig --del snmptrapd
-#fi
+%preun snmptrapd
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/snmptrapd ]; then
+		/etc/rc.d/init.d/snmptrapd stop >&2
+	fi
+	/sbin/chkconfig --del snmptrapd
+fi
 
 %files
 %defattr(644,root,root,755)
@@ -460,8 +484,8 @@ chmod 640 %{logfile}
 %doc ChangeLog EXAMPLE.conf.def EXAMPLE.conf
 %doc FAQ NEWS PORTING README.snmpv3 TODO AGENT.txt
 
-#%attr(754,root,root) /etc/rc.d/init.d/snmpd
-#%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmpd
+%attr(754,root,root) /etc/rc.d/init.d/snmpd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmpd
 
 %dir %{_sysconfdir}/snmp
 #%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.conf
@@ -477,11 +501,17 @@ chmod 640 %{logfile}
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%attr(755,root,root) %{_libdir}/libnet*.so.*.*
 
 %dir %{_datadir}/snmp
 
+%files mibs
+%defattr(644,root,root,755)
 %{_datadir}/snmp/mibs
+
+%files compat-libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libnet*.so.*.*
 
 %files utils
 %defattr(644,root,root,755)
@@ -529,12 +559,10 @@ chmod 640 %{logfile}
 %files utils-perl
 %defattr(644,root,root,755)
 #%doc perl/SNMP/{BUG,README,TODO} perl/SNMP/examples
-#%attr(755,root,root) %{_bindir}/mib2c
-#%attr(755,root,root) %{_bindir}/snmpcheck
-#%attr(755,root,root) %{_bindir}/snmpconf
-#%attr(755,root,root) %{_bindir}/tkmib
-#%{_datadir}/snmp/mib2c*
-#%{_mandir}/man1/snmpconf.1*
+%attr(755,root,root) %{_bindir}/snmpcheck
+%attr(755,root,root) %{_bindir}/snmpconf
+%{_mandir}/man1/snmpconf.1*
+%{_datadir}/snmp/snmpconf-data
 #%{perl_sitearch}/SNMP.pm
 #%dir %{perl_sitearch}/auto/SNMP
 #%{perl_sitearch}/auto/SNMP/autosplit.ix
@@ -544,8 +572,8 @@ chmod 640 %{logfile}
 %files snmptrapd
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/snmptrapd
-#%attr(754,root,root) /etc/rc.d/init.d/snmptrapd
-#%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
+%attr(754,root,root) /etc/rc.d/init.d/snmptrapd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
 #%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
 %{_mandir}/man5/snmptrapd.conf.5*
 %{_mandir}/man8/snmptrapd.8*
@@ -574,12 +602,6 @@ chmod 640 %{logfile}
 %files compat-static
 %defattr(644,root,root,755)
 %attr(0644,root,root) %{_libdir}/libsnmp.a
-
-%files snmpconf
-%defattr(644,root,root,755)
-%attr(0755,root,root) %{_bindir}/snmpconf
-%{_mandir}/man1/snmpconf.1*
-%{_datadir}/snmp/snmpconf-data
 
 %files tkmib
 %defattr(644,root,root,755)
