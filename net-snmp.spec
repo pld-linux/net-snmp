@@ -8,6 +8,7 @@
 # - review ucd patches:
 # -- ia64
 # -- init_master-libwrap
+# - /usr/local/bin/perl fix
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es):	Agente SNMP de la UCD
@@ -17,7 +18,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.0.8
-Release:	0.3
+Release:	0.4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -602,6 +603,7 @@ fi
 %{_mandir}/man5/snmp_config.5*
 
 %files -n perl-SNMP
+%defattr(644,root,root,755)
 %doc perl/SNMP/{BUG,README,TODO} perl/SNMP/examples
 %{perl_vendorarch}/SNMP.pm
 %{perl_vendorarch}/NetSNMP
