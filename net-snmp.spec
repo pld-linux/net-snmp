@@ -14,12 +14,12 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
-Version:	5.1.1
-Release:	3
+Version:	5.1.2
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	68f6c946387718e4f300cbb8b6c4bd43
+# Source0-md5:	8080555ab3f90011f25d5122042d9a8d
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
