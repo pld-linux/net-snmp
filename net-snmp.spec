@@ -140,10 +140,14 @@ Biblioteki SNMP.
 
 %package mibs
 Summary:	MIB database
+Summary(pl):	Baza danych MIB
 Group:		Applications/System
 
 %description mibs
-MIB database
+MIB database.
+
+%description mibs -l pl
+Baza danych MIB.
 
 %package utils
 Summary:	Network management utilities using SNMP, from the NET-SNMP project
@@ -501,10 +505,9 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libnet*.so.*.*
 
-%dir %{_datadir}/snmp
-
 %files mibs
 %defattr(644,root,root,755)
+%dir %{_datadir}/snmp
 %{_datadir}/snmp/mibs
 
 %files compat-libs
@@ -596,11 +599,11 @@ fi
 
 %files static
 %defattr(644,root,root,755)
-%attr(0644,root,root) %{_libdir}/libnet*.a
+%{_libdir}/libnet*.a
 
 %files compat-static
 %defattr(644,root,root,755)
-%attr(0644,root,root) %{_libdir}/libsnmp.a
+%{_libdir}/libsnmp.a
 
 %files tkmib
 %defattr(644,root,root,755)
