@@ -1,8 +1,0 @@
---- perl/SNMP/examples/bulkwalk.pl~	Sat Apr 20 07:30:18 2002
-+++ perl/SNMP/examples/bulkwalk.pl	Sat Jul 26 13:40:43 2003
-@@ -1,4 +1,4 @@
--#!/usr/local/bin/perl
-+#!/usr/bin/perl
- #
- # $Id$
- #
