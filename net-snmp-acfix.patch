@@ -1,0 +1,303 @@
+--- net-snmp-5.0.7/configure.in.wiget	Fri Jan 10 23:38:31 2003
++++ net-snmp-5.0.7/configure.in	Wed Feb 12 14:24:36 2003
+@@ -7,8 +7,8 @@
+ dnl
+ dnl save the configure arguments
+ dnl
+-AC_DEFINE_UNQUOTED(CONFIGURE_OPTIONS,"\"$ac_configure_args\"")
+-CONFIGURE_OPTIONS="\"$ac_configure_args\""
++AC_DEFINE_UNQUOTED(CONFIGURE_OPTIONS,"$ac_configure_args")
++CONFIGURE_OPTIONS="$ac_configure_args"
+ AC_SUBST(CONFIGURE_OPTIONS)
+ 
+ dnl
+@@ -555,9 +555,7 @@
+ dnl get version number.
+ AC_MSG_CHECKING(for net-snmp version number)
+ VERSION=`grep NetSnmpVersionInfo.*= $srcdir/snmplib/snmp_version.c | sed 's/";.*//;s/.*"//;s/pre/0./;'`
+-changequote(, )
+-RELEASEVERSION=`echo $VERSION | sed 's/^\([0-9]\)\.\([0-9]\)/\1:\2:0/'`
+-changequote([, ])
++RELEASEVERSION=`echo $VERSION | sed ['s/^\([0-9]\)\.\([0-9]\)/\1:\2:0/']`
+ AC_SUBST(VERSION)
+ AC_SUBST(RELEASEVERSION)
+ AC_MSG_RESULT($VERSION)
+@@ -575,10 +573,8 @@
+ 
+ dnl system check
+ AC_CANONICAL_SYSTEM
+-changequote(, )
+-PARTIALTARGETOS=`echo $target_os | sed 's/[-._].*//'`
++PARTIALTARGETOS=`echo $target_os | sed ['s/[-._].*//']`
+ CFLAGS="$CFLAGS -D$PARTIALTARGETOS"
+-changequote([, ])
+ AC_MSG_CACHE_ADD(Building for:               $PARTIALTARGETOS)
+ 
+ dnl
+@@ -586,7 +582,6 @@
+ dnl
+ 
+ AC_MSG_CHECKING(for system include file)
+-changequote(, )
+ filebase=$target_os
+ dnl ignore binary format indication
+ filebase=`echo $filebase | sed 's/elf//'`
+@@ -596,9 +591,9 @@
+ while test "x$filebase" != "x$last" -a ! -f $srcdir/include/net-snmp/system/$filebase.h
+ do
+     last=$filebase
+-    filebase=`echo $filebase | sed 's/[-._][^-._]*$//'`
++    filebase=`echo $filebase | sed ['s/[-._][^-._]*$//']`
+     if test "x$filebase" = "x$last"; then
+-	filebase=`echo $filebase | sed 's/[0-9]*$//'`
++	filebase=`echo $filebase | sed ['s/[0-9]*$//']`
+     fi
+ done
+ 
+@@ -607,19 +602,17 @@
+ fi
+ ac_cv_SYSTEM_INCLUDE_FILE="net-snmp/system/$filebase.h"
+ 
+-changequote([, ])
+ AC_MSG_RESULT($ac_cv_SYSTEM_INCLUDE_FILE)
+ AC_DEFINE_UNQUOTED(SYSTEM_INCLUDE_FILE, "$ac_cv_SYSTEM_INCLUDE_FILE")
+ 
+ dnl second part, the CPU type.
+ 
+ AC_MSG_CHECKING(for machine-type include file)
+-changequote(, )
+ filebase=$target_cpu
+ while test "x$filebase" != "x$last" -a ! -f $srcdir/include/net-snmp/machine/$filebase.h
+ do
+     last=$filebase
+-    filebase=`echo $filebase | sed 's/[-._][^-._]*$//'`
++    filebase=`echo $filebase | sed ['s/[-._][^-._]*$//']`
+ done
+ 
+ if test "x$filebase" = "x$last"; then
+@@ -628,7 +621,6 @@
+ ac_cv_MACHINE_INCLUDE_FILE="net-snmp/machine/$filebase.h"
+ AC_MSG_RESULT($ac_cv_MACHINE_INCLUDE_FILE)
+ 
+-changequote([, ])
+ AC_DEFINE_UNQUOTED(MACHINE_INCLUDE_FILE, "$ac_cv_MACHINE_INCLUDE_FILE")
+ 
+ AC_PATH_PROG(CCPATH,$CC)
+@@ -738,7 +730,7 @@
+ 	for i in v6d toshiba kame inria zeta linux-glibc linux-inet6; do
+ 		case $i in
+ 		v6d)
+-			AC_EGREP_CPP(yes, [dnl
++			AC_EGREP_CPP(yes, [
+ #include </usr/local/v6/include/sys/types.h>
+ #ifdef __V6D__
+ yes
+@@ -748,7 +740,7 @@
+ 				CFLAGS="-I/usr/local/v6/include $CFLAGS"])
+ 			;;
+ 		toshiba)
+-			AC_EGREP_CPP(yes, [dnl
++			AC_EGREP_CPP(yes, [
+ #include <sys/param.h>
+ #ifdef _TOSHIBA_INET6
+ yes
+@@ -758,7 +750,7 @@
+ 				CFLAGS="-DINET6 $CFLAGS"])
+ 			;;
+ 		kame)
+-			AC_EGREP_CPP(yes, [dnl
++			AC_EGREP_CPP(yes, [
+ #include <netinet/in.h>
+ #ifdef __KAME__
+ yes
+@@ -769,7 +761,7 @@
+ 				CFLAGS="-DINET6 $CFLAGS"])
+ 			;;
+ 		inria)
+-			AC_EGREP_CPP(yes, [dnl
++			AC_EGREP_CPP(yes, [
+ #include <netinet/in.h>
+ #ifdef IPV6_INRIA_VERSION
+ yes
+@@ -781,7 +773,7 @@
+ 				CFLAGS="-DINET6 $CFLAGS"])
+ 			;;
+ 		zeta)
+-			AC_EGREP_CPP(yes, [dnl
++			AC_EGREP_CPP(yes, [
+ #include <sys/param.h>
+ #ifdef _ZETA_MINAMI_INET6
+ A
+@@ -792,7 +784,7 @@
+ 				CFLAGS="-DINET6 $CFLAGS"])
+ 			;;
+ 		linux-glibc)
+-			AC_EGREP_CPP(yes, [dnl
++			AC_EGREP_CPP(yes, [
+ #include <features.h>
+ #if defined(__GLIBC__) && ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1) || (__GLIBC_ > 2))
+ yes
+@@ -841,7 +833,6 @@
+ 
+ if test "x$with_res_locks" = "xyes"; then
+   AC_DEFINE(NS_REENTRANT)
+-EOF
+ 
+     case $target_os in
+ 
+@@ -1049,7 +1040,6 @@
+ dnl
+ dnl Do hairy agent module processing.
+ dnl
+-changequote(, )
+ AC_MSG_CHECKING(for and configuring mib modules to use)
+ 
+ mibdir="agent/mibgroup"
+@@ -1098,9 +1088,7 @@
+ done
+ 
+ AC_MSG_RESULT($new_module_list.)
+-changequote([, ])
+ AC_MSG_CACHE_ADD(Agent MIB code:            $new_module_list)
+-changequote(, )
+ 
+ AC_MSG_CHECKING(for and configuring mib modules pieces to use)
+ while test "x$new_module_list" != "x"; do
+@@ -1170,7 +1158,7 @@
+ 	fi
+       fi
+       if test "x`echo $i | sed 's/\///g;'`" != "x$i"; then
+-	mnd=`echo $i | sed 's/\/[^/]*$//;'`
++	mnd=`echo $i | sed ['s/\/[^/]*$//;']`
+ 	if test ! -d ./$mibdir/$mnd; then
+ 	    module_directories="$module_directories ./$mibdir/$mnd"
+ 	fi
+@@ -1178,8 +1166,8 @@
+       if grep config_load_mib $srcdir/$mibdir/$i.h > /dev/null 2>&1; then
+       	AC_MSG_WARN(mib module "$i" uses the "config_load_mib" directive, which is no longer supported.  It probably won't work.)
+       fi
+-      grep config_parse_dot_conf $srcdir/$mibdir/$i.h | sed 's@.*config_parse_dot_conf(\([^)]*\), *\([^),]*\), *\([^),]*\), *\([^),]*\)).*@register_config_handler("snmpd",\1, \2, \3, \4);@' >> $mibdir/mib_module_dot_conf.h
+-      sym="`echo ${i} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
++      grep config_parse_dot_conf $srcdir/$mibdir/$i.h | sed ['s@.*config_parse_dot_conf(\([^)]*\), *\([^),]*\), *\([^),]*\), *\([^),]*\)).*@register_config_handler("snmpd",\1, \2, \3, \4);@'] >> $mibdir/mib_module_dot_conf.h
++      sym="`echo ${i} | sed ['s/[^a-zA-Z0-9_]/_/g'] | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
+       echo "/* Define if compiling with the ${i} module files.  */" >> include/net-snmp/agent/mib_module_config.h
+       echo "#define USING_${sym}_MODULE 1" >> include/net-snmp/agent/mib_module_config.h
+       echo " " >> include/net-snmp/agent/mib_module_config.h
+@@ -1189,12 +1177,11 @@
+   new_module_list="$new_list_two"
+   new_list_two=""
+ done
+-module_list_o=`echo "$module_list_code " | sed 's/\([^ ]\) /\1.o /g'`
+-module_list_lo=`echo "$module_list_code " | sed 's/\([^ ]\) /\1.lo /g'`
+-module_list_c=`echo "$module_list_code " | sed 's/\([^ ]\) /\1.c /g'`
+-mibgroup_list_o=`echo " $module_list_o " | sed 's@ \([^ ]*\)\.o@ mibgroup/\1.o @g'`
+-mibgroup_list_lo=`echo " $module_list_lo " | sed 's@ \([^ ]*\)\.lo@ mibgroup/\1.lo @g'`
+-changequote([, ])
++module_list_o=`echo "$module_list_code " | sed ['s/\([^ ]\) /\1.o /g']`
++module_list_lo=`echo "$module_list_code " | sed ['s/\([^ ]\) /\1.lo /g']`
++module_list_c=`echo "$module_list_code " | sed ['s/\([^ ]\) /\1.c /g']`
++mibgroup_list_o=`echo " $module_list_o " | sed ['s@ \([^ ]*\)\.o@ mibgroup/\1.o @g']`
++mibgroup_list_lo=`echo " $module_list_lo " | sed ['s@ \([^ ]*\)\.lo@ mibgroup/\1.lo @g']`
+ MODULE_LIST=$module_list_code
+ AC_SUBST(MODULE_LIST)
+ AC_SUBST(module_list_c)
+@@ -1352,39 +1339,39 @@
+     fi
+ 
+     _libs=${LIBS}
+-    AC_CHECK_HEADER(tcpd.h, ,
+-	    AC_MSG_ERROR(Asked to use libwrap but I couldn't find tcpd.h.))
++    AC_CHECK_HEADER(tcpd.h, ,[
++	    AC_MSG_ERROR(Asked to use libwrap but I couldn't find tcpd.h.)])
+ 
+     LIBS="$LIBS -lwrap"
+ 	AC_MSG_CHECKING(for TCP wrappers library -lwrap)
+ 	AC_TRY_LINK([#include <tcpd.h>
+ 		     int allow_severity = 0;
+ 		     int deny_severity  = 0;
+-		    ],[hosts_access((void *)0)],
++		    ],[hosts_access((void *)0)],[
+ 
+ 	    AC_MSG_RESULT(yes)
+ 	    AC_DEFINE(USE_LIBWRAP)
+ 	    test "$with_libwrap" != no -a "$with_libwrap" != yes && WRAPLIBS="-L$with_libwrap/lib"
+-	    WRAPLIBS="$WRAPLIBS -lwrap",
++	    WRAPLIBS="$WRAPLIBS -lwrap"],[
+ 
+ 	    AC_MSG_RESULT(no)
+ 	    dnl Linux RedHat 6.1 won't link libwrap without libnsl
+-	    AC_CHECK_FUNC(yp_get_default_domain, ,
+-		AC_CHECK_LIB(nsl, yp_get_default_domain))
++	    AC_CHECK_FUNC(yp_get_default_domain, ,[
++		AC_CHECK_LIB(nsl, yp_get_default_domain)])
+ 	    AC_MSG_CHECKING(for TCP wrappers library -lwrap linked with -lnsl)
+ 	    AC_TRY_LINK([#include <tcpd.h>
+ 		         int allow_severity = 0;
+ 	                 int deny_severity  = 0;
+-	 		],[hosts_access((void *)0)],
++	 		],[hosts_access((void *)0)],[
+ 
+ 			AC_MSG_RESULT(yes)
+ 			AC_DEFINE(USE_LIBWRAP)
+ 			test "$with_libwrap" != no -a "$with_libwrap" != yes && WRAPLIBS="-L$with_libwrap/lib"
+-			WRAPLIBS="$WRAPLIBS -lwrap -lnsl",
++			WRAPLIBS="$WRAPLIBS -lwrap -lnsl"],[
+ 
+ 			AC_MSG_RESULT(no)
+-			AC_MSG_ERROR(Asked to use libwrap but I couldn't find it.))
+-	    CPPFLAGS=${_cppflags})
++			AC_MSG_ERROR(Asked to use libwrap but I couldn't find it.)])
++	    CPPFLAGS=${_cppflags}])
+     LDFLAGS=${_ldflags}
+     LIBS=${_libs}
+   fi
+@@ -1639,17 +1626,15 @@
+ dnl so we do it by hand.
+ AC_MSG_CHECKING(for socklen_t)
+ AC_CACHE_VAL(ac_cv_type_$1,
+-[AC_EGREP_CPP(dnl
+-changequote(<<,>>)dnl
+-<<socklen_t[^a-zA-Z_0-9]>>dnl
+-changequote([,]), [#include <sys/types.h>
++[AC_EGREP_CPP([socklen_t[^a-zA-Z_0-9]]
++, [#include <sys/types.h>
+ #if STDC_HEADERS
+ #include <stdlib.h>
+ #include <stddef.h>
+ #endif
+ #ifdef HAVE_SYS_SOCKET_H
+ #include <sys/socket.h>
+-#endif], ac_cv_type_socklen_t=yes, ac_cv_type_socklen_t=no)])dnl
++#endif], [ac_cv_type_socklen_t=yes], [ac_cv_type_socklen_t=no])])
+ 
+ AC_MSG_RESULT($ac_cv_type_socklen_t)
+ if test $ac_cv_type_socklen_t = yes; then
+@@ -1659,10 +1644,8 @@
+ dnl AIX keeps in_addr_t in /usr/include/netinet/in.h
+ AC_MSG_CHECKING(for in_addr_t)
+ AC_CACHE_VAL(ac_cv_type_$1,
+-[AC_EGREP_CPP(dnl
+-changequote(<<,>>)dnl
+-<<in_addr_t[^a-zA-Z_0-9]>>dnl
+-changequote([,]), [#include <sys/types.h>
++[AC_EGREP_CPP([in_addr_t[^a-zA-Z_0-9]]
++, [#include <sys/types.h>
+ #if STDC_HEADERS
+ #include <stdlib.h>
+ #include <stddef.h>
+--- ucd-snmp-4.2.4/acconfig.h.orig	Thu Feb  7 16:39:26 2002
++++ ucd-snmp-4.2.4/acconfig.h	Thu Apr 25 21:24:51 2002
+@@ -49,9 +49,11 @@
+ #undef _REENTRANT
+ 
+ /* debugging stuff */
+-#undef SNMP_NO_DEBUGGING           /* if defined, we optimize the code
++#undef SNMP_NO_DEBUGGING
++                                   /* if defined, we optimize the code
+                                       to exclude all debugging calls. */
+-#define SNMP_ALWAYS_DEBUG 0        /* Always print debugging information and
++#define SNMP_ALWAYS_DEBUG 0
++                                   /* Always print debugging information and
+                                       ignore the -D flag passed to the cmds */
+ 
+ /* reverse encoding BER packets is both faster and more efficient in space. */

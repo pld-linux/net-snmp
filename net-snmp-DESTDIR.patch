@@ -1,0 +1,224 @@
+--- net-snmp-5.0.7/local/Makefile.in.DESTDIR	Wed Feb 12 16:28:42 2003
++++ net-snmp-5.0.7/local/Makefile.in	Wed Feb 12 16:29:27 2003
+@@ -90,9 +90,9 @@
+ 
+ localinstall:
+ 	@if test "x$(PERLPROG)" != "x" ; then \
+-	  for i in $(PERLSCRIPTS) ; do $(INSTALL) $$i.made $(bindir)/$$i ; echo "install:  installed $$i in $(bindir)" ; done ; \
+-	  $(SHELL) $(srcdir)/../mkinstalldirs $(snmplibdir) ; \
+-	  for i in $(DATASRCS) ; do $(INSTALL) $(srcdir)/$$i $(snmplibdir)/$$i ; echo "install:  installed $$i in $(snmplibdir)" ; done ; \
+-	  for i in $(CONFDIRS); do $(SHELL) $(srcdir)/../mkinstalldirs $(CONFINSTALLDIR)/$$i ; done ; \
+-	  for i in $(CONFFILES); do $(INSTALL) $(srcdir)/$(CONFDATASRC)/$$i $(CONFINSTALLDIR)/$$i; echo "install:  installed $$i in $(CONFINSTALLDIR)"; done \
++	  for i in $(PERLSCRIPTS) ; do $(INSTALL) $$i.made $(DESTDIR)$(bindir)/$$i ; echo "install:  installed $$i in $(DESTDIR)$(bindir)" ; done ; \
++	  $(SHELL) $(srcdir)/../mkinstalldirs $(DESTDIR)$(snmplibdir) ; \
++	  for i in $(DATASRCS) ; do $(INSTALL) $(srcdir)/$$i $(DESTDIR)$(snmplibdir)/$$i ; echo "install:  installed $$i in $(DESTDIR)$(snmplibdir)" ; done ; \
++	  for i in $(CONFDIRS); do $(SHELL) $(srcdir)/../mkinstalldirs $(DESTDIR)$(CONFINSTALLDIR)/$$i ; done ; \
++	  for i in $(CONFFILES); do $(INSTALL) $(srcdir)/$(CONFDATASRC)/$$i $(DESTDIR)$(CONFINSTALLDIR)/$$i; echo "install:  installed $$i in $(DESTDIR)$(CONFINSTALLDIR)"; done \
+ 	fi
+--- net-snmp-5.0.7/man/Makefile.in.DESTDIR	Wed Feb 12 16:29:44 2003
++++ net-snmp-5.0.7/man/Makefile.in	Wed Feb 12 16:30:53 2003
+@@ -143,19 +143,19 @@
+ 	cat default_store.3.h $(srcdir)/default_store.3.bot >> default_store.3
+ 
+ maninstall:  maninstalldirs $(MAN1) $(MAN1G) $(MAN3) $(MAN5G) $(MAN8)
+-	@for i in $(MAN1) ; do $(INSTALL) $(srcdir)/$$i $(man1dir) ; echo "install:  installed $$i in $(man1dir)" ; done
+-	@$(INSTALL) $(MAN1G) $(man1dir)
+-	@for i in $(MAN1G) ; do echo "install:  installed $$i in $(man1dir)" ; done
+-	@for i in $(MAN3) ; do $(INSTALL) $(srcdir)/$$i $(man3dir) ; echo "install:  installed $$i in $(man3dir)" ; done
+-	@$(INSTALL) $(MAN3G) $(man3dir)
+-	@for i in $(MAN3G) ; do echo "install:  installed $$i in $(man3dir)" ; done
+-	@$(INSTALL) $(MAN5G) $(man5dir)
+-	@for i in $(MAN5G) ; do echo "install:  installed $$i in $(man5dir)" ; done
+-	@$(INSTALL) $(MAN8G) $(man8dir)
+-	@for i in $(MAN8G) ; do echo "install:  installed $$i in $(man8dir)" ; done
++	@for i in $(MAN1) ; do $(INSTALL) $(srcdir)/$$i $(DESTDIR)$(man1dir) ; echo "install:  installed $$i in $(DESTDIR)$(man1dir)" ; done
++	@$(INSTALL) $(MAN1G) $(DESTDIR)$(man1dir)
++	@for i in $(MAN1G) ; do echo "install:  installed $$i in $(DESTDIR)$(man1dir)" ; done
++	@for i in $(MAN3) ; do $(INSTALL) $(srcdir)/$$i $(DESTDIR)$(man3dir) ; echo "install:  installed $$i in $(DESTDIR)$(man3dir)" ; done
++	@$(INSTALL) $(MAN3G) $(DESTDIR)$(man3dir)
++	@for i in $(MAN3G) ; do echo "install:  installed $$i in $(DESTDIR)$(man3dir)" ; done
++	@$(INSTALL) $(MAN5G) $(DESTDIR)$(man5dir)
++	@for i in $(MAN5G) ; do echo "install:  installed $$i in $(DESTDIR)$(man5dir)" ; done
++	@$(INSTALL) $(MAN8G) $(DESTDIR)$(man8dir)
++	@for i in $(MAN8G) ; do echo "install:  installed $$i in $(DESTDIR)$(man8dir)" ; done
+ 
+ maninstalldirs:
+-	@$(SHELL) $(srcdir)/../mkinstalldirs $(man1dir) $(man3dir) $(man5dir) $(man8dir)
++	@$(SHELL) $(srcdir)/../mkinstalldirs $(DESTDIR)$(man1dir) $(DESTDIR)$(man3dir) $(DESTDIR)$(man5dir) $(DESTDIR)$(man8dir)
+ 
+ 
+ #
+--- net-snmp-5.0.7/mibs/Makefile.in.DESTDIR	Wed Feb 12 16:26:08 2003
++++ net-snmp-5.0.7/mibs/Makefile.in	Wed Feb 12 16:25:53 2003
+@@ -51,9 +51,9 @@
+ 
+ mibsinstall: installdirs
+ 	@for i in $(MIBS) ; do \
+-		$(INSTALL) $(srcdir)/$$i $(mibdir) ; \
+-		echo "install: installed $$i in $(mibdir)" ; \
++		$(INSTALL) $(srcdir)/$$i $(DESTDIR)$(mibdir) ; \
++		echo "install: installed $$i in $(DESTDIR)$(mibdir)" ; \
+ 	done
+ 
+ installdirs:
+-	@$(SHELL) $(srcdir)/../mkinstalldirs $(mibdir)
++	@$(SHELL) $(srcdir)/../mkinstalldirs $(DESTDIR)$(mibdir)
+--- net-snmp-5.0.7/Makefile.rules.DESTDIR	Wed Feb 12 16:21:36 2003
++++ net-snmp-5.0.7/Makefile.rules	Wed Feb 12 16:25:17 2003
+@@ -44,48 +44,48 @@
+ 
+ installlocalheaders:
+ 	@if test "$(INSTALLHEADERS)" != "" ; then \
+-		echo creating directory $(includedir) ; \
++		echo creating directory $(DESTDIR)$(includedir) ; \
+ 		it="$(INSTALLHEADERS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(includedir) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(includedir) ; \
+ 	        for i in $$it ; do \
+-			$(INSTALL) $(top_srcdir)/include/net-snmp/$$i $(includedir) ; \
+-	                echo "installing $$i in $(includedir)" ; \
++			$(INSTALL) $(top_srcdir)/include/net-snmp/$$i $(DESTDIR)$(includedir) ; \
++	                echo "installing $$i in $(DESTDIR)$(includedir)" ; \
+ 	        done \
+ 	fi
+ 	@if test "$(INSTALLBUILTHEADERS)" != "" ; then \
+-		echo creating directory $(includedir) ; \
++		echo creating directory $(DESTDIR)$(includedir) ; \
+ 		it="$(INSTALLBUILTHEADERS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(includedir) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(includedir) ; \
+ 	        for i in $$it ; do \
+-			$(INSTALL) $$i $(includedir) ; \
+-	                echo "installing $$i in $(includedir)" ; \
++			$(INSTALL) $$i $(DESTDIR)$(includedir) ; \
++	                echo "installing $$i in $(DESTDIR)$(includedir)" ; \
+ 	        done \
+ 	fi
+ 	@if test "$(INCLUDESUBDIRHEADERS)" != "" ; then \
+-		echo creating directory $(includedir)/$(INCLUDESUBDIR) ; \
++		echo creating directory $(DESTDIR)$(includedir)/$(INCLUDESUBDIR) ; \
+ 		it="$(INCLUDESUBDIRHEADERS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(includedir)/$(INCLUDESUBDIR) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(includedir)/$(INCLUDESUBDIR) ; \
+ 	        for i in $$it ; do \
+-			$(INSTALL) $(top_srcdir)/include/net-snmp/$(INCLUDESUBDIR)/$$i $(includedir)/$(INCLUDESUBDIR) ; \
+-	                echo "installing $$i in $(includedir)/$(INCLUDESUBDIR)" ; \
++			$(INSTALL) $(top_srcdir)/include/net-snmp/$(INCLUDESUBDIR)/$$i $(DESTDIR)$(includedir)/$(INCLUDESUBDIR) ; \
++	                echo "installing $$i in $(DESTDIR)$(includedir)/$(INCLUDESUBDIR)" ; \
+ 	        done \
+ 	fi
+ 	@if test "$(INCLUDESUBDIRHEADERS2)" != "" ; then \
+-		echo creating directory $(includedir)/$(INCLUDESUBDIR2) ; \
++		echo creating directory $(DESTDIR)$(includedir)/$(INCLUDESUBDIR2) ; \
+ 		it="$(INCLUDESUBDIRHEADERS2)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(includedir)/$(INCLUDESUBDIR2) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(includedir)/$(INCLUDESUBDIR2) ; \
+ 	        for i in $$it ; do \
+-			$(INSTALL) $(top_srcdir)/include/net-snmp/$(INCLUDESUBDIR2)/$$i $(includedir)/$(INCLUDESUBDIR2) ; \
+-	                echo "installing $$i in $(includedir)/$(INCLUDESUBDIR2)" ; \
++			$(INSTALL) $(top_srcdir)/include/net-snmp/$(INCLUDESUBDIR2)/$$i $(DESTDIR)$(includedir)/$(INCLUDESUBDIR2) ; \
++	                echo "installing $$i in $(DESTDIR)$(includedir)/$(INCLUDESUBDIR2)" ; \
+ 	        done \
+ 	fi
+ 	@if test "$(INSTALLBUILTSUBDIRHEADERS)" != "" ; then \
+-		echo creating directory $(includedir)/$(INSTALLBUILTSUBDIR) ; \
++		echo creating directory $(DESTDIR)$(includedir)/$(INSTALLBUILTSUBDIR) ; \
+ 		it="$(INSTALLBUILTSUBDIRHEADERS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(includedir)/$(INSTALLBUILTSUBDIR) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(includedir)/$(INSTALLBUILTSUBDIR) ; \
+ 	        for i in $$it ; do \
+-			$(INSTALL) $$i $(includedir)/$(INSTALLBUILTSUBDIR) ; \
+-	                echo "installing $$i in $(includedir)/$(INSTALLBUILTSUBDIR)" ; \
++			$(INSTALL) $$i $(DESTDIR)$(includedir)/$(INSTALLBUILTSUBDIR) ; \
++	                echo "installing $$i in $(DESTDIR)$(includedir)/$(INSTALLBUILTSUBDIR)" ; \
+ 	        done \
+ 	fi
+ 
+@@ -103,12 +103,12 @@
+ 
+ installucdheaders:
+ 	@if test "$(INSTALLUCDHEADERS)" != "" ; then \
+-		echo creating directory $(ucdincludedir) ; \
++		echo creating directory $(DESTDIR)$(ucdincludedir) ; \
+ 		it="$(INSTALLUCDHEADERS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(ucdincludedir) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(ucdincludedir) ; \
+ 	        for i in $$it ; do \
+-			$(INSTALL) $(top_srcdir)/include/ucd-snmp/$$i $(ucdincludedir) ; \
+-	                echo "installing $$i in $(ucdincludedir)" ; \
++			$(INSTALL) $(top_srcdir)/include/ucd-snmp/$$i $(DESTDIR)$(ucdincludedir) ; \
++	                echo "installing $$i in $(DESTDIR)$(ucdincludedir)" ; \
+ 	        done \
+ 	fi
+ 
+@@ -122,11 +122,11 @@
+ installlocallibs: $(INSTALLLIBS)
+ 	@if test "$(INSTALLLIBS)" != ""; then \
+ 		it="$(INSTALLLIBS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(libdir) ; \
+-                $(INSTALL) $(INSTALLLIBS) $(libdir) ;              \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(libdir) ; \
++                $(INSTALL) $(INSTALLLIBS) $(DESTDIR)$(libdir) ;              \
+ 	        for i in $$it ; do    \
+-	                echo "installing $$i in $(libdir)"; \
+-	                $(RANLIB) $(libdir)/$$i ; \
++	                echo "installing $$i in $(DESTDIR)$(libdir)"; \
++	                $(RANLIB) $(DESTDIR)$(libdir)/$$i ; \
+ 	        done ; \
+ 		$(LIB_LDCONFIG_CMD) ; \
+ 	fi
+@@ -134,11 +134,11 @@
+ installucdlibs: $(INSTALLUCDLIBS)
+ 	@if test "$(INSTALLUCDLIBS)" != ""; then \
+ 		it="$(INSTALLUCDLIBS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(libdir) ; \
+-                $(INSTALL) $(INSTALLUCDLIBS) $(libdir) ;              \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(libdir) ; \
++                $(INSTALL) $(INSTALLUCDLIBS) $(DESTDIR)$(libdir) ;              \
+ 	        for i in $$it ; do    \
+-	                echo "installing $$i in $(libdir)"; \
+-	                $(RANLIB) $(libdir)/$$i ; \
++	                echo "installing $$i in $(DESTDIR)$(libdir)"; \
++	                $(RANLIB) $(DESTDIR)$(libdir)/$$i ; \
+ 	        done ; \
+ 		$(LIB_LDCONFIG_CMD) ; \
+ 	fi
+@@ -164,11 +164,11 @@
+ 
+ installlocalbin: $(INSTALLBINPROGS)
+ 	@if test "$(INSTALLBINPROGS) $(INSTALLBINSCRIPTS)" != " "; then \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(bindir) ; \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(bindir) ; \
+ 		it="$(INSTALLBINPROGS) $(INSTALLBINSCRIPTS)" ; \
+-	        $(INSTALL) $(INSTALLBINPROGS) $(INSTALLBINSCRIPTS) $(bindir) ;              \
++	        $(INSTALL) $(INSTALLBINPROGS) $(INSTALLBINSCRIPTS) $(DESTDIR)$(bindir) ;              \
+ 	        for i in $$it ; do   \
+-	                echo "installing $$i in $(bindir)"; \
++	                echo "installing $$i in $(DESTDIR)$(bindir)"; \
+ 	        done \
+ 	fi
+ 
+@@ -194,10 +194,10 @@
+ installlocalsbin: $(INSTALLSBINPROGS)
+ 	@if test "$(INSTALLSBINPROGS)" != ""; then \
+ 		it="$(INSTALLSBINPROGS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(sbindir) ; \
+-	        $(INSTALL) $(INSTALLSBINPROGS) $(sbindir) ;              \
++		$(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir) ; \
++	        $(INSTALL) $(INSTALLSBINPROGS) $(DESTDIR)$(sbindir) ;              \
+ 	        for i in $$it ; do   \
+-	                echo "installing $$i in $(sbindir)"; \
++	                echo "installing $$i in $(DESTDIR)$(sbindir)"; \
+ 	        done \
+ 	fi
+ 
+--- net-snmp-5.0.7/apps/Makefile.in.DESTDIR	Wed Feb 12 16:58:57 2003
++++ net-snmp-5.0.7/apps/Makefile.in	Wed Feb 12 16:59:24 2003
+@@ -112,5 +112,5 @@
+ 	$(LINK) -o $@ snmpdf.$(OSUFFIX) $(LOCAL_LIBS) ${LDFLAGS} ${LIBS} 
+ 
+ snmpinforminstall:
+-	rm -f $(bindir)/snmpinform$(EXEEXT)
+-	$(LN_S) snmptrap$(EXEEXT) $(bindir)/snmpinform$(EXEEXT)
++	rm -f $(DESTDIR)$(bindir)/snmpinform$(EXEEXT)
++	$(LN_S) snmptrap$(EXEEXT) $(DESTDIR)$(bindir)/snmpinform$(EXEEXT)
