@@ -1,8 +1,6 @@
 # TODO:
-# - Summary and %%description in all packages
 # - init scripts
 # - default configs
-# - perl module 
 # - review %%files (add missing)
 # - review Requires:
 # - review Obsoletes:
@@ -25,8 +23,8 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	îÁÂÏÒ ÕÔÉÌÉÔ ÄÌÑ ÐÒÏÔÏËÏÌÁ SNMP ÏÔ UC-Davis
 Summary(uk):	îÁÂ¦Ò ÕÔÉÌ¦Ô ÄÌÑ ÐÒÏÔÏËÏÌÕ SNMP ×¦Ä UC-Davis
 Name:		net-snmp
-Version:	5.0.7
-Release:	0.3
+Version:	5.0.8
+Release:	0.1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -41,12 +39,14 @@ Patch0:		%{name}-acinclude.patch
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-rpm-implicit-libs.patch
 Patch3:		%{name}-DESTDIR.patch
+Patch4:		%{name}-config-noflags.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7
+%{!?_without_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 5.6.1
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
@@ -60,21 +60,16 @@ Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
 
-%define		_sysconfdir	/etc
 %define		logfile		/var/log/snmpd.log
 
 %description
 SNMP (Simple Network Management Protocol) is a protocol used for
-network management (hence the name). The UCD-SNMP project includes
+network management (hence the name). The net-snmp project includes
 various SNMP tools: an extensible agent, an SNMP library, tools for
 requesting or setting information from SNMP agents, tools for
 generating and handling SNMP traps, a version of the netstat command
 which uses SNMP, and a Tk/Perl mib browser. This package contains the
 snmpd daemon, documentation, etc.
-
-Install the ucd-snmp package if you need network management tools. You
-will probably also want to install the ucd-snmp-utils package, which
-contains UCD-SNMP utilities.
 
 %description -l es
 Este paquete se deriva de la implementación del Protocolo Simple de
@@ -96,7 +91,7 @@ Mellon. Útil para gerenciar redes e fazer contabilidade.
 
 %description -l ru
 SNMP (Simple Network Management Protocol) - ÜÔÏ ÐÒÏÔÏËÏÌ, ÉÓÐÏÌØÚÕÅÍÙÊ
-ÄÌÑ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ (ÏÔÓÀÄÁ É ÎÁÚ×ÁÎÉÅ). ðÒÏÅËÔ UCD-SNMP ×ËÌÀÞÁÅÔ
+ÄÌÑ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ (ÏÔÓÀÄÁ É ÎÁÚ×ÁÎÉÅ). ðÒÏÅËÔ net-snmp ×ËÌÀÞÁÅÔ
 ÒÁÚÎÏÏÂÒÁÚÎÙÅ SNMP-ÕÔÉÌÉÔÙ: ÒÁÓÛÉÒÑÅÍÙÊ ÁÇÅÎÔ, ÂÉÂÌÉÏÔÅËÁ SNMP,
 ÕÔÉÌÉÔÙ ÄÌÑ ÚÁÐÒÏÓÁ ÉÌÉ ÕÓÔÁÎÏ×ËÉ ÉÎÆÏÒÍÁÃÉÉ ÏÔ SNMP-ÁÇÅÎÔÏ×, ÕÔÉÌÉÔÙ
 ÄÌÑ ÇÅÎÅÒÁÃÉÉ É ÏÂÒÁÂÏÔËÉ SNMP-ÔÒÁÐÏ×, ×ÅÒÓÉÑ ËÏÍÁÎÄÙ netstat,
@@ -105,7 +100,7 @@ SNMP (Simple Network Management Protocol) - ÜÔÏ ÐÒÏÔÏËÏÌ, ÉÓÐÏÌØÚÕÅÍÙÊ
 
 %description -l uk
 SNMP (Simple Network Management Protocol) - ÃÅ ÐÒÏÔÏËÏÌ, ÑËÉÊ
-×ÉËÏÒÉÓÔÏ×ÕÀÔØ ÄÌÑ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ (Ú×¦ÄÓÉ ¦ ÎÁÚ×Á). ðÒÏÅËÔ UCD-SNMP
+×ÉËÏÒÉÓÔÏ×ÕÀÔØ ÄÌÑ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ (Ú×¦ÄÓÉ ¦ ÎÁÚ×Á). ðÒÏÅËÔ net-snmp
 Í¦ÓÔÉÔØ Ò¦ÚÎÏÍÁÎ¦ÔÎ¦ SNMP-ÕÔÉÌ¦ÔÉ: ÒÏÚÛÉÒÀ×ÁÎÉÊ ÁÇÅÎÔ, Â¦ÂÌ¦ÏÔÅËÁ
 SNMP, ÕÔÉÌ¦ÔÉ ÄÌÑ ÚÁÐÒÏÓÕ ÔÁ ×ÓÔÁÎÏ×ÌÅÎÎÑ ¦ÎÆÏÒÍÁÃ¦§ ×¦Ä NMP-ÁÇÅÎÔ¦×,
 ÕÔÉÌ¦ÔÉ ÄÌÑ ÇÅÎÅÒÁÃ¦§ ÔÁ ÏÂÒÏÂËÉ SNMP-ÔÒÁÐ¦×, ×ÅÒÓ¦Ñ ËÏÍÁÎÄÉ netstat,
@@ -125,109 +120,10 @@ NET SNMP libraries.
 %description libs -l pl
 Biblioteki SNMP.
 
-%package compat-libs
-Summary:	UCD SNMP libraries
-Summary(pl):	Biblioteki SNMP
-Group:		Libraries
-Obsoletes:	ucd-snmp-libs
-Requires:	%{name}-mibs = %{version}
-
-%description compat-libs
-UCD SNMP libraries.
-
-%description compat-libs -l pl
-Biblioteki SNMP.
-
-%package mibs
-Summary:	MIB database
-Summary(pl):	Baza danych MIB
-Group:		Applications/System
-
-%description mibs
-MIB database.
-
-%description mibs -l pl
-Baza danych MIB.
-
-%package utils
-Summary:	Network management utilities using SNMP, from the NET-SNMP project
-Summary(es):	Utilitarios del SNMP de la UCD
-Summary(pl):	Narzêdzia u¿ywaj±ce protoko³u SNMP
-Summary(pt_BR):	Utilitários do SNMP da UCD
-Summary(ru):	õÔÉÌÉÔÙ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ ÐÏ SNMP ÉÚ ÐÒÏÅËÔÁ NET-SNMP
-Summary(uk):	õÔÉÌ¦ÔÉ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ ÐÏ SNMP Ú ÐÒÏÅËÔÕ NET-SNMP
-Group:		Applications/System
-Requires:	%{name}-libs = %{version}
-Obsoletes:	cmu-snmp-utils
-Obsoletes:	ucd-snmp-utils
-
-%description utils
-The ucd-snmp package contains various utilities for use with the
-UCD-SNMP network management project.
-
-Install this package if you need utilities for managing your network
-using the SNMP protocol. You'll also need to install the ucd-snmp
-package.
-
-%description utils -l es
-Varios utilitarios para uso con el SNMP de la UCD. Contiene
-utilitarios como: snmpwalk, snmptest y otros.
-
-%description utils -l pl
-Ró¿nego rodzaju narzêdzia do u¿ytku z programem %{name}.
-
-%description utils -l pt_BR
-Vários utilitários para uso com o SNMP da UCD. Contém utilitários
-como: snmpwalk, snmptest e outros.
-
-%description utils -l ru
-ðÁËÅÔ ucd-snmp-utils ÓÏÄÅÒÖÉÔ ÒÁÚÎÏÏÂÒÁÚÎÙÅ ÕÔÉÌÉÔÙ ÄÌÑ ÉÓÐÏÌØÚÏ×ÁÎÉÑ
-× ÐÒÏÅËÔÅ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ UCD-SNMP.
-
-%description utils -l uk
-ðÁËÅÔ ucd-snmp-utils Í¦ÓÔÉÔØ Ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÕÔÉÌ¦ÔÉ ÄÌÑ ×ÉËÏÒÉÓÔÁÎÎÑ ×
-ÐÒÏÅËÔ¦ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ UCD-SNMP.
-
-%package utils-perl
-Summary:	Network management utilities using SNMP, from the UCD-SNMP project
-Summary(pl):	Narzêdzia u¿ywaj±ce protoko³u SNMP
-Group:		Applications/System
-Requires:	perl-Term-ReadKey
-Requires:	perl-Tk
-Obsoletes:	cmu-snmp-utils
-Obsoletes:	ucd-snmp-utils-perl
-
-%description utils-perl
-The ucd-snmp package contains various utilities for use with the
-UCD-SNMP network management project.
-
-Install this package if you need utilities for managing your network
-using the SNMP protocol. You'll also need to install the ucd-snmp
-package.
-
-%description utils-perl -l pl
-Ró¿nego rodzaju narzêdzia do u¿ytku z programem %{name}.
-
-%package snmptrapd
-Summary:	SNMP trap daemon
-Summary(pl):	Demon obs³uguj±cy pu³apki SNMP
-Group:		Applications/System
-PreReq:		%{name} = %{version}
-Requires(post,preun):	/sbin/chkconfig
-Requires:	rc-scripts >= 0.2.0
-Obsoletes:	cmu-snmp-utils
-Obsoletes:	ucd-snmp-snmptrapd
-
-%description snmptrapd
-The ucd-snmp-snmptrapd package contains snmp trap daemon.
-
-%description snmptrapd -l pl
-Pakiet zawiera demon obs³uguj±cy pu³apki SNMP.
-
 %package devel
-Summary:	The development environment for the UCD-SNMP project
+Summary:	The development environment for the net-snmp project
 Summary(es):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl):	Pliki dla developerów u¿ywaj±cych %{name}
+Summary(pl):	Pliki dla programistów u¿ywaj±cych bibliotek net-snmp
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
 Summary(ru):	óÒÅÄÁ ÒÁÚÒÁÂÏÔËÉ ÄÌÑ ÐÒÏÅËÔÁ UCD-SNMP
 Summary(uk):	óÅÒÅÄÏ×ÉÝÅ ÒÏÚÒÏÂËÉ ÄÌÑ ÐÒÏÅËÔÕ UCD-SNMP
@@ -238,13 +134,8 @@ Obsoletes:	ucd-snmp-devel
 
 %description devel
 The ucd-snmp-devel package contains the development libraries and
-header files for use with the UCD-SNMP project's network management
+header files for use with the net-snmp project's network management
 tools.
-
-Install the ucd-snmp-devel package if you would like to develop
-applications for use with the UCD-SNMP project's network management
-tools. You'll also need to have the ucd-snmp and ucd-snmp-utils
-packages installed.
 
 %description devel -l es
 Estas son las bibliotecas y archivos de inclusión para desarrollo con
@@ -262,39 +153,48 @@ para uso no gerenciamento de redes.
 
 %description devel -l ru
 ðÁËÅÔ ucd-snmp-devel ÓÏÄÅÒÖÉÔ ÂÉÂÌÉÏÔÅËÉ ÒÁÚÒÁÂÏÔÞÉËÁ É ÈÅÄÅÒÁ ÄÌÑ
-ÉÓÐÏÌØÚÏ×ÁÎÉÑ Ó ÕÔÉÌÉÔÁÍÉ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ ÐÒÏÅËÔÁ UCD-SNMP.
+ÉÓÐÏÌØÚÏ×ÁÎÉÑ Ó ÕÔÉÌÉÔÁÍÉ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ ÐÒÏÅËÔÁ net-snmp.
 
 %description devel -l uk
 ðÁËÅÔ ucd-snmp-devel Í¦ÓÔÉÔØ Â¦ÂÌ¦ÏÔÅËÉ ÐÒÏÇÒÁÍ¦ÓÔÁ ÔÁ ÈÅÄÅÒÉ ÄÌÑ
-×ÉËÏÒÉÓÔÁÎÎÑ Ú ÕÔÉÌ¦ÔÁÍÉ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ ÐÒÏÅËÔÕ UCD-SNMP.
+×ÉËÏÒÉÓÔÁÎÎÑ Ú ÕÔÉÌ¦ÔÁÍÉ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ ÐÒÏÅËÔÕ net-snmp.
 
 %package static
-Summary:	Static UCD-SNMP libraries
-Summary(es):	Static libraries for ucd-snmp development
-Summary(pl):	Statyczne biblioteki %{name}
+Summary:	Static net-snmp libraries
+Summary(pl):	Statyczne biblioteki net-snmp
 Summary(pt_BR):	Bibliotecas estáticas para desenvolvimento com ucd-snmp
-Summary(ru):	óÔÁÔÉÞÅÓËÉÅ ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ÐÒÏÅËÔÁ UCD-SNMP
-Summary(uk):	óÔÁÔÉÞÎ¦ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ÐÒÏÅËÔÕ UCD-SNMP
+Summary(ru):	óÔÁÔÉÞÅÓËÉÅ ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ÐÒÏÅËÔÁ net-snmp
+Summary(uk):	óÔÁÔÉÞÎ¦ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ÐÒÏÅËÔÕ net-snmp
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 Obsoletes:	ucd-snmp-static
 
 %description static
-Static UCD-SNMP libraries.
-
-%description static -l es
-Static libraries for ucd-snmp development
+Static net-snmp libraries.
 
 %description static -l pl
-Statyczne biblioteki %{name}.
+Statyczne biblioteki net-snmp.
 
 %description static -l pt_BR
-Bibliotecas estáticas para desenvolvimento com ucd-snmp
+Bibliotecas estáticas para desenvolvimento com net-snmp.
+
+%package compat-libs
+Summary:	UCD SNMP libraries
+Summary(pl):	Biblioteki UCD SNMP
+Group:		Libraries
+Obsoletes:	ucd-snmp-libs
+Requires:	%{name}-mibs = %{version}
+
+%description compat-libs
+UCD SNMP libraries.
+
+%description compat-libs -l pl
+Biblioteki UCD SNMP.
 
 %package compat-devel
 Summary:	The development environment for the UCD-SNMP project
 Summary(es):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl):	Pliki dla developerów u¿ywaj±cych %{name}
+Summary(pl):	Pliki dla programistów u¿ywaj±cych bibliotek UCD-SNMP
 Summary(pt_BR):	Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
 Summary(ru):	óÒÅÄÁ ÒÁÚÒÁÂÏÔËÉ ÄÌÑ ÐÒÏÅËÔÁ UCD-SNMP
 Summary(uk):	óÅÒÅÄÏ×ÉÝÅ ÒÏÚÒÏÂËÉ ÄÌÑ ÐÒÏÅËÔÕ UCD-SNMP
@@ -308,11 +208,6 @@ Obsoletes:	ucd-snmp-devel
 The ucd-snmp-devel package contains the development libraries and
 header files for use with the UCD-SNMP project's network management
 tools.
-
-Install the ucd-snmp-devel package if you would like to develop
-applications for use with the UCD-SNMP project's network management
-tools. You'll also need to have the ucd-snmp and ucd-snmp-utils
-packages installed.
 
 %description compat-devel -l es
 Estas son las bibliotecas y archivos de inclusión para desarrollo con
@@ -338,8 +233,7 @@ para uso no gerenciamento de redes.
 
 %package compat-static
 Summary:	Static UCD-SNMP libraries
-Summary(es):	Static libraries for ucd-snmp development
-Summary(pl):	Statyczne biblioteki %{name}
+Summary(pl):	Statyczne biblioteki UCD-SNMP
 Summary(pt_BR):	Bibliotecas estáticas para desenvolvimento com ucd-snmp
 Summary(ru):	óÔÁÔÉÞÅÓËÉÅ ÂÉÂÌÉÏÔÅËÉ ÄÌÑ ÐÒÏÅËÔÁ UCD-SNMP
 Summary(uk):	óÔÁÔÉÞÎ¦ Â¦ÂÌ¦ÏÔÅËÉ ÄÌÑ ÐÒÏÅËÔÕ UCD-SNMP
@@ -350,28 +244,130 @@ Obsoletes:	ucd-snmp-static
 %description compat-static
 Static UCD-SNMP libraries.
 
-%description compat-static -l es
-Static libraries for ucd-snmp development
-
 %description compat-static -l pl
-Statyczne biblioteki %{name}.
+Statyczne biblioteki UCD-SNMP.
 
 %description compat-static -l pt_BR
-Bibliotecas estáticas para desenvolvimento com ucd-snmp
+Bibliotecas estáticas para desenvolvimento com ucd-snmp.
 
-%package snmpconf
-Summary:	snmpconf
+%package mibs
+Summary:	MIB database
+Summary(pl):	Baza danych MIB
 Group:		Applications/System
 
+%description mibs
+MIB database.
+
+%description mibs -l pl
+Baza danych MIB.
+
+%package snmptrapd
+Summary:	SNMP trap daemon
+Summary(pl):	Demon obs³uguj±cy pu³apki SNMP
+Group:		Applications/System
+PreReq:		%{name} = %{version}
+PreReq:		rc-scripts >= 0.2.0
+Requires(post,preun):	/sbin/chkconfig
+Obsoletes:	cmu-snmp-utils
+Obsoletes:	ucd-snmp-snmptrapd
+
+%description snmptrapd
+The ucd-snmp-snmptrapd package contains snmp trap daemon.
+
+%description snmptrapd -l pl
+Pakiet zawiera demon obs³uguj±cy pu³apki SNMP.
+
+%package utils
+Summary:	Network management utilities using SNMP, from the NET-SNMP project
+Summary(es):	Utilitarios del SNMP de la UCD
+Summary(pl):	Narzêdzia u¿ywaj±ce protoko³u SNMP
+Summary(pt_BR):	Utilitários do SNMP da UCD
+Summary(ru):	õÔÉÌÉÔÙ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ ÐÏ SNMP ÉÚ ÐÒÏÅËÔÁ NET-SNMP
+Summary(uk):	õÔÉÌ¦ÔÉ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ ÐÏ SNMP Ú ÐÒÏÅËÔÕ NET-SNMP
+Group:		Applications/System
+Requires:	%{name}-libs = %{version}
+Obsoletes:	cmu-snmp-utils
+Obsoletes:	ucd-snmp-utils
+
+%description utils
+This package contains various utilities for managing your network
+using the SNMP protocol.
+
+%description utils -l es
+Varios utilitarios para uso con el SNMP de la UCD. Contiene
+utilitarios como: snmpwalk, snmptest y otros.
+
+%description utils -l pl
+Ró¿nego rodzaju narzêdzia do zarz±dzania sieci± przy u¿yciu protoko³u
+SNMP.
+
+%description utils -l pt_BR
+Vários utilitários para uso com o SNMP da UCD. Contém utilitários
+como: snmpwalk, snmptest e outros.
+
+%description utils -l ru
+ðÁËÅÔ ucd-snmp-utils ÓÏÄÅÒÖÉÔ ÒÁÚÎÏÏÂÒÁÚÎÙÅ ÕÔÉÌÉÔÙ ÄÌÑ ÉÓÐÏÌØÚÏ×ÁÎÉÑ
+× ÐÒÏÅËÔÅ ÕÐÒÁ×ÌÅÎÉÑ ÓÅÔØÀ net-snmp.
+
+%description utils -l uk
+ðÁËÅÔ ucd-snmp-utils Í¦ÓÔÉÔØ Ò¦ÚÎÏÍÁÎ¦ÔÎ¦ ÕÔÉÌ¦ÔÉ ÄÌÑ ×ÉËÏÒÉÓÔÁÎÎÑ ×
+ÐÒÏÅËÔ¦ ËÅÒÕ×ÁÎÎÑ ÍÅÒÅÖÅÀ net-snmp.
+
+%package -n perl-SNMP
+Summary:	SNMP and NetSNMP::* Perl modules
+Summary(pl):	Modu³y Perla SNMP oraz NetSNMP::*
+Group:		Development/Languages/Perl
+Requires:	%{name}-libs = %{version}
+
+%description -n perl-SNMP
+SNMP and NetSNMP::* Perl modules - Perl interface to net-snmp.
+
+%description -n perl-SNMP -l pl
+Modu³y Perla SNMP oraz NetSNMP::* - perlowy interfejs do net-snmp.
+
+%package utils-perl
+Summary:	Perl utilities for network management using SNMP
+Summary(pl):	Perlowe narzêdzia u¿ywaj±ce protoko³u SNMP
+Group:		Applications/System
+Requires:	perl-SNMP = %{version}
+Obsoletes:	cmu-snmp-utils
+Obsoletes:	ucd-snmp-utils-perl
+
+%description utils-perl
+This package contains various Perl utilities for managing your network
+using the SNMP protocol.
+
+%description utils-perl -l pl
+Perlowe narzêdzia do zarz±dzania sieci± przy u¿yciu protoko³u SNMP.
+
+%package snmpconf
+Summary:	snmpconf - creating and modifying SNMP configuration files
+Summary(pl):	snmpconf - tworzenie i modyfikowanie plików konfiguracyjnych SNMP
+Group:		Applications/System
+Requires:	%{name} = %{version}
+Requires:	perl-SNMP = %{version}
+
 %description snmpconf
-snmpconf
+snmpconf is a simple Perl script that walks you through setting up a
+configuration file step by step. It should be fairly straight forward
+to use.
+
+%description snmpconf -l pl
+snmpconf to prosty skrypt Perla pozwalaj±cy na tworzenie pliku
+konfiguracyjnego krok po kroku. Powinien byæ w miarê prosty w u¿yciu.
 
 %package tkmib
 Summary:	MIB browser in TK
+Summary(pl):	Przegl±darka MIB-ów w TK
 Group:		Applications/System
+Requires:	perl-SNMP = %{version}
+Requires:	perl-Tk
 
 %description tkmib
-MIB browser in TK
+MIB browser in TK.
+
+%description tkmib -l pl
+Przegl±darka MIB-ów w TK.
 
 %prep
 %setup -q -a7
@@ -379,7 +375,7 @@ MIB browser in TK
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-
+%patch4 -p1
 
 %build
 %{__libtoolize}
@@ -407,12 +403,21 @@ MIB browser in TK
 	--enable-shared
 %{__make}
 
-# symlinks to allow build perl module w/o installed ucd-snmp
-#ln -sf snmplib ucd-snmp
-#ln -sf ../ucd-snmp-config.h ucd-snmp/ucd-snmp-config.h
-#cd perl/SNMP
-#echo "%{_datadir}/snmp/mibs" | perl Makefile.PL
-#%%{__make} OPTIMIZE="%{rpmcflags}"
+TDIR="`pwd`"
+cd perl
+sed -e "s@-L/usr/lib@-L${TDIR}/snmplib/.libs -L${TDIR}/agent/.libs -L${TDIR}/agent/helpers/.libs@" \
+	../net-snmp-config > net-snmp-config
+chmod +x net-snmp-config
+
+PATH=`pwd`:$PATH \
+%{__perl} Makefile.PL \
+	INSTALLDIRS=vendor \
+	OPTIMIZE="%{rpmcflags} -I`pwd`/../include" \
+	</dev/null
+# avoid rpaths generated by MakeMaker
+perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
+
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -435,8 +440,11 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 #install agent/mibgroup/ipfwchains/IPFWCHAINS-MIB.txt \
 #	$RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
-#cd perl/SNMP
-#%%{__make} install DESTDIR=$RPM_BUILD_ROOT
+cd perl
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
+install SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -461,6 +469,9 @@ fi
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
+
+%post	compat -p /sbin/ldconfig
+%postun	compat -p /sbin/ldconfig
 
 %post snmptrapd
 /sbin/chkconfig --add snmptrapd
@@ -495,9 +506,9 @@ fi
 
 %attr(755,root,root) %{_sbindir}/snmpd
 
-%{_mandir}/man1/snmpd.1*
 %{_mandir}/man5/snmpd.conf.5*
 %{_mandir}/man5/variables.5*
+%{_mandir}/man8/snmpd.8*
 
 %attr(640,root,root) %ghost %{logfile}
 
@@ -505,14 +516,48 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libnet*.so.*.*
 
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/mib2c
+%attr(755,root,root) %{_bindir}/net-snmp-config
+%attr(755,root,root) %{_libdir}/libnet*[a-z].so
+%{_libdir}/libnet*.la
+%{_includedir}/net-snmp
+%{_datadir}/snmp/mib2c*
+%{_mandir}/man1/mib2c.1*
+%{_mandir}/man3/*
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libnet*.a
+
+%files compat-libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libsnmp.so.*.*
+
+%files compat-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libsnmp.so
+%{_libdir}/libsnmp.la
+%{_includedir}/ucd-snmp
+
+%files compat-static
+%defattr(644,root,root,755)
+%{_libdir}/libsnmp.a
+
 %files mibs
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
 %{_datadir}/snmp/mibs
 
-%files compat-libs
+%files snmptrapd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libsnmp.so.*.*
+%attr(755,root,root) %{_sbindir}/snmptrapd
+%attr(754,root,root) /etc/rc.d/init.d/snmptrapd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
+%{_mandir}/man5/snmptrapd.conf.5*
+%{_mandir}/man8/snmptrapd.8*
 
 %files utils
 %defattr(644,root,root,755)
@@ -557,53 +602,36 @@ fi
 %{_mandir}/man5/snmp.conf.5*
 %{_mandir}/man5/snmp_config.5*
 
+%files -n perl-SNMP
+%doc perl/SNMP/{BUG,README,TODO} perl/SNMP/examples
+%{perl_vendorarch}/SNMP.pm
+%{perl_vendorarch}/NetSNMP
+%dir %{perl_vendorarch}/auto/SNMP
+%{perl_vendorarch}/auto/SNMP/autosplit.ix
+%{perl_vendorarch}/auto/SNMP/SNMP.bs
+%attr(755,root,root) %{perl_vendorarch}/auto/SNMP/SNMP.so
+%dir %{perl_vendorarch}/auto/NetSNMP
+%dir %{perl_vendorarch}/auto/NetSNMP/*
+%{perl_vendorarch}/auto/NetSNMP/*/autosplit.ix
+%{perl_vendorarch}/auto/NetSNMP/*/*.bs
+%attr(755,root,root) %{perl_vendorarch}/auto/NetSNMP/*/*.so
+%dir %{perl_vendorarch}/auto/NetSNMP/agent/default_store
+%{perl_vendorarch}/auto/NetSNMP/agent/default_store/autosplit.ix
+%{perl_vendorarch}/auto/NetSNMP/agent/default_store/default_store.bs
+%attr(755,root,root) %{perl_vendorarch}/auto/NetSNMP/agent/default_store/default_store.so
+%{_mandir}/man3/NetSNMP::*.3*
+%{_mandir}/man3/SNMP.3*
+%{_examplesdir}/perl-SNMP-%{version}
+
 %files utils-perl
 %defattr(644,root,root,755)
-#%doc perl/SNMP/{BUG,README,TODO} perl/SNMP/examples
 %attr(755,root,root) %{_bindir}/snmpcheck
-%attr(755,root,root) %{_bindir}/snmpconf
 %attr(755,root,root) %{_bindir}/traptoemail
+
+%files snmpconf
+%attr(755,root,root) %{_bindir}/snmpconf
 %{_mandir}/man1/snmpconf.1*
 %{_datadir}/snmp/snmpconf-data
-#%%{perl_sitearch}/SNMP.pm
-#%dir %{perl_sitearch}/auto/SNMP
-#%%{perl_sitearch}/auto/SNMP/autosplit.ix
-#%%{perl_sitearch}/auto/SNMP/SNMP.bs
-#%attr(755,root,root) %{perl_sitearch}/auto/SNMP/SNMP.so
-
-%files snmptrapd
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/snmptrapd
-%attr(754,root,root) /etc/rc.d/init.d/snmptrapd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
-%{_mandir}/man5/snmptrapd.conf.5*
-%{_mandir}/man8/snmptrapd.8*
-
-%files devel
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/mib2c
-%attr(755,root,root) %{_bindir}/net-snmp-config
-%attr(755,root,root) %{_libdir}/libnet*[a-z].so
-%{_libdir}/libnet*.la
-%{_includedir}/net-snmp
-%{_datadir}/snmp/mib2c*
-%{_mandir}/man1/mib2c.1*
-%{_mandir}/man3/*
-
-%files compat-devel
-%defattr(644,root,root,755)
-%{_libdir}/libsnmp.la
-%attr(755,root,root) %{_libdir}/libsnmp.so
-%{_includedir}/ucd-snmp
-
-%files static
-%defattr(644,root,root,755)
-%{_libdir}/libnet*.a
-
-%files compat-static
-%defattr(644,root,root,755)
-%{_libdir}/libsnmp.a
 
 %files tkmib
 %defattr(644,root,root,755)

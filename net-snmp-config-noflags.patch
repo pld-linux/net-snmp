@@ -1,0 +1,42 @@
+--- net-snmp-5.0.8/net-snmp-config.in.orig	2003-03-12 19:40:33.000000000 +0100
++++ net-snmp-5.0.8/net-snmp-config.in	2003-05-17 13:10:21.000000000 +0200
+@@ -27,24 +27,24 @@
+       echo @MODULE_LIST@
+       ;;
+     --base-cflags)
+-      echo @CFLAGS@ @CPPFLAGS@ -I@includedir@
++      echo @CPPFLAGS@ -I@includedir@
+       ;;
+     --cflags)
+-      echo @CFLAGS@ @DEVFLAGS@ @CPPFLAGS@ -I. -I@includedir@
++      echo @DEVFLAGS@ @CPPFLAGS@ -I. -I@includedir@
+       ;;
+     --agent-libs)
+       # use this one == --netsnmp-agent-libs + --external-libs
+-      echo @LDFLAGS@ -L@libdir@ $NSC_BASE_AGENT_LIBS @AGENTLIBS@ @WRAPLIBS@
++      echo -L@libdir@ $NSC_BASE_AGENT_LIBS @AGENTLIBS@ @WRAPLIBS@
+       ;;
+     --libs)
+       # use this one == --netsnmp-libs + --external-libs
+-      echo @LDFLAGS@ -L@libdir@ -lnetsnmp @LIBS@
++      echo -L@libdir@ -lnetsnmp @LIBS@
+       ;;
+     --external-libs)
+-      echo @LDFLAGS@ @LIBS@
++      echo @LIBS@
+       ;;
+     --external-agent-libs)
+-      echo @LDFLAGS@ @AGENTLIBS@ @WRAPLIBS@
++      echo @AGENTLIBS@ @WRAPLIBS@
+       ;;
+     --netsnmp-libs)
+       echo -L@libdir@ -lnetsnmp
+@@ -265,7 +265,7 @@
+ 	exit 1
+       fi
+       prefix=@prefix@
+-      cmd="@CC@ $cflags @CFLAGS@ @DEVFLAGS@ -I. -I@includedir@ -o $outname $tmpfile $cfiles @LDFLAGS@ -L@exec_prefix@/lib -lnetsnmpagent -lnetsnmphelpers -lnetsnmpmibs -lnetsnmp @AGENTLIBS@ $ldflags"
++      cmd="@CC@ $cflags @DEVFLAGS@ -I. -I@includedir@ -o $outname $tmpfile $cfiles -L@exec_prefix@/lib -lnetsnmpagent -lnetsnmphelpers -lnetsnmpmibs -lnetsnmp @AGENTLIBS@ $ldflags"
+       echo "running: $cmd"
+       `$cmd`
+       if test "x$norm" != "x1" ; then

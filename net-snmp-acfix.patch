@@ -1,5 +1,5 @@
---- net-snmp-5.0.7/configure.in.wiget	Fri Jan 10 23:38:31 2003
-+++ net-snmp-5.0.7/configure.in	Wed Feb 12 14:24:36 2003
+--- net-snmp-5.0.8/configure.in.orig	2003-03-06 07:41:13.000000000 +0100
++++ net-snmp-5.0.8/configure.in	2003-05-17 12:55:45.000000000 +0200
 @@ -7,8 +7,8 @@
  dnl
  dnl save the configure arguments
@@ -11,7 +11,7 @@
  AC_SUBST(CONFIGURE_OPTIONS)
  
  dnl
-@@ -555,9 +555,7 @@
+@@ -554,9 +554,7 @@
  dnl get version number.
  AC_MSG_CHECKING(for net-snmp version number)
  VERSION=`grep NetSnmpVersionInfo.*= $srcdir/snmplib/snmp_version.c | sed 's/";.*//;s/.*"//;s/pre/0./;'`
@@ -22,7 +22,7 @@
  AC_SUBST(VERSION)
  AC_SUBST(RELEASEVERSION)
  AC_MSG_RESULT($VERSION)
-@@ -575,10 +573,8 @@
+@@ -574,10 +572,8 @@
  
  dnl system check
  AC_CANONICAL_SYSTEM
@@ -34,7 +34,7 @@
  AC_MSG_CACHE_ADD(Building for:               $PARTIALTARGETOS)
  
  dnl
-@@ -586,7 +582,6 @@
+@@ -585,7 +581,6 @@
  dnl
  
  AC_MSG_CHECKING(for system include file)
@@ -42,7 +42,7 @@
  filebase=$target_os
  dnl ignore binary format indication
  filebase=`echo $filebase | sed 's/elf//'`
-@@ -596,9 +591,9 @@
+@@ -595,9 +590,9 @@
  while test "x$filebase" != "x$last" -a ! -f $srcdir/include/net-snmp/system/$filebase.h
  do
      last=$filebase
@@ -54,7 +54,7 @@
      fi
  done
  
-@@ -607,19 +602,17 @@
+@@ -606,19 +601,17 @@
  fi
  ac_cv_SYSTEM_INCLUDE_FILE="net-snmp/system/$filebase.h"
  
@@ -75,15 +75,15 @@
  done
  
  if test "x$filebase" = "x$last"; then
-@@ -628,7 +621,6 @@
+@@ -626,7 +619,6 @@
+ fi
  ac_cv_MACHINE_INCLUDE_FILE="net-snmp/machine/$filebase.h"
- AC_MSG_RESULT($ac_cv_MACHINE_INCLUDE_FILE)
  
 -changequote([, ])
+ AC_MSG_RESULT($ac_cv_MACHINE_INCLUDE_FILE)
  AC_DEFINE_UNQUOTED(MACHINE_INCLUDE_FILE, "$ac_cv_MACHINE_INCLUDE_FILE")
  
- AC_PATH_PROG(CCPATH,$CC)
-@@ -738,7 +730,7 @@
+@@ -737,7 +729,7 @@
  	for i in v6d toshiba kame inria zeta linux-glibc linux-inet6; do
  		case $i in
  		v6d)
@@ -92,7 +92,7 @@
  #include </usr/local/v6/include/sys/types.h>
  #ifdef __V6D__
  yes
-@@ -748,7 +740,7 @@
+@@ -747,7 +739,7 @@
  				CFLAGS="-I/usr/local/v6/include $CFLAGS"])
  			;;
  		toshiba)
@@ -101,7 +101,7 @@
  #include <sys/param.h>
  #ifdef _TOSHIBA_INET6
  yes
-@@ -758,7 +750,7 @@
+@@ -757,7 +749,7 @@
  				CFLAGS="-DINET6 $CFLAGS"])
  			;;
  		kame)
@@ -110,7 +110,7 @@
  #include <netinet/in.h>
  #ifdef __KAME__
  yes
-@@ -769,7 +761,7 @@
+@@ -768,7 +760,7 @@
  				CFLAGS="-DINET6 $CFLAGS"])
  			;;
  		inria)
@@ -119,7 +119,7 @@
  #include <netinet/in.h>
  #ifdef IPV6_INRIA_VERSION
  yes
-@@ -781,7 +773,7 @@
+@@ -780,7 +772,7 @@
  				CFLAGS="-DINET6 $CFLAGS"])
  			;;
  		zeta)
@@ -128,7 +128,7 @@
  #include <sys/param.h>
  #ifdef _ZETA_MINAMI_INET6
  A
-@@ -792,7 +784,7 @@
+@@ -791,7 +783,7 @@
  				CFLAGS="-DINET6 $CFLAGS"])
  			;;
  		linux-glibc)
@@ -137,7 +137,7 @@
  #include <features.h>
  #if defined(__GLIBC__) && ((__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1) || (__GLIBC_ > 2))
  yes
-@@ -841,7 +833,6 @@
+@@ -840,7 +832,6 @@
  
  if test "x$with_res_locks" = "xyes"; then
    AC_DEFINE(NS_REENTRANT)
@@ -146,24 +146,52 @@
      case $target_os in
  
 @@ -1049,7 +1040,6 @@
- dnl
  dnl Do hairy agent module processing.
  dnl
--changequote(, )
  AC_MSG_CHECKING(for and configuring mib modules to use)
+-changequote(, )
  
  mibdir="agent/mibgroup"
-@@ -1098,9 +1088,7 @@
+ module_list=""
+@@ -1096,13 +1086,11 @@
+   fi
  done
  
- AC_MSG_RESULT($new_module_list.)
 -changequote([, ])
+ AC_MSG_RESULT($new_module_list.)
  AC_MSG_CACHE_ADD(Agent MIB code:            $new_module_list)
--changequote(, )
  
  AC_MSG_CHECKING(for and configuring mib modules pieces to use)
+ FD=AC_FD_MSG
+-changequote(, )
+ 
  while test "x$new_module_list" != "x"; do
-@@ -1170,7 +1158,7 @@
+   for i in $new_module_list
+@@ -1127,13 +1115,9 @@
+ 	  for j in $new_list
+ 	    do
+ 	    if test ! -f $srcdir/$mibdir/$j.h; then
+-              changequote([, ])
+ 	      AC_MSG_ERROR(mib module "$i" requires module "$j" but $j.h or $j.c could not be found in $srcdir/$mibdir)
+-              changequote(, )
+ 	    elif echo " $new_with_out_mib_modules " | grep " $j " > /dev/null; then
+-              changequote([, ])
+ 	      AC_MSG_WARN(mib module "$i" requires module "$j" but you told me to compile without it)
+-              changequote(, )
+ 	    elif echo " $module_list $new_list_two $new_module_list " | grep " $j " > /dev/null; then
+ 	      :
+ 	    else
+@@ -1158,9 +1142,7 @@
+ 	    done
+ 	fi
+       else
+-        changequote([, ])
+ 	AC_MSG_ERROR(module files $i.h or $i.c could not be found in $srcdir/$mibdir)
+-        changequote(, )
+       fi
+       module_list="$module_list $i"
+       echo '#include "'"mibgroup/$i.h"'"' >> $mibdir/mib_module_includes.h
+@@ -1177,18 +1159,16 @@
  	fi
        fi
        if test "x`echo $i | sed 's/\///g;'`" != "x$i"; then
@@ -172,9 +200,11 @@
  	if test ! -d ./$mibdir/$mnd; then
  	    module_directories="$module_directories ./$mibdir/$mnd"
  	fi
-@@ -1178,8 +1166,8 @@
+       fi
        if grep config_load_mib $srcdir/$mibdir/$i.h > /dev/null 2>&1; then
+-        changequote([, ])
        	AC_MSG_WARN(mib module "$i" uses the "config_load_mib" directive, which is no longer supported.  It probably won't work.)
+-        changequote(, )
        fi
 -      grep config_parse_dot_conf $srcdir/$mibdir/$i.h | sed 's@.*config_parse_dot_conf(\([^)]*\), *\([^),]*\), *\([^),]*\), *\([^),]*\)).*@register_config_handler("snmpd",\1, \2, \3, \4);@' >> $mibdir/mib_module_dot_conf.h
 -      sym="`echo ${i} | sed 's/[^a-zA-Z0-9_]/_/g' | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`"
@@ -183,7 +213,7 @@
        echo "/* Define if compiling with the ${i} module files.  */" >> include/net-snmp/agent/mib_module_config.h
        echo "#define USING_${sym}_MODULE 1" >> include/net-snmp/agent/mib_module_config.h
        echo " " >> include/net-snmp/agent/mib_module_config.h
-@@ -1189,12 +1177,11 @@
+@@ -1198,12 +1178,11 @@
    new_module_list="$new_list_two"
    new_list_two=""
  done
@@ -201,7 +231,7 @@
  MODULE_LIST=$module_list_code
  AC_SUBST(MODULE_LIST)
  AC_SUBST(module_list_c)
-@@ -1352,39 +1339,39 @@
+@@ -1361,8 +1340,8 @@
      fi
  
      _libs=${LIBS}
@@ -212,18 +242,8 @@
  
      LIBS="$LIBS -lwrap"
  	AC_MSG_CHECKING(for TCP wrappers library -lwrap)
- 	AC_TRY_LINK([#include <tcpd.h>
- 		     int allow_severity = 0;
- 		     int deny_severity  = 0;
--		    ],[hosts_access((void *)0)],
-+		    ],[hosts_access((void *)0)],[
- 
- 	    AC_MSG_RESULT(yes)
- 	    AC_DEFINE(USE_LIBWRAP)
- 	    test "$with_libwrap" != no -a "$with_libwrap" != yes && WRAPLIBS="-L$with_libwrap/lib"
--	    WRAPLIBS="$WRAPLIBS -lwrap",
-+	    WRAPLIBS="$WRAPLIBS -lwrap"],[
- 
+@@ -1378,21 +1357,21 @@
+         [
  	    AC_MSG_RESULT(no)
  	    dnl Linux RedHat 6.1 won't link libwrap without libnsl
 -	    AC_CHECK_FUNC(yp_get_default_domain, ,
@@ -245,13 +265,11 @@
  
  			AC_MSG_RESULT(no)
 -			AC_MSG_ERROR(Asked to use libwrap but I couldn't find it.))
--	    CPPFLAGS=${_cppflags})
 +			AC_MSG_ERROR(Asked to use libwrap but I couldn't find it.)])
-+	    CPPFLAGS=${_cppflags}])
+         ])
+     CPPFLAGS=${_cppflags}
      LDFLAGS=${_ldflags}
-     LIBS=${_libs}
-   fi
-@@ -1639,17 +1626,15 @@
+@@ -1649,17 +1628,15 @@
  dnl so we do it by hand.
  AC_MSG_CHECKING(for socklen_t)
  AC_CACHE_VAL(ac_cv_type_$1,
@@ -272,7 +290,7 @@
  
  AC_MSG_RESULT($ac_cv_type_socklen_t)
  if test $ac_cv_type_socklen_t = yes; then
-@@ -1659,10 +1644,8 @@
+@@ -1669,10 +1646,8 @@
  dnl AIX keeps in_addr_t in /usr/include/netinet/in.h
  AC_MSG_CHECKING(for in_addr_t)
  AC_CACHE_VAL(ac_cv_type_$1,
@@ -285,9 +303,9 @@
  #if STDC_HEADERS
  #include <stdlib.h>
  #include <stddef.h>
---- ucd-snmp-4.2.4/acconfig.h.orig	Thu Feb  7 16:39:26 2002
-+++ ucd-snmp-4.2.4/acconfig.h	Thu Apr 25 21:24:51 2002
-@@ -49,9 +49,11 @@
+--- net-snmp-5.0.8/acconfig.h.orig	2003-02-25 19:04:04.000000000 +0100
++++ net-snmp-5.0.8/acconfig.h	2003-05-17 12:54:27.000000000 +0200
+@@ -46,9 +46,11 @@
  #undef _REENTRANT
  
  /* debugging stuff */
@@ -301,3 +319,13 @@
                                        ignore the -D flag passed to the cmds */
  
  /* reverse encoding BER packets is both faster and more efficient in space. */
+@@ -616,4 +616,9 @@
+ 
+ #undef INET6
+ 
++#ifndef NETSNMP_INLINE
++#   define NETSNMP_NO_INLINE
++#   define NETSNMP_INLINE
++#endif
++
+ #endif /* NET_SNMP_CONFIG_H */
