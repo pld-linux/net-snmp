@@ -44,6 +44,7 @@ Patch9:		%{name}-usr_local_bin_perl.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
+BuildRequires:	elfutils-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7
@@ -130,6 +131,7 @@ Summary(ru):	Среда разработки для проекта UCD-SNMP
 Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}
+Requires:	elfutils-devel
 Requires:	openssl-devel >= 0.9.7
 Obsoletes:	ucd-snmp-devel
 
