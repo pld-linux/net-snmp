@@ -46,7 +46,7 @@ BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-BuildRequires:	openssl-devel >= 0.9.6a
+BuildRequires:	openssl-devel >= 0.9.7
 BuildRequires:	perl-devel >= 5.6.1
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
@@ -230,7 +230,7 @@ Summary(ru):	Среда разработки для проекта UCD-SNMP
 Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}
-Requires:	openssl-devel
+Requires:	openssl-devel >= 0.9.7
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -297,7 +297,7 @@ Summary(ru):	Среда разработки для проекта UCD-SNMP
 Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-compat-libs = %{version}
-Requires:	openssl-devel
+Requires:	openssl-devel >= 0.9.7
 Obsoletes:	cmu-snmp-devel
 Obsoletes:	ucd-snmp-devel
 
