@@ -112,7 +112,7 @@ Summary:	NET SNMP libraries
 Summary(pl):	Biblioteki SNMP
 Group:		Libraries
 Requires:	%{name}-mibs = %{version}-%{release}
-Obsoletes:	net-snmp-libs
+Obsoletes:	net-snmp-compat-libs
 Obsoletes:	ucd-snmp-libs
 
 %description libs
