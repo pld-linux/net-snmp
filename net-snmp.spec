@@ -296,7 +296,7 @@ Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para desenvolvimento no SNMP 
 Summary(ru):	Среда разработки для проекта UCD-SNMP
 Summary(uk):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-compat-libs = %{version}
 Requires:	openssl-devel
 Obsoletes:	cmu-snmp-devel
 Obsoletes:	ucd-snmp-devel
@@ -341,7 +341,7 @@ Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com ucd-snmp
 Summary(ru):	Статические библиотеки для проекта UCD-SNMP
 Summary(uk):	Статичн╕ б╕бл╕отеки для проекту UCD-SNMP
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-compat-devel = %{version}
 Obsoletes:	ucd-snmp-static
 
 %description compat-static
