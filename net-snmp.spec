@@ -448,6 +448,7 @@ cd perl
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
 install SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
+cd ..
 
 # IP-Filter (non-Linux)
 rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
