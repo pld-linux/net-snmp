@@ -14,12 +14,12 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
-Version:	5.1.2
+Version:	5.2
 Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	8080555ab3f90011f25d5122042d9a8d
+# Source0-md5:	af1c18209474ec4851b06504aae2a7c1
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -38,7 +38,6 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-llinterfaces.patch
 Patch8:		%{name}-usr_local_bin_perl.patch
 Patch9:		%{name}-kernel_headers.patch
-Patch10:	%{name}-strtok.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -369,10 +368,9 @@ Przegl╠darka MIB-Сw w Tk.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p2
+%patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
 
 %build
 %{__libtoolize}
