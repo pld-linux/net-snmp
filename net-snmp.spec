@@ -1,14 +1,7 @@
 # TODO:
 # - init scripts
 # - default configs
-# - review %%files (add missing)
-# - review Requires:
-# - review Obsoletes:
-# - review Provides:
-# - review ucd patches:
-# -- ia64
-# -- init_master-libwrap
-# - /usr/local/bin/perl fix
+# - review ucd-snmp-ia64.patch patch
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -21,12 +14,12 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	Ó¡¬œ“ ’‘…Ã…‘ ƒÃ— –“œ‘œÀœÃ¡ SNMP œ‘ UC-Davis
 Summary(uk):	Ó¡¬¶“ ’‘…Ã¶‘ ƒÃ— –“œ‘œÀœÃ’ SNMP ◊¶ƒ UC-Davis
 Name:		net-snmp
-Version:	5.1
-Release:	1.1
+Version:	5.1.1
+Release:	0.2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	14217471edb2b805b0e28c4c3cfd8c75
+# Source0-md5:	68f6c946387718e4f300cbb8b6c4bd43
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -45,6 +38,7 @@ Patch6:		%{name}-link.patch
 Patch7:		%{name}-llinterfaces.patch
 Patch8:		%{name}-usr_local_bin_perl.patch
 Patch9:		%{name}-kernel_headers.patch
+Patch10:	%{name}-strtok.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -57,7 +51,7 @@ BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 PreReq:		rc-scripts >= 0.2.0
-PreReq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
 Requires:	/usr/bin/setsid
 Provides:	snmpd
@@ -117,8 +111,9 @@ SNMP, ’‘…Ã¶‘… ƒÃ— ⁄¡–“œ”’ ‘¡ ◊”‘¡Œœ◊Ã≈ŒŒ— ¶Œ∆œ“Õ¡√¶ß ◊¶ƒ NMP-¡«≈Œ‘¶◊,
 Summary:	NET SNMP libraries
 Summary(pl):	Biblioteki SNMP
 Group:		Libraries
+Requires:	%{name}-mibs = %{version}-%{release}
+Obsoletes:	net-snmp-libs
 Obsoletes:	ucd-snmp-libs
-Requires:	%{name}-mibs = %{version}
 
 %description libs
 NET SNMP libraries.
@@ -134,7 +129,7 @@ Summary(pt_BR):	Arquivos de inclus„o e bibliotecas para desenvolvimento no SNMP 
 Summary(ru):	Û“≈ƒ¡ “¡⁄“¡¬œ‘À… ƒÃ— –“œ≈À‘¡ UCD-SNMP
 Summary(uk):	Û≈“≈ƒœ◊…›≈ “œ⁄“œ¬À… ƒÃ— –“œ≈À‘’ UCD-SNMP
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
@@ -173,7 +168,7 @@ Summary(pt_BR):	Bibliotecas est·ticas para desenvolvimento com ucd-snmp
 Summary(ru):	Û‘¡‘…ﬁ≈”À…≈ ¬…¬Ã…œ‘≈À… ƒÃ— –“œ≈À‘¡ net-snmp
 Summary(uk):	Û‘¡‘…ﬁŒ¶ ¬¶¬Ã¶œ‘≈À… ƒÃ— –“œ≈À‘’ net-snmp
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
 
 %description static
@@ -185,19 +180,6 @@ Statyczne biblioteki net-snmp.
 %description static -l pt_BR
 Bibliotecas est·ticas para desenvolvimento com net-snmp.
 
-%package compat-libs
-Summary:	UCD SNMP libraries
-Summary(pl):	Biblioteki UCD SNMP
-Group:		Libraries
-Obsoletes:	ucd-snmp-libs
-Requires:	%{name}-mibs = %{version}
-
-%description compat-libs
-UCD SNMP libraries.
-
-%description compat-libs -l pl
-Biblioteki UCD SNMP.
-
 %package compat-devel
 Summary:	The development environment for the UCD-SNMP project
 Summary(es):	Archivos de inclusiÛn y bibliotecas para desarrollo en el SNMP de la UCD
@@ -206,8 +188,8 @@ Summary(pt_BR):	Arquivos de inclus„o e bibliotecas para desenvolvimento no SNMP 
 Summary(ru):	Û“≈ƒ¡ “¡⁄“¡¬œ‘À… ƒÃ— –“œ≈À‘¡ UCD-SNMP
 Summary(uk):	Û≈“≈ƒœ◊…›≈ “œ⁄“œ¬À… ƒÃ— –“œ≈À‘’ UCD-SNMP
 Group:		Development/Libraries
-Requires:	%{name}-compat-libs = %{version}
-Requires:	openssl-devel >= 0.9.7c
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	openssl-devel >= 0.9.7d
 Obsoletes:	cmu-snmp-devel
 Obsoletes:	ucd-snmp-devel
 
@@ -245,7 +227,7 @@ Summary(pt_BR):	Bibliotecas est·ticas para desenvolvimento com ucd-snmp
 Summary(ru):	Û‘¡‘…ﬁ≈”À…≈ ¬…¬Ã…œ‘≈À… ƒÃ— –“œ≈À‘¡ UCD-SNMP
 Summary(uk):	Û‘¡‘…ﬁŒ¶ ¬¶¬Ã¶œ‘≈À… ƒÃ— –“œ≈À‘’ UCD-SNMP
 Group:		Development/Libraries
-Requires:	%{name}-compat-devel = %{version}
+Requires:	%{name}-compat-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
 
 %description compat-static
@@ -261,6 +243,7 @@ Bibliotecas est·ticas para desenvolvimento com ucd-snmp.
 Summary:	MIB database
 Summary(pl):	Baza danych MIB
 Group:		Applications/System
+Conflicts:	ucd-snmp-libs
 
 %description mibs
 MIB database.
@@ -272,7 +255,7 @@ Baza danych MIB.
 Summary:	SNMP trap daemon
 Summary(pl):	Demon obs≥uguj±cy pu≥apki SNMP
 Group:		Applications/System
-PreReq:		%{name} = %{version}
+PreReq:		%{name} = %{version}-%{release}
 PreReq:		rc-scripts >= 0.2.0
 Requires(post,preun):	/sbin/chkconfig
 Obsoletes:	cmu-snmp-utils
@@ -292,7 +275,7 @@ Summary(pt_BR):	Utilit·rios do SNMP da UCD
 Summary(ru):	ı‘…Ã…‘Ÿ ’–“¡◊Ã≈Œ…— ”≈‘ÿ¿ –œ SNMP …⁄ –“œ≈À‘¡ NET-SNMP
 Summary(uk):	ı‘…Ã¶‘… À≈“’◊¡ŒŒ— Õ≈“≈÷≈¿ –œ SNMP ⁄ –“œ≈À‘’ NET-SNMP
 Group:		Applications/System
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils
 
@@ -324,7 +307,8 @@ como: snmpwalk, snmptest e outros.
 Summary:	SNMP and NetSNMP::* Perl modules
 Summary(pl):	Modu≥y Perla SNMP oraz NetSNMP::*
 Group:		Development/Languages/Perl
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
+Conflicts:	ucd-snmp-utils-perl
 
 %description -n perl-SNMP
 SNMP and NetSNMP::* Perl modules - Perl interface to net-snmp.
@@ -336,7 +320,7 @@ Modu≥y Perla SNMP oraz NetSNMP::* - perlowy interfejs do net-snmp.
 Summary:	Perl utilities for network management using SNMP
 Summary(pl):	Perlowe narzÍdzia uøywaj±ce protoko≥u SNMP
 Group:		Applications/System
-Requires:	perl-SNMP = %{version}
+Requires:	perl-SNMP = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils-perl
 
@@ -351,8 +335,8 @@ Perlowe narzÍdzia do zarz±dzania sieci± przy uøyciu protoko≥u SNMP.
 Summary:	snmpconf - creating and modifying SNMP configuration files
 Summary(pl):	snmpconf - tworzenie i modyfikowanie plikÛw konfiguracyjnych SNMP
 Group:		Applications/System
-Requires:	%{name} = %{version}
-Requires:	perl-SNMP = %{version}
+Requires:	%{name} = %{version}-%{release}
+Requires:	perl-SNMP = %{version}-%{release}
 
 %description snmpconf
 snmpconf is a simple Perl script that walks you through setting up a
@@ -367,7 +351,7 @@ konfiguracyjnego krok po kroku. Powinien byÊ w miarÍ prosty w uøyciu.
 Summary:	MIB browser in TK
 Summary(pl):	Przegl±darka MIB-Ûw w TK
 Group:		Applications/System
-Requires:	perl-SNMP = %{version}
+Requires:	perl-SNMP = %{version}-%{release}
 Requires:	perl-Tk
 
 %description tkmib
@@ -386,8 +370,9 @@ Przegl±darka MIB-Ûw w TK.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p2
-%patch8 -p0
+%patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 %{__libtoolize}
@@ -457,8 +442,12 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 cd perl
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
 install SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
+
+# IP-Filter (non-Linux)
+rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -483,9 +472,6 @@ fi
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
-
-%post	compat-libs -p /sbin/ldconfig
-%postun	compat-libs -p /sbin/ldconfig
 
 %post snmptrapd
 /sbin/chkconfig --add snmptrapd
@@ -544,10 +530,6 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libnet*.a
-
-%files compat-libs
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libsnmp.so.*.*
 
 %files compat-devel
 %defattr(644,root,root,755)
