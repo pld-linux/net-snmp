@@ -458,7 +458,7 @@ rm -rf $RPM_BUILD_ROOT
 if [ -f /var/lock/subsys/snmpd ]; then
 	/etc/rc.d/init.d/snmpd restart >&2
 else
-	%banner %{name} -e << EOF
+	%banner %{name} -e <<EOF
 Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon.
 EOF
 fi
@@ -481,7 +481,7 @@ fi
 if [ -f /var/lock/subsys/snmptrapd ]; then
 	/etc/rc.d/init.d/snmptrapd restart >&2
 else
-	%banner %{name}-snmptrapd -e << EOF
+	%banner %{name}-snmptrapd -e <<EOF
 Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon.
 EOF
 fi
