@@ -9,6 +9,10 @@
 # -- ia64
 # -- init_master-libwrap
 # - /usr/local/bin/perl fix
+#
+# Conditional build:
+%bcond_without	autodeps	# don't BR packages only for deps resolving
+#
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es):	Agente SNMP de la UCD
@@ -18,7 +22,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.1
-Release:	0.1
+Release:	0.2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -47,8 +51,8 @@ BuildRequires:	elfutils-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
 BuildRequires:	openssl-devel >= 0.9.7c
-%{!?_without_autodeps:BuildRequires:	perl-Term-ReadKey}
-BuildRequires:	perl-devel >= 5.6.1
+%{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
+BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 PreReq:		rc-scripts >= 0.2.0
