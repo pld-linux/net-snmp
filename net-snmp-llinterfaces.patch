@@ -1,0 +1,26 @@
+===================================================================
+RCS file: /cvsroot/net-snmp/net-snmp/agent/mibgroup/mibII/interfaces.c,v
+retrieving revision 1.75.2.16
+retrieving revision 1.75.2.17
+diff -u -r1.75.2.16 -r1.75.2.17
+--- net-snmp/net-snmp/agent/mibgroup/mibII/interfaces.c	2001/11/28 22:30:33	1.75.2.16
++++ net-snmp/net-snmp/agent/mibgroup/mibII/interfaces.c	2002/01/09 16:23:06	1.75.2.17
+@@ -1266,14 +1266,14 @@
+     struct ifreq    ifrq;
+     struct ifnet  **ifnetaddr_ptr;
+     FILE           *devin;
+-    unsigned long   rec_pkt, rec_oct, rec_err, rec_drop;
+-    unsigned long   snd_pkt, snd_oct, snd_err, snd_drop, coll;
++    unsigned long long rec_pkt, rec_oct, rec_err, rec_drop;
++    unsigned long long snd_pkt, snd_oct, snd_err, snd_drop, coll;
+     int             i, fd;
+     conf_if_list   *if_ptr;
+     const char     *scan_line_2_2 =
+-        "%lu %lu %lu %lu %*lu %*lu %*lu %*lu %lu %lu %lu %lu %*lu %lu";
++        "%llu %llu %llu %llu %*llu %*llu %*llu %*llu %llu %llu %llu %llu %*llu %llu";
+     const char     *scan_line_2_0 =
+-        "%lu %lu %*lu %*lu %*lu %lu %lu %*lu %*lu %lu";
++        "%llu %llu %*llu %*llu %*llu %llu %llu %*llu %*llu %llu";
+     const char     *scan_line_to_use;
+     
+ #endif  
