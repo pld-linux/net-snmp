@@ -21,8 +21,8 @@
 # Get network config
 . /etc/sysconfig/network
 
-CONF_FILE=/etc/snmp/snmpd.conf
-LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
+CONF_FILE=""
+LOG_WARNINGS_MESSAGES_TO_SYSLOG="yes"
 
 # Get service config
 [ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
