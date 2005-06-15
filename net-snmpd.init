@@ -66,7 +66,7 @@ case "$1" in
   reload)
 	if [ -f /var/lock/subsys/snmpd ]; then
 		msg_reloading "snmpd"
-		killproc -HUP snmpd
+		killproc snmpd -HUP
 	else
 		msg_not_running "snmpd"
 	fi
