@@ -61,7 +61,7 @@ case "$1" in
 		rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
 	else
 		msg_not_running "snmpd"
-	fi	
+	fi
 	;;
   reload)
 	if [ -f /var/lock/subsys/snmpd ]; then
@@ -70,7 +70,7 @@ case "$1" in
 		rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
 	else
 		msg_not_running "snmpd"
-	fi	
+	fi
 	;;
   restart|force-reload)
 	$0 stop
