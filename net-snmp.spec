@@ -15,7 +15,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.1.2
-Release:	1
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -408,6 +408,7 @@ chmod +x net-snmp-config
 
 PATH=`pwd`:$PATH \
 %{__perl} Makefile.PL \
+	-NET-SNMP-CONFIG="sh ../../net-snmp-config" -NET-SNMP-IN-SOURCE=true \
 	INSTALLDIRS=vendor \
 	OPTIMIZE="%{rpmcflags} -I`pwd`/../include" \
 	</dev/null
