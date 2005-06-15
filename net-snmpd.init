@@ -63,6 +63,15 @@ case "$1" in
 		msg_not_running "snmpd"
 	fi	
 	;;
+  reload)
+	if [ -f /var/lock/subsys/snmpd ]; then
+		msg_reloading "snmpd"
+		killproc -HUP snmpd
+		rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
+	else
+		msg_not_running "snmpd"
+	fi	
+	;;
   restart|force-reload)
 	$0 stop
 	$0 start
