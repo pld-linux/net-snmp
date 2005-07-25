@@ -1,0 +1,11 @@
+--- net-snmp-5.1.1/agent/mibgroup/ucd-snmp/memory.c.old	2004-03-26 13:25:41.048612988 +0200
++++ net-snmp-5.1.1/agent/mibgroup/ucd-snmp/memory.c	2004-03-26 13:26:43.672575121 +0200
+@@ -290,7 +290,7 @@
+         if (b)
+             sscanf(b, "MemShared: %lu", memshared);
+         else {
+-            snmp_log(LOG_ERR, "No MemShared line in /proc/meminfo\n");
++            /* snmp_log(LOG_ERR, "No MemShared line in /proc/meminfo\n"); */
+             *memshared = 0;
+         }
+         b = strstr(buff, "Buffers: ");

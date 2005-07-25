@@ -21,8 +21,8 @@
 # Get network config
 . /etc/sysconfig/network
 
-CONF_FILE=/etc/snmp/snmpd.conf
-LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
+CONF_FILE=""
+LOG_WARNINGS_MESSAGES_TO_SYSLOG="yes"
 
 # Get service config
 [ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
@@ -61,7 +61,15 @@ case "$1" in
 		rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
 	else
 		msg_not_running "snmpd"
-	fi	
+	fi
+	;;
+  reload)
+	if [ -f /var/lock/subsys/snmpd ]; then
+		msg_reloading "snmpd"
+		killproc snmpd -HUP
+	else
+		msg_not_running "snmpd"
+	fi
 	;;
   restart|force-reload)
 	$0 stop

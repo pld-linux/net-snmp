@@ -3,8 +3,10 @@
 # Define nice level for snmpd
 SERVICE_RUN_NICE_LEVEL="+0"
 
-# Default configuration file name
-CONF_FILE=/etc/snmp/snmpd.conf
+# Default configuration file name.
+# IMPORTANT:
+#  If you enable this, snmpd will not read additionally /etc/snmp/snmpd.local.conf
+# CONF_FILE=/etc/snmp/snmpd.conf
 
 # Log warnings/messages to syslog (otherwise to /var/log/snmpd.log)
 LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
