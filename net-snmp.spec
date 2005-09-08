@@ -3,6 +3,7 @@
 # - default configs
 # - review ucd-snmp-ia64.patch patch
 # - security http://security.gentoo.org/glsa/glsa-200505-18.xml
+# - security http://security.gentoo.org/glsa/glsa-200509-05.xml
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
