@@ -530,11 +530,11 @@ fi
 %doc FAQ NEWS PORTING README.snmpv3 TODO AGENT.txt
 
 %attr(754,root,root) /etc/rc.d/init.d/snmpd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmpd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmpd
 
 %dir %{_sysconfdir}/snmp
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.conf
-%attr(640,root,root) %config(missingok,noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmpd.local.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.conf
+%attr(640,root,root) %config(missingok,noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.local.conf
 
 %attr(755,root,root) %{_sbindir}/snmpd
 
@@ -584,8 +584,8 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/snmptrapd
 %attr(754,root,root) /etc/rc.d/init.d/snmptrapd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/snmptrapd
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/snmp/snmptrapd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmptrapd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmptrapd.conf
 %attr(755,root,root) %{_datadir}/snmp/snmp_perl_trapd.pl
 %{_mandir}/man5/snmptrapd.conf.5*
 %{_mandir}/man8/snmptrapd.8*
