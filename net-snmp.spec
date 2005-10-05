@@ -1,9 +1,3 @@
-# TODO:
-# - init scripts (which, what?)
-# - default configs
-# - review ucd-snmp-ia64.patch patch
-# - security http://security.gentoo.org/glsa/glsa-200505-18.xml
-# - security http://security.gentoo.org/glsa/glsa-200509-05.xml
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -17,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	0.2
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -30,8 +24,8 @@ Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
 # Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
-Source8:	http://juniper.net/techpubs/software/junos/junos71/juniper-mibs-7.1R1.3.tgz
-# Source8-md5:	fa5b9a2a3b93c6c5a5994ac7f36b5bf9
+Source8:	http://juniper.net/techpubs/software/junos/junos73/juniper-mibs-7.3R1.6.tgz
+# Source8-md5:	380f8475a7f71e093b1dc98e4976c106
 Patch0:		%{name}-acinclude.patch
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-rpm-implicit-libs.patch
@@ -43,6 +37,7 @@ Patch7:		%{name}-llinterfaces.patch
 Patch8:		%{name}-usr_local_bin_perl.patch
 Patch9:		%{name}-kernel_headers.patch
 Patch10:	%{name}-syntax.patch
+Patch11:	%{name}-fix-insecure-fixproc.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -378,6 +373,7 @@ Przegl╠darka MIB-Сw w Tk.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p0
 
 %build
 %{__libtoolize}
