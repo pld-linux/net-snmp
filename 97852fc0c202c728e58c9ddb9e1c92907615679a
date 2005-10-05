@@ -1,0 +1,4 @@
+- rel 1
+- glsa-200505-18 [CAN-2005-1740] fixed
+- glsa-200509-05 was gentoo specific
+- other todo item dropped (missing info about init script, what is missing in configs, we have no ia64)
