@@ -1,0 +1,2 @@
+- updated to 5.2.1.2 (NEWS say it fixes DoS vuln but... deadlock is unresolved)
+[fixes CAN-2005-2177]
