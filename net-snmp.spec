@@ -11,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	1
+Release:	1.1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -474,6 +474,9 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
 # Juniper MIBs:
 install JuniperMibs/*.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs
+
+# Standard MIBs (Required by Juniper MIBs)
+install StandardMibs/*.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
 %clean
 rm -rf $RPM_BUILD_ROOT
