@@ -11,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	1.1
+Release:	2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -420,6 +420,8 @@ Przegl╠darka MIB-Сw w Tk.
 #   #17 0x0804b53d in main (argc=5, argv=0xbffff344) at snmpd.c:993
 # [res mutex with groupID=0, resourceID=1 already locked in snmp_read() at snmp_api.c:5258]
 
+# build this subdir first. it's causing STRANGE compile failures # otherwise (for me at least). glen
+%{__make} -C agent/mibgroup
 %{__make}
 
 TDIR="`pwd`"
