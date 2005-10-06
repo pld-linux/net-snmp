@@ -1,0 +1,1 @@
+- -libs R: -mibs, so %{_datadir}/snmp dir should belong to -mibs
