@@ -11,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -44,6 +44,7 @@ BuildRequires:	automake
 BuildRequires:	elfutils-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
+BuildRequires:	lm_sensors-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -387,6 +388,9 @@ Przegl╠darka MIB-Сw w Tk.
 	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
 	--with-sys-location="Unknown" \
 	--with-mib-modules="host disman/event-mib smux mibII/mta_sendmail \
+%ifarch %{ix86} %{x8664}
+		ucd-snmp/lmSensors ucd-snmp/diskio \
+%endif
 		agentx target misc/ipfwacc tunnel" \
 	--with-libwrap \
 	--with-openssl \
@@ -450,6 +454,7 @@ install -d $RPM_BUILD_ROOT{/etc/{snmp,rc.d/init.d,sysconfig},/var/log}
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
+:> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmp.conf
 :> $RPM_BUILD_ROOT%{logfile}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
@@ -636,6 +641,8 @@ fi
 %{_mandir}/man1/snmpwalk.1*
 %{_mandir}/man5/snmp.conf.5*
 %{_mandir}/man5/snmp_config.5*
+
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmp.conf
 
 %files -n perl-SNMP
 %defattr(644,root,root,755)
