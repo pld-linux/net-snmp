@@ -24,8 +24,6 @@ Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
 # Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
-Source8:	http://juniper.net/techpubs/software/junos/junos73/juniper-mibs-7.3R1.6.tgz
-# Source8-md5:	380f8475a7f71e093b1dc98e4976c106
 Patch0:		%{name}-acinclude.patch
 Patch1:		%{name}-acfix.patch
 Patch2:		%{name}-rpm-implicit-libs.patch
@@ -362,7 +360,7 @@ MIB browser in Tk.
 Przegl±darka MIB-ów w Tk.
 
 %prep
-%setup -q -a7 -a8
+%setup -q -a7
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -478,12 +476,6 @@ cd ..
 
 # IP-Filter (non-Linux)
 rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
-
-# Juniper MIBs:
-install JuniperMibs/*.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs
-
-# Standard MIBs (Required by Juniper MIBs)
-install StandardMibs/*.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
 %clean
 rm -rf $RPM_BUILD_ROOT
