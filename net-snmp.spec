@@ -131,6 +131,7 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 Requires:	openssl-devel >= 0.9.7c
+Requires:	rpm-devel
 Obsoletes:	ucd-snmp-devel
 
 %description devel
