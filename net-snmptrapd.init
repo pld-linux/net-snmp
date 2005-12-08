@@ -54,7 +54,7 @@ case "$1" in
 		rm -f /var/lock/subsys/snmptrapd >/dev/null 2>&1
 	else
 		msg_not_running "snmptrapd"
-	fi	
+	fi
 	;;
   restart|force-reload)
 	$0 stop
