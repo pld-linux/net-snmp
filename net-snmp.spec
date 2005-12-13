@@ -49,10 +49,10 @@ BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.176
-PreReq:		rc-scripts >= 0.2.0
-PreReq:		%{name}-libs = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
+Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	cmu-snmp
@@ -130,9 +130,9 @@ Summary(uk):	óÅÒÅÄÏ×ÉÝÅ ÒÏÚÒÏÂËÉ ÄÌÑ ÐÒÏÅËÔÕ UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
+Requires:	libwrap-devel
 Requires:	openssl-devel >= 0.9.7c
 Requires:	rpm-devel
-Requires:	libwrap-devel
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -256,9 +256,9 @@ Baza danych MIB.
 Summary:	SNMP trap daemon
 Summary(pl):	Demon obs³uguj±cy pu³apki SNMP
 Group:		Applications/System
-PreReq:		%{name} = %{version}-%{release}
-PreReq:		rc-scripts >= 0.2.0
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
+Requires:	rc-scripts >= 0.2.0
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-snmptrapd
 
