@@ -1,13 +1,10 @@
---- net-snmp-5.1/configure.in.wiget	Wed Feb 12 16:04:32 2003
-+++ net-snmp-5.1/configure.in	Wed Feb 12 16:08:36 2003
-@@ -1403,24 +1403,6 @@
-       AC_CHECK_LIB(z, gzread, , CPPFLAGS=${_cppflags} LDFLAGS=${_ldflags}),
-       CPPFLAGS=${_cppflags} LDFLAGS=${_ldflags})
+diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
+--- net-snmp-5.3.org/configure.in	2005-12-28 18:20:56.000000000 +0100
++++ net-snmp-5.3/configure.in	2006-01-09 00:57:24.173063750 +0100
+@@ -2396,20 +2396,6 @@
+   ])
  
--  # two variants of bzip2 need checking.
--  AC_CHECK_LIB(bz2, bzread, [_rpmlibs="$_rpmlibs -lbz2"],
--     AC_CHECK_LIB(bz2, BZ2_bzread, [_rpmlibs="$_rpmlibs -lbz2"],))
--
+ 
 -  # two variants of db1 need checking.
 -  AC_CHECK_LIB(db1, dbopen, [_rpmlibs="-ldb1 $_rpmlibs"],
 -     AC_CHECK_LIB(db, dbopen, [_rpmlibs="-ldb $_rpmlibs"]))
