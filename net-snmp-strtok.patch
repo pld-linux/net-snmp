@@ -1,0 +1,23 @@
+--- net-snmp-5.1.1/snmplib/read_config.c.orig	2004-02-27 01:26:56.000000000 +0100
++++ net-snmp-5.1.1/snmplib/read_config.c	2004-03-27 18:30:31.624843344 +0100
+@@ -766,9 +766,9 @@
+      * do this even when the normal above wasn't done 
+      */
+     if (optional_config && type) {
+-      char *newp, *cp;
++      char *newp, *cp, *stptr;
+       newp = strdup(optional_config);
+-      cp = strtok(newp, ",");
++      cp = strtok_r(newp, ",", &stptr);
+       while (cp) {
+         struct stat     statbuf;
+         if (stat(cp, &statbuf)) {
+@@ -782,7 +782,7 @@
+                         cp));
+             read_config_with_type(cp, type);
+         }
+-        cp = strtok(NULL, ",");
++        cp = strtok_r(NULL, ",", &stptr);
+       }
+       free(newp);
+     }
