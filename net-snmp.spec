@@ -10,12 +10,12 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
-Version:	5.2.1.2
-Release:	4
+Version:	5.3
+Release:	0.1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	34159770a7fe418d99fdd416a75358b1
+# Source0-md5:	0dc8e4c8440c011139b71e59cd3b421a
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -32,10 +32,7 @@ Patch4:		%{name}-dlopen-fix.patch
 Patch5:		%{name}-manpage.patch
 Patch6:		%{name}-link.patch
 Patch7:		%{name}-llinterfaces.patch
-Patch8:		%{name}-usr_local_bin_perl.patch
-Patch9:		%{name}-kernel_headers.patch
-Patch10:	%{name}-syntax.patch
-Patch11:	%{name}-fix-insecure-fixproc.patch
+Patch8:		%{name}-kernel_headers.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -372,15 +369,12 @@ Przegl╠darka MIB-Сw w Tk.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p0
 
 %build
 %{__libtoolize}
 %{__aclocal}
-%{__autoheader}
 %{__autoconf}
+%{__autoheader}
 %configure \
 	--with-logfile="%{logfile}" \
 	--with-cflags="%{rpmcflags} -I%{_includedir}/rpm" \
