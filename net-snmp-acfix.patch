@@ -1,7 +1,31 @@
 diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
 --- net-snmp-5.3.org/configure.in	2005-12-28 18:20:56.000000000 +0100
-+++ net-snmp-5.3/configure.in	2006-01-09 00:54:22.913735750 +0100
-@@ -2880,7 +2880,7 @@
++++ net-snmp-5.3/configure.in	2006-01-09 01:07:39.031490000 +0100
+@@ -2661,23 +2661,6 @@
+     LIBS="${LIBS} -ladm"
+     AGENTLIBS="${AGENTLIBS} -ladm"))
+ 
+-case $target_os in
+-    aix*) # AIX perfstat library, needed for CPU/memory statistics
+-        AC_CHECK_HEADERS(libperfstat.h,
+-            AC_CHECK_LIB(perfstat, perfstat_cpu_total, AC_DEFINE(HAVE_PERFSTAT)
+-            AGENTLIBS="${AGENTLIBS} -lperfstat"), AC_MSG_ERROR([
+-
+-*** To monitor CPU/memory values in AIX you need to install
+-*** libperfstat which can be found in bos.perf
+-]))
+-        ;;
+-    hpux*) # HP-UX agent needs open_mib
+-        AC_CHECK_LIB(nm, open_mib, AC_DEFINE(HAVE_LIBNM)
+-            AGENTLIBS="${AGENTLIBS} -lnm")
+-        ;;
+-    *)
+-        ;;
+-esac
+ # WIN32
+ # (mingw32 must link winsock explicitly)
+ AC_CHECK_HEADERS(winsock.h,[
+@@ -2880,7 +2863,7 @@
  
  AC_MSG_RESULT([$ac_cv_type_ssize_t])
  if test $ac_cv_type_ssize_t = yes; then
