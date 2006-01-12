@@ -385,7 +385,7 @@ Przegl±darka MIB-ów w Tk.
 %ifarch %{ix86} %{x8664}
 		ucd-snmp/lmSensors ucd-snmp/diskio \
 %endif
-		agentx target misc/ipfwacc tunnel" \
+		agentx target misc/ipfwacc" \
 	--with-libwrap \
 	--with-openssl \
 	--disable-debugging \
@@ -534,6 +534,8 @@ fi
 %attr(755,root,root) %{_sbindir}/snmpd
 
 %{_mandir}/man5/snmpd.conf.5*
+%{_mandir}/man5/snmpd.examples.5*
+%{_mandir}/man5/snmpd.internal.5*
 %{_mandir}/man5/variables.5*
 %{_mandir}/man8/snmpd.8*
 
