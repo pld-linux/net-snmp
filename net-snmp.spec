@@ -426,7 +426,7 @@ Przegl±darka MIB-ów w Tk.
 
 # build this subdir first. it's causing STRANGE compile failures # otherwise (for me at least). glen
 %{__make} -C agent/mibgroup
-%{__make}
+%{__make} -j1
 
 cd perl
 
@@ -633,7 +633,7 @@ fi
 %{_mandir}/man5/snmp.conf.5*
 %{_mandir}/man5/snmp_config.5*
 
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmp.conf
 
 %files -n perl-SNMP
 %defattr(644,root,root,755)
