@@ -54,10 +54,10 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
 Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		logfile		/var/log/snmpd.log
 
@@ -444,7 +444,7 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{snmp,rc.d/init.d,sysconfig},/var/log}
+install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,snmp},/var/log}
 
 %{__make} install \
 	INSTALL_PREFIX=$RPM_BUILD_ROOT
@@ -471,8 +471,8 @@ cd perl
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
 install SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
-cd ..
 
+rm -f $RPM_BUILD_ROOT{%{perl_archlib}/perllocal.pod,%{perl_vendorarch}/{Bundle/Makefile.subs.pl,auto/Bundle/NetSNMP/.packlist}}
 # IP-Filter (non-Linux)
 rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
