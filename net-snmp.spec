@@ -1,6 +1,3 @@
-# TODO:
-# - upgrade from RA ucd-snmp leaves us with snmpd
-#   in off state on all levels as seen by chkconfig
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -14,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -506,6 +503,9 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
+%triggerpostun -- ucd-snmp
+/sbin/chkconfig --add snmpd
+
 %post snmptrapd
 /sbin/chkconfig --add snmptrapd
 if [ -f /var/lock/subsys/snmptrapd ]; then
@@ -526,6 +526,9 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del snmptrapd
 fi
+
+%triggerpostun snmptrapd -- ucd-snmp-snmptrapd
+/sbin/chkconfig --add snmptrapd
 
 %files
 %defattr(644,root,root,755)
