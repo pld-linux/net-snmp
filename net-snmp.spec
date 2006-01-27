@@ -11,7 +11,7 @@ Summary(ru):	îÁÂÏÒ ÕÔÉÌÉÔ ÄÌÑ ÐÒÏÔÏËÏÌÁ SNMP ÏÔ UC-Davis
 Summary(uk):	îÁÂ¦Ò ÕÔÉÌ¦Ô ÄÌÑ ÐÒÏÔÏËÏÌÕ SNMP ×¦Ä UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -49,15 +49,15 @@ BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.176
-PreReq:		rc-scripts >= 0.2.0
-PreReq:		%{name}-libs = %{version}-%{release}
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
+Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		logfile		/var/log/snmpd.log
 
@@ -130,9 +130,9 @@ Summary(uk):	óÅÒÅÄÏ×ÉÝÅ ÒÏÚÒÏÂËÉ ÄÌÑ ÐÒÏÅËÔÕ UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
+Requires:	libwrap-devel
 Requires:	openssl-devel >= 0.9.7c
 Requires:	rpm-devel
-Requires:	libwrap-devel
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -256,9 +256,9 @@ Baza danych MIB.
 Summary:	SNMP trap daemon
 Summary(pl):	Demon obs³uguj±cy pu³apki SNMP
 Group:		Applications/System
-PreReq:		%{name} = %{version}-%{release}
-PreReq:		rc-scripts >= 0.2.0
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name} = %{version}-%{release}
+Requires:	rc-scripts >= 0.2.0
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-snmptrapd
 
@@ -426,7 +426,7 @@ Przegl±darka MIB-ów w Tk.
 
 # build this subdir first. it's causing STRANGE compile failures # otherwise (for me at least). glen
 %{__make} -C agent/mibgroup
-%{__make}
+%{__make} -j1
 
 cd perl
 
@@ -444,7 +444,7 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{snmp,rc.d/init.d,sysconfig},/var/log}
+install -d $RPM_BUILD_ROOT{/etc/{sysconfig,rc.d/init.d,snmp},/var/log}
 
 %{__make} install \
 	INSTALL_PREFIX=$RPM_BUILD_ROOT
@@ -471,8 +471,8 @@ cd perl
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
 install SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
-cd ..
 
+rm -f $RPM_BUILD_ROOT{%{perl_archlib}/perllocal.pod,%{perl_vendorarch}/{Bundle/Makefile.subs.pl,auto/Bundle/NetSNMP/.packlist}}
 # IP-Filter (non-Linux)
 rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
@@ -503,6 +503,9 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
+%triggerpostun -- ucd-snmp
+/sbin/chkconfig --add snmpd
+
 %post snmptrapd
 /sbin/chkconfig --add snmptrapd
 if [ -f /var/lock/subsys/snmptrapd ]; then
@@ -523,6 +526,9 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del snmptrapd
 fi
+
+%triggerpostun snmptrapd -- ucd-snmp-snmptrapd
+/sbin/chkconfig --add snmptrapd
 
 %files
 %defattr(644,root,root,755)
@@ -633,7 +639,7 @@ fi
 %{_mandir}/man5/snmp.conf.5*
 %{_mandir}/man5/snmp_config.5*
 
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmp.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmp.conf
 
 %files -n perl-SNMP
 %defattr(644,root,root,755)
