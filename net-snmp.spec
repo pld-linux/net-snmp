@@ -1,3 +1,6 @@
+# TODO:
+# - upgrade from RA ucd-snmp leaves us with snmpd
+#   in off state on all levels as seen by chkconfig
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
