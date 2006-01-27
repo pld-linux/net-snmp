@@ -521,7 +521,7 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del snmptrapd
 fi
 
-%triggerpostun -- ucd-snmp-snmptrapd
+%triggerpostun snmptrapd -- ucd-snmp-snmptrapd
 /sbin/chkconfig --add snmptrapd
 
 %files
