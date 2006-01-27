@@ -497,6 +497,9 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
+%triggerpostun -- ucd-snmp
+/sbin/chkconfig --add snmpd
+
 %post snmptrapd
 /sbin/chkconfig --add snmptrapd
 if [ -f /var/lock/subsys/snmptrapd ]; then
@@ -517,6 +520,9 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del snmptrapd
 fi
+
+%triggerpostun -- ucd-snmp-snmptrapd
+/sbin/chkconfig --add snmptrapd
 
 %files
 %defattr(644,root,root,755)
