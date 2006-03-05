@@ -46,15 +46,16 @@ BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.176
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
 Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		logfile		/var/log/snmpd.log
 
@@ -438,7 +439,7 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{snmp,rc.d/init.d,sysconfig},/var/log}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log}
 
 %{__make} install \
 	INSTALL_PREFIX=$RPM_BUILD_ROOT
@@ -474,23 +475,14 @@ rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/chkconfig --add snmpd
-if [ -f /var/lock/subsys/snmpd ]; then
-	/etc/rc.d/init.d/snmpd restart >&2
-else
-	%banner %{name} -e <<EOF
-Run \"/etc/rc.d/init.d/snmpd start\" to start snmpd daemon.
-EOF
-#" vim
-fi
 touch %{logfile}
 chmod 640 %{logfile}
+/sbin/chkconfig --add snmpd
+%service snmpd restart "snmpd daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/snmpd ]; then
-		/etc/rc.d/init.d/snmpd stop >&2
-	fi
+	%service snmpd stop
 	/sbin/chkconfig --del snmpd
 fi
 
@@ -501,23 +493,14 @@ fi
 /sbin/chkconfig --add snmpd
 
 %post snmptrapd
-/sbin/chkconfig --add snmptrapd
-if [ -f /var/lock/subsys/snmptrapd ]; then
-	/etc/rc.d/init.d/snmptrapd restart >&2
-else
-	%banner %{name}-snmptrapd -e <<EOF
-Run \"/etc/rc.d/init.d/snmptrapd start\" to start snmp trap daemon.
-EOF
-#" vim
-fi
 touch %{logfile}
 chmod 640 %{logfile}
+/sbin/chkconfig --add snmptrapd
+%service snmptrapd restart "snmp trap daemon"
 
 %preun snmptrapd
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/snmptrapd ]; then
-		/etc/rc.d/init.d/snmptrapd stop >&2
-	fi
+	%service snmptrapd stop
 	/sbin/chkconfig --del snmptrapd
 fi
 
