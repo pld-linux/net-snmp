@@ -11,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.3.1
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -519,7 +519,6 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/snmpd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmpd
 
-%dir %{_sysconfdir}/snmp
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.conf
 %attr(640,root,root) %config(missingok,noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.local.conf
 
@@ -535,6 +534,7 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
+%dir %{_sysconfdir}/snmp
 %attr(755,root,root) %{_libdir}/libnet*.so.*.*
 
 %files devel
