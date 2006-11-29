@@ -10,40 +10,41 @@ Summary(pt_BR):	Agente SNMP da UCD
 Summary(ru):	îÁÂÏÒ ÕÔÉÌÉÔ ÄÌÑ ÐÒÏÔÏËÏÌÁ SNMP ÏÔ UC-Davis
 Summary(uk):	îÁÂ¦Ò ÕÔÉÌ¦Ô ÄÌÑ ÐÒÏÔÏËÏÌÕ SNMP ×¦Ä UC-Davis
 Name:		net-snmp
-Version:	5.3.1
-Release:	4
+Version:	5.4
+Release:	0.1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	360a9783dbc853bab6bda90d961daee5
+# Source0-md5:	46d893281056ff476e597659cb91574d
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
 Source4:	%{name}trapd.init
 Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
-Source7:	ftp://ucd-snmp.ucdavis.edu/contrib/ucd-ipchains.tar.gz
+Source7:	ucd-ipchains.tar.gz
 # Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
-Patch0:		%{name}-acinclude.patch
-Patch1:		%{name}-acfix.patch
-Patch2:		%{name}-rpm-implicit-libs.patch
-Patch3:		%{name}-config-noflags.patch
-Patch4:		%{name}-dlopen-fix.patch
-Patch5:		%{name}-manpage.patch
-Patch6:		%{name}-link.patch
-Patch7:		%{name}-llinterfaces.patch
-Patch8:		%{name}-kernel_headers.patch
-Patch9:		%{name}-rpmpath.patch
+Patch0:		%{name}-acfix.patch
+Patch1:		%{name}-rpm-implicit-libs.patch
+Patch2:		%{name}-config-noflags.patch
+Patch3:		%{name}-dlopen-fix.patch
+Patch4:		%{name}-manpage.patch
+Patch5:		%{name}-link.patch
+Patch6:		%{name}-llinterfaces.patch
+Patch7:		%{name}-kernel_headers.patch
+Patch8:		%{name}-rpmpath.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
+BuildRequires:	heimdal-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
 BuildRequires:	lm_sensors-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
+BuildRequires:	python-devel
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.176
@@ -372,7 +373,6 @@ Przegl±darka MIB-ów w Tk.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 
 %build
 %{__libtoolize}
@@ -385,11 +385,15 @@ Przegl±darka MIB-ów w Tk.
 	--with-ldflags="%{rpmldflags}" \
 	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
 	--with-sys-location="Unknown" \
+	--with-perl-modules \
+	--with-python-modules \
+	--with-security-modules="usm ksm" \
 	--with-mib-modules="host disman/event-mib smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 		ucd-snmp/lmSensors ucd-snmp/diskio \
 %endif
 		agentx target misc/ipfwacc" \
+	--with-krb5 \
 	--with-libwrap \
 	--with-openssl \
 	--disable-debugging \
