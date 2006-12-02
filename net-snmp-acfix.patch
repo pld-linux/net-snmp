@@ -1,6 +1,19 @@
 diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
 --- net-snmp-5.3.org/configure.in	2005-12-28 18:20:56.000000000 +0100
 +++ net-snmp-5.3/configure.in	2006-01-09 01:07:39.031490000 +0100
+@@ -1704,11 +1704,11 @@
+   if test "x$sec" = "xksm" -a "xyes" = "x$already_checked_krb5"; then
+     continue
+   fi
+-  already_checked_krb5=yes
+ 
+   if test x$sec != xksm; then
+     rebuilt_new_with_security="$rebuilt_new_with_security $sec"
+   else
++    already_checked_krb5=yes
+     if test no = $trykrb5; then
+       AC_MSG_NOTICE([configured not to use krb5. disabling ksm])
+       continue
 @@ -2661,23 +2661,6 @@
      LIBS="${LIBS} -ladm"
      AGENTLIBS="${AGENTLIBS} -ladm"))
