@@ -451,7 +451,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log}
 
 %{__make} install \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
