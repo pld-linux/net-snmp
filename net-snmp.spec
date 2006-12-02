@@ -33,6 +33,7 @@ Patch5:		%{name}-link.patch
 Patch6:		%{name}-llinterfaces.patch
 Patch7:		%{name}-kernel_headers.patch
 Patch8:		%{name}-rpmpath.patch
+Patch9:		%{name}-snmpksm.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -373,6 +374,7 @@ Przegl±darka MIB-ów w Tk.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 %build
 %{__libtoolize}
@@ -381,13 +383,13 @@ Przegl±darka MIB-ów w Tk.
 %{__autoheader}
 %configure \
 	--with-logfile="%{logfile}" \
-	--with-cflags="%{rpmcflags} -I%{_includedir}/rpm" \
+	--with-cflags="%{rpmcflags} -I/usr/include/et" \
 	--with-ldflags="%{rpmldflags}" \
 	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
 	--with-sys-location="Unknown" \
 	--with-perl-modules \
 	--with-python-modules \
-	--with-security-modules="usm ksm" \
+	--with-security-modules="ksm" \
 	--with-mib-modules="host disman/event-mib smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 		ucd-snmp/lmSensors ucd-snmp/diskio \
