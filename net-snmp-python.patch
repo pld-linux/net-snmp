@@ -1,0 +1,11 @@
+--- net-snmp-5.4/Makefile.in.orig	2006-11-07 15:54:25.000000000 +0100
++++ net-snmp-5.4/Makefile.in	2006-12-02 18:50:02.611735250 +0100
+@@ -208,7 +208,7 @@
+         fi
+ 
+ pythoninstall:
+-	@(cd python ; $(PYMAKE) install) ; \
++	@(cd python ; $(PYMAKE) install --root=$(DESTDIR)) ; \
+         if test $$? != 0 ; then \
+            exit 1 ; \
+         fi
