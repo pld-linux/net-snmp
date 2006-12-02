@@ -34,3 +34,82 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
  fi
  
  # Check ps args
+--- net-snmp-5.4/agent/mibgroup/Makefile.in.orig	2006-09-13 19:00:27.000000000 +0200
++++ net-snmp-5.4/agent/mibgroup/Makefile.in	2006-12-02 11:51:38.369040000 +0100
+@@ -22,9 +22,13 @@
+ .c.o:
+ 	$(CC) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
+ 
+-OBJS  = @mib_module_list_o@
+-LOBJS = @mib_module_list_lo@
+-SRCS  = @mib_module_list_c@
++@mib_module_list_o@
++@mib_module_list_lo@
++@mib_module_list_c@
++
++OBJS  = $(mib_module_list_o)
++LOBJS = $(mib_module_list_lo)
++SRCS  = $(mib_module_list_c)
+ 
+ all: standardall $(LOBJS)
+ 
+--- net-snmp-5.4/agent/mibgroup/ucd-snmp/disk.c.orig	2006-09-15 02:48:41.000000000 +0200
++++ net-snmp-5.4/agent/mibgroup/ucd-snmp/disk.c	2006-12-02 12:03:27.889382250 +0100
+@@ -229,7 +229,7 @@
+ static void 
+ disk_parse_config(const char *token, char *cptr)
+ {
+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS
++#if HAVE_FSTAB_H || defined(HAVE_GETMNTENT) || HAVE_STATFS
+   char            tmpbuf[1024];
+   char            path[STRMAX];
+   int             minpercent;
+@@ -296,7 +296,7 @@
+ static void 
+ disk_parse_config_all(const char *token, char *cptr)
+ {
+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS
++#if HAVE_FSTAB_H || defined(HAVE_GETMNTENT) || HAVE_STATFS
+   char            tmpbuf[1024];
+   int             minpercent = DISKMINPERCENT;
+     
+@@ -428,7 +428,7 @@
+ static void 
+ find_and_add_allDisks(int minpercent)
+ {
+-#if HAVE_GETMNTENT
++#if defined(HAVE_GETMNTENT)
+ #if HAVE_SYS_MNTTAB_H
+   struct mnttab   mnttab;
+ #else
+@@ -451,8 +451,8 @@
+    * string declared above and at the end of the routine return it
+    * to the caller 
+    */
+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS   
+-#if HAVE_GETMNTENT
++#if HAVE_FSTAB_H || defined(HAVE_GETMNTENT) || HAVE_STATFS   
++#if defined(HAVE_GETMNTENT)
+ #if HAVE_SETMNTENT
+   mntfp = setmntent(ETC_MNTTAB, "r");
+   while (NULL != (mntent = getmntent(mntfp))) {
+@@ -522,7 +522,7 @@
+ static char *
+ find_device(char *path)
+ {
+-#if HAVE_GETMNTENT
++#if defined(HAVE_GETMNTENT)
+ #if HAVE_SYS_MNTTAB_H
+   struct mnttab   mnttab;
+ #else
+@@ -548,8 +548,8 @@
+    * string declared above and at the end of the routine return it
+    * to the caller 
+    */
+-#if HAVE_FSTAB_H || HAVE_GETMNTENT || HAVE_STATFS   
+-#if HAVE_GETMNTENT
++#if HAVE_FSTAB_H || defined(HAVE_GETMNTENT) || HAVE_STATFS   
++#if defined(HAVE_GETMNTENT)
+ #if HAVE_SETMNTENT
+   mntfp = setmntent(ETC_MNTTAB, "r");
+   while (NULL != (mntent = getmntent(mntfp)))
