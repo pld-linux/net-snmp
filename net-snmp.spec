@@ -34,6 +34,7 @@ Patch6:		%{name}-llinterfaces.patch
 Patch7:		%{name}-kernel_headers.patch
 Patch8:		%{name}-rpmpath.patch
 Patch9:		%{name}-snmpksm.patch
+Patch10:	%{name}-python.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
@@ -45,7 +46,7 @@ BuildRequires:	lm_sensors-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
-BuildRequires:	python-devel
+BuildRequires:	python-devel >= 1:2.5
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.176
@@ -363,6 +364,20 @@ MIB browser in Tk.
 %description tkmib -l pl
 Przegl±darka MIB-ów w Tk.
 
+%package -n python-netsnmp
+Summary:	Python netsnmp extension module
+Summary(pl):	Modu³ rozszerzenia netsnmp dla Pythona
+Group:		Libraries/Python
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description -n python-netsnmp
+The 'netsnmp' Python extension module provides a full featured,
+tri-lingual SNMP (SNMPv3, SNMPv2c, SNMPv1) client API.
+
+%description -n python-netsnmp -l pl
+Modu³ rozszerzenia netsnmp dla Pythona udostêpnia pe³ne API klienckie
+SNMP dla trzech wersji tego protoko³u (SNMPv3, SNMPv2c, SNMPv1).
+
 %prep
 %setup -q -a7
 %patch0 -p1
@@ -375,6 +390,7 @@ Przegl±darka MIB-ów w Tk.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
 
 %build
 %{__libtoolize}
@@ -553,6 +569,8 @@ fi
 %{_includedir}/net-snmp
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
+%{_mandir}/man1/mib2c-update.1*
+%{_mandir}/man1/net-snmp-config.1*
 %{_mandir}/man3/[!NS]*
 %{_mandir}/man5/mib2c.conf.5*
 
@@ -605,7 +623,7 @@ fi
 %attr(755,root,root) %{_bindir}/snmpusm
 %attr(755,root,root) %{_bindir}/snmpvacm
 %attr(755,root,root) %{_bindir}/snmpwalk
-
+%{_mandir}/man1/encode_keychange.1*
 %{_mandir}/man1/snmpbulkget.1*
 %{_mandir}/man1/snmpbulkwalk.1*
 %{_mandir}/man1/snmpcmd.1*
@@ -656,6 +674,8 @@ fi
 %attr(755,root,root) %{_bindir}/fixproc
 %attr(755,root,root) %{_bindir}/snmpcheck
 %attr(755,root,root) %{_bindir}/traptoemail
+%{_mandir}/man1/fixproc.1*
+%{_mandir}/man1/traptoemail.1*
 
 %files snmpconf
 %defattr(644,root,root,755)
@@ -666,3 +686,11 @@ fi
 %files tkmib
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/tkmib
+%{_mandir}/man1/tkmib.1*
+
+%files -n python-netsnmp
+%defattr(644,root,root,755)
+%dir %{py_sitedir}/netsnmp
+%attr(755,root,root) %{py_sitedir}/netsnmp/*.so
+%{py_sitedir}/netsnmp/*.py[co]
+%{py_sitedir}/netsnmp_python-*.egg-info
