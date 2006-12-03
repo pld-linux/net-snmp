@@ -398,30 +398,30 @@ SNMP dla trzech wersji tego protoko³u (SNMPv3, SNMPv2c, SNMPv1).
 %{__autoconf}
 %{__autoheader}
 %configure \
-	--with-logfile="%{logfile}" \
 	--with-cflags="%{rpmcflags} -I/usr/include/et" \
 	--with-ldflags="%{rpmldflags}" \
-	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
-	--with-sys-location="Unknown" \
-	--with-perl-modules \
-	--with-python-modules \
-	--with-security-modules="ksm" \
+	--with-defaults \
+	--with-default-snmp-version=3 \
+	--with-krb5 \
+	--with-libwrap \
+	--with-logfile="%{logfile}" \
 	--with-mib-modules="host disman/event-mib smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 		ucd-snmp/lmSensors ucd-snmp/diskio \
 %endif
 		agentx target misc/ipfwacc" \
-	--with-krb5 \
-	--with-libwrap \
 	--with-openssl \
-	--disable-debugging \
+	--with-perl-modules \
 	--with-persistent-directory="/var/lib/net-snmp" \
-	--enable-ipv6 \
+	--with-python-modules \
+	--with-security-modules="ksm" \
 	--with-sys-contact="root@localhost" \
-	--enable-ucd-snmp-compatibility \
-	--with-defaults \
-	--with-default-snmp-version=3 \
-	--enable-shared
+	--with-sys-location="Unknown" \
+	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
+	--disable-debugging \
+	--enable-as-needed \
+	--enable-ipv6 \
+	--enable-ucd-snmp-compatibility
 
 #	--enable-reentrant is broken - snmpd deadlocks on send (tries to lock the same mutex twice):
 #   #4  0xb760f54e in siglongjmp () from /lib/tls/libpthread.so.0
