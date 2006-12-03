@@ -1,7 +1,6 @@
-diff -ur net-snmp-5.3.org/agent/Makefile.in net-snmp-5.3/agent/Makefile.in
---- net-snmp-5.3.org/agent/Makefile.in	2005-12-04 19:24:25.000000000 +0100
-+++ net-snmp-5.3/agent/Makefile.in	2006-01-09 00:58:58.598965000 +0100
-@@ -133,7 +133,7 @@
+--- net-snmp-5.4.org/agent/Makefile.in	2005-12-04 19:24:25.000000000 +0100
++++ net-snmp-5.4/agent/Makefile.in	2006-01-09 00:58:58.598965000 +0100
+@@ -137,11 +137,11 @@
  
  
  libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION):    ${LLIBAGENTOBJS}
@@ -10,6 +9,11 @@ diff -ur net-snmp-5.3.org/agent/Makefile.in net-snmp-5.3/agent/Makefile.in
  	$(RANLIB) libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION)
  
  libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION):    ${LMIBOBJS}
+-	$(LIB_LD_CMD) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION) ${LMIBOBJS}  $(LIB_LD_LIBS) @SENSORLIBS@
++	$(LIB_LD_CMD) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION) ${LMIBOBJS}  $(LIB_LD_LIBS) @SENSORLIBS@ -ldl
+ 	$(RANLIB) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION)
+ 
+ agentlib: libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION)
 diff -ur net-snmp-5.3.org/Makefile.rules net-snmp-5.3/Makefile.rules
 --- net-snmp-5.3.org/Makefile.rules	2005-10-10 20:47:48.000000000 +0200
 +++ net-snmp-5.3/Makefile.rules	2006-01-09 00:58:13.044118000 +0100
@@ -61,7 +65,7 @@ diff -ur net-snmp-5.3.org/snmplib/Makefile.in net-snmp-5.3/snmplib/Makefile.in
  # how to build the libraries.
  libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
 -	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
-+	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
++	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @KRB5_LIBS@ @LIBCRYPTO@
  	$(RANLIB) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
  
 -libsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
@@ -71,3 +75,45 @@ diff -ur net-snmp-5.3.org/snmplib/Makefile.in net-snmp-5.3/snmplib/Makefile.in
  #
  # internal test objects
  #
+--- net-snmp-5.4/configure.in.orig	2006-12-03 19:46:10.257988000 +0100
++++ net-snmp-5.4/configure.in	2006-12-03 20:31:42.153670517 +0100
+@@ -1699,6 +1699,8 @@
+ rebuilt_new_with_security=
+ already_checked_krb5=no
+ 
++KRB5_LIBS=
++AC_SUBST(KRB5_LIBS)
+ for sec in $new_with_security
+ do
+   if test "x$sec" = "xksm" -a "xyes" = "x$already_checked_krb5"; then
+@@ -1718,7 +1720,7 @@
+ 
+     if test no != $krb5_config; then
+       CPPFLAGS="$CPPFLAGS `$krb5_config --cflags`"
+-      LIBS="$LIBS `$krb5_config --libs`"
++      KRB5_LIBS="`$krb5_config --libs`"
+     elif test $krb5path != no; then
+       AC_ADD_SEARCH_PATH($krb5path)
+     else
+@@ -1755,10 +1757,10 @@
+     if test $ac_cv_heimdal = yes; then
+       AC_DEFINE(NETSNMP_USE_KERBEROS_HEIMDAL)
+       if test no = $krb5_config; then
+-	LIBS="$LIBS -lkrb5 -lasn1 -lcom_err -lroken"
++	KRB5_LIBS="-lkrb5 -lasn1 -lcom_err -lroken"
+       fi
+     elif test no = $krb5_config; then
+-	LIBS="$LIBS -lkrb5 -lcom_err"
++	KRB5_LIBS="-lkrb5 -lcom_err"
+     fi
+ 
+     AC_MSG_CHECKING([to see which crypto API we need to use])
+@@ -1773,7 +1775,7 @@
+       AC_MSG_RESULT(new MIT crypto API)
+       AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
+       if test no = $krb5_config; then
+-	LIBS="$LIBS -lk5crypto"
++	KRB5_LIBS="-lk5crypto"
+       fi
+     else
+       AC_MSG_RESULT(old MIT crypto API)])
