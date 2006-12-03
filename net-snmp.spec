@@ -11,7 +11,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.4
-Release:	0.1
+Release:	0.2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
