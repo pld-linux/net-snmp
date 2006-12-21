@@ -47,6 +47,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	python-devel >= 1:2.5
+BuildRequires:	python-setuptools
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.176
