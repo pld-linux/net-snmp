@@ -1,82 +1,38 @@
---- net-snmp-5.4.org/agent/Makefile.in	2005-12-04 19:24:25.000000000 +0100
-+++ net-snmp-5.4/agent/Makefile.in	2006-01-09 00:58:58.598965000 +0100
+diff -urN net-snmp-5.4.org/agent/Makefile.in net-snmp-5.4/agent/Makefile.in
+--- net-snmp-5.4.org/agent/Makefile.in	2006-11-07 15:54:25.000000000 +0100
++++ net-snmp-5.4/agent/Makefile.in	2006-12-21 01:59:59.846638250 +0100
+@@ -74,11 +74,11 @@
+ #
+ # how to build it info
+ #
+-USELIBS		= ../snmplib/libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
+-HELPERLIB	= helpers/libnetsnmphelpers.$(LIB_EXTENSION)$(LIB_VERSION)
++USELIBS		= $(top_builddir)/snmplib/libnetsnmp.la
++HELPERLIB	= $(top_builddir)/agent/helpers/libnetsnmphelpers.la
+ LOCAL_LIBS	= 
+ PERLLDOPTS      = @PERLLDOPTS@
+-LIBS		= ../snmplib/libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) @AGENTLIBS@ $(PERLLDOPTS)
++LIBS		= $(top_builddir)/snmplib/libnetsnmp.la @AGENTLIBS@ $(PERLLDOPTS)
+ OUR_AGENT_LIBS	= $(INSTALLLIBS) $(HELPERLIB) @WRAPLIBS@ $(LIBS) @DLLIBS@
+ CPPFLAGS	= $(TOP_INCLUDES) -I. $(AGENT_INCLUDES) $(MIBGROUP_INCLUDES) \
+ 		  $(SNMPLIB_INCLUDES) @CPPFLAGS@ 
 @@ -137,11 +137,11 @@
  
  
  libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION):    ${LLIBAGENTOBJS}
 -	$(LIB_LD_CMD) libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION) ${LLIBAGENTOBJS}  $(LIB_LD_LIBS)
-+	$(LIB_LD_CMD) libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION) ${LLIBAGENTOBJS} @WRAPLIBS@ $(LIB_LD_LIBS)
++	$(LIB_LD_CMD) libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION) ${LLIBAGENTOBJS} @WRAPLIBS@ $(LIB_LD_LIBS) ${HELPERLIB} ${LIBS}
  	$(RANLIB) libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION)
  
  libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION):    ${LMIBOBJS}
 -	$(LIB_LD_CMD) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION) ${LMIBOBJS}  $(LIB_LD_LIBS) @SENSORLIBS@
-+	$(LIB_LD_CMD) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION) ${LMIBOBJS}  $(LIB_LD_LIBS) @SENSORLIBS@ -ldl
++	$(LIB_LD_CMD) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION) ${LMIBOBJS} ${HELPERLIB} $(LIB_LD_LIBS) @SENSORLIBS@ -ldl
  	$(RANLIB) libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION)
  
  agentlib: libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION)
-diff -ur net-snmp-5.3.org/Makefile.rules net-snmp-5.3/Makefile.rules
---- net-snmp-5.3.org/Makefile.rules	2005-10-10 20:47:48.000000000 +0200
-+++ net-snmp-5.3/Makefile.rules	2006-01-09 00:58:13.044118000 +0100
-@@ -8,7 +8,7 @@
- 
- # the standard items to build: libraries, bins, and sbins
- STANDARDTARGETS     =$(INSTALLLIBS) $(INSTALLBINPROGS) $(INSTALLSBINPROGS)
--STANDARDCLEANTARGETS=$(INSTALLLIBS) $(INSTALLBINPROGS) $(INSTALLSBINPROGS) $(INSTALLUCDLIBS)
-+STANDARDCLEANTARGETS=$(INSTALLLIBS) $(INSTALLBINPROGS) $(INSTALLSBINPROGS)
- 
- standardall: subdirs $(STANDARDTARGETS)
- 
-@@ -175,17 +175,11 @@
- 		$(LIB_LDCONFIG_CMD) ; \
- 	fi
- 
--installucdlibs: $(INSTALLUCDLIBS)
--	@if test "$(INSTALLUCDLIBS)" != ""; then \
--		it="$(INSTALLUCDLIBS)" ; \
--		$(SHELL) $(top_srcdir)/mkinstalldirs $(INSTALL_PREFIX)$(libdir) ; \
--		$(INSTALL) $(INSTALLUCDLIBS) $(INSTALL_PREFIX)$(libdir) ; \
--		for i in $$it ; do \
--			echo "installing $$i in $(INSTALL_PREFIX)$(libdir)"; \
--			$(RANLIB) $(INSTALL_PREFIX)$(libdir)/$$i ; \
--		done ; \
--		$(LIB_LDCONFIG_CMD) ; \
--	fi
-+installucdlibs:
-+	$(SHELL) $(top_srcdir)/mkinstalldirs $(INSTALL_PREFIX)$(libdir) ; \
-+	ln -sf libnetsnmp.so $(INSTALL_PREFIX)$(libdir)/libsnmp.so ; \
-+	ln -sf libnetsnmp.la $(INSTALL_PREFIX)$(libdir)/libsnmp.la ; \
-+	ln -sf libnetsnmp.a $(INSTALL_PREFIX)$(libdir)/libsnmp.a
- 
- installsubdirlibs:
- 	@if test "$(SUBDIRS)" != ""; then \
-diff -ur net-snmp-5.3.org/snmplib/Makefile.in net-snmp-5.3/snmplib/Makefile.in
---- net-snmp-5.3.org/snmplib/Makefile.in	2005-10-30 20:01:14.000000000 +0100
-+++ net-snmp-5.3/snmplib/Makefile.in	2006-01-09 00:58:13.044118000 +0100
-@@ -127,7 +127,6 @@
- 
- # libraries
- INSTALLLIBS=libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
--INSTALLUCDLIBS=libsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
- 
- #
- # Things to build
-@@ -187,13 +186,9 @@
- 
- # how to build the libraries.
- libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
--	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
-+	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @KRB5_LIBS@ @LIBCRYPTO@
- 	$(RANLIB) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
- 
--libsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
--	$(LIB_LD_CMD) libsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
--	$(RANLIB) libsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
--
- #
- # internal test objects
- #
---- net-snmp-5.4/configure.in.orig	2006-12-03 19:46:10.257988000 +0100
-+++ net-snmp-5.4/configure.in	2006-12-03 20:31:42.153670517 +0100
+diff -urN net-snmp-5.4.org/configure.in net-snmp-5.4/configure.in
+--- net-snmp-5.4.org/configure.in	2006-11-24 18:53:18.000000000 +0100
++++ net-snmp-5.4/configure.in	2006-12-21 01:17:16.166418250 +0100
 @@ -1699,6 +1699,8 @@
  rebuilt_new_with_security=
  already_checked_krb5=no
@@ -117,3 +73,64 @@ diff -ur net-snmp-5.3.org/snmplib/Makefile.in net-snmp-5.3/snmplib/Makefile.in
        fi
      else
        AC_MSG_RESULT(old MIT crypto API)])
+diff -urN net-snmp-5.4.org/Makefile.rules net-snmp-5.4/Makefile.rules
+--- net-snmp-5.4.org/Makefile.rules	2005-10-10 20:47:48.000000000 +0200
++++ net-snmp-5.4/Makefile.rules	2006-12-21 01:17:16.166418250 +0100
+@@ -8,7 +8,7 @@
+ 
+ # the standard items to build: libraries, bins, and sbins
+ STANDARDTARGETS     =$(INSTALLLIBS) $(INSTALLBINPROGS) $(INSTALLSBINPROGS)
+-STANDARDCLEANTARGETS=$(INSTALLLIBS) $(INSTALLBINPROGS) $(INSTALLSBINPROGS) $(INSTALLUCDLIBS)
++STANDARDCLEANTARGETS=$(INSTALLLIBS) $(INSTALLBINPROGS) $(INSTALLSBINPROGS)
+ 
+ standardall: subdirs $(STANDARDTARGETS)
+ 
+@@ -175,17 +175,11 @@
+ 		$(LIB_LDCONFIG_CMD) ; \
+ 	fi
+ 
+-installucdlibs: $(INSTALLUCDLIBS)
+-	@if test "$(INSTALLUCDLIBS)" != ""; then \
+-		it="$(INSTALLUCDLIBS)" ; \
+-		$(SHELL) $(top_srcdir)/mkinstalldirs $(INSTALL_PREFIX)$(libdir) ; \
+-		$(INSTALL) $(INSTALLUCDLIBS) $(INSTALL_PREFIX)$(libdir) ; \
+-		for i in $$it ; do \
+-			echo "installing $$i in $(INSTALL_PREFIX)$(libdir)"; \
+-			$(RANLIB) $(INSTALL_PREFIX)$(libdir)/$$i ; \
+-		done ; \
+-		$(LIB_LDCONFIG_CMD) ; \
+-	fi
++installucdlibs:
++	$(SHELL) $(top_srcdir)/mkinstalldirs $(INSTALL_PREFIX)$(libdir) ; \
++	ln -sf libnetsnmp.so $(INSTALL_PREFIX)$(libdir)/libsnmp.so ; \
++	ln -sf libnetsnmp.la $(INSTALL_PREFIX)$(libdir)/libsnmp.la ; \
++	ln -sf libnetsnmp.a $(INSTALL_PREFIX)$(libdir)/libsnmp.a
+ 
+ installsubdirlibs:
+ 	@if test "$(SUBDIRS)" != ""; then \
+diff -urN net-snmp-5.4.org/snmplib/Makefile.in net-snmp-5.4/snmplib/Makefile.in
+--- net-snmp-5.4.org/snmplib/Makefile.in	2006-09-19 16:45:29.000000000 +0200
++++ net-snmp-5.4/snmplib/Makefile.in	2006-12-21 01:17:16.166418250 +0100
+@@ -128,7 +128,6 @@
+ 
+ # libraries
+ INSTALLLIBS=libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
+-INSTALLUCDLIBS=libsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
+ 
+ #
+ # Things to build
+@@ -188,13 +187,9 @@
+ 
+ # how to build the libraries.
+ libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
+-	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
++	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @KRB5_LIBS@ @LIBCRYPTO@
+ 	$(RANLIB) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
+ 
+-libsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
+-	$(LIB_LD_CMD) libsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
+-	$(RANLIB) libsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
+-
+ #
+ # internal test objects
+ #
