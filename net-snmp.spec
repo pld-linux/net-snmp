@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
+%bcond_without	lm_sensors
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
@@ -11,7 +12,7 @@ Summary(ru):	îÁÂÏÒ ÕÔÉÌÉÔ ÄÌÑ ÐÒÏÔÏËÏÌÁ SNMP ÏÔ UC-Davis
 Summary(uk):	îÁÂ¦Ò ÕÔÉÌ¦Ô ÄÌÑ ÐÒÏÔÏËÏÌÕ SNMP ×¦Ä UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	5
+Release:	6
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -36,13 +37,14 @@ Patch8:		%{name}-usr_local_bin_perl.patch
 Patch9:		%{name}-kernel_headers.patch
 Patch10:	%{name}-syntax.patch
 Patch11:	%{name}-fix-insecure-fixproc.patch
+Patch12:	%{name}-fix-64bit-interface-counters.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-BuildRequires:	lm_sensors-devel
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -375,6 +377,7 @@ Przegl±darka MIB-ów w Tk.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p0
+%patch12 -p0
 
 %build
 %{__libtoolize}
@@ -389,7 +392,7 @@ Przegl±darka MIB-ów w Tk.
 	--with-sys-location="Unknown" \
 	--with-mib-modules="host disman/event-mib smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
-		ucd-snmp/lmSensors ucd-snmp/diskio \
+		%{?with_lm_sensors:ucd-snmp/lmSensors} ucd-snmp/diskio \
 %endif
 		agentx target misc/ipfwacc tunnel" \
 	--with-libwrap \
