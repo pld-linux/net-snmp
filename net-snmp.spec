@@ -4,11 +4,11 @@
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
-Summary(es):	Agente SNMP de la UCD
-Summary(pl):	Kolekcja narzЙdzi do obsЁugi protokoЁu SNMP
-Summary(pt_BR):	Agente SNMP da UCD
-Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
-Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
+Summary(es.UTF-8):   Agente SNMP de la UCD
+Summary(pl.UTF-8):   Kolekcja narzд≥dzi do obsе┌ugi protokoе┌u SNMP
+Summary(pt_BR.UTF-8):   Agente SNMP da UCD
+Summary(ru.UTF-8):   п²п╟п╠п╬я─ я┐я┌п╦п╩п╦я┌ п╢п╩я▐ п©я─п╬я┌п╬п╨п╬п╩п╟ SNMP п╬я┌ UC-Davis
+Summary(uk.UTF-8):   п²п╟п╠я√я─ я┐я┌п╦п╩я√я┌ п╢п╩я▐ п©я─п╬я┌п╬п╨п╬п╩я┐ SNMP п╡я√п╢ UC-Davis
 Name:		net-snmp
 Version:	5.4
 Release:	2
@@ -75,45 +75,45 @@ generating and handling SNMP traps, a version of the netstat command
 which uses SNMP, and a Tk/Perl mib browser. This package contains the
 snmpd daemon, documentation, etc.
 
-%description -l es
-Este paquete se deriva de la implementaciСn del Protocolo Simple de
-GestiСn de Redes versiСn 2 (SNMPv2) de la Universidad Carnegie Mellon.
-зtil para administrar redes y hacer contabilidad.
+%description -l es.UTF-8
+Este paquete se deriva de la implementaciцЁn del Protocolo Simple de
+GestiцЁn de Redes versiцЁn 2 (SNMPv2) de la Universidad Carnegie Mellon.
+ц til para administrar redes y hacer contabilidad.
 
-%description -l pl
-SNMP (Simple Network Management Protocol) jest protokoЁem u©ywanym do
-zarz╠dzania sieciami. Pakiet zawiera narzЙdzia: rozbudowywalnego
-agenta, bibliotekЙ SNMP, narzЙdzia do odpytywania oraz ustawiania
-informacji poprzez agentСw SNMP, narzЙdzia do generowania i obsЁugi
-puЁapek SNMP, wersjЙ komendy netstat u©ywaj╠c╠ SNMP, przegl╠darkЙ mib
-w Tk/Perl, demona, dokumentacjЙ itp.
+%description -l pl.UTF-8
+SNMP (Simple Network Management Protocol) jest protokoе┌em uе╪ywanym do
+zarzд┘dzania sieciami. Pakiet zawiera narzд≥dzia: rozbudowywalnego
+agenta, bibliotekд≥ SNMP, narzд≥dzia do odpytywania oraz ustawiania
+informacji poprzez agentцЁw SNMP, narzд≥dzia do generowania i obsе┌ugi
+puе┌apek SNMP, wersjд≥ komendy netstat uе╪ywajд┘cд┘ SNMP, przeglд┘darkд≥ mib
+w Tk/Perl, demona, dokumentacjд≥ itp.
 
-%description -l pt_BR
-Este pacote И derivado da implementaГЦo do Protocolo Simples de
-Gerenciamento de Redes versЦo 2 (SNMPv2) da Universidade Carnegie
-Mellon. зtil para gerenciar redes e fazer contabilidade.
+%description -l pt_BR.UTF-8
+Este pacote ц╘ derivado da implementaц╖цёo do Protocolo Simples de
+Gerenciamento de Redes versцёo 2 (SNMPv2) da Universidade Carnegie
+Mellon. ц til para gerenciar redes e fazer contabilidade.
 
-%description -l ru
-SNMP (Simple Network Management Protocol) - это протокол, используемый
-для управления сетью (отсюда и название). Проект net-snmp включает
-разнообразные SNMP-утилиты: расширяемый агент, библиотека SNMP,
-утилиты для запроса или установки информации от SNMP-агентов, утилиты
-для генерации и обработки SNMP-трапов, версия команды netstat,
-использующей SNMP, и mib-браузер на Tk/Perl. Этот пакет содержит
-демоны snmpd и snmptrapd, документацию и т.д.
+%description -l ru.UTF-8
+SNMP (Simple Network Management Protocol) - я█я┌п╬ п©я─п╬я┌п╬п╨п╬п╩, п╦я│п©п╬п╩я▄п╥я┐п╣п╪я▀п╧
+п╢п╩я▐ я┐п©я─п╟п╡п╩п╣п╫п╦я▐ я│п╣я┌я▄я▌ (п╬я┌я│я▌п╢п╟ п╦ п╫п╟п╥п╡п╟п╫п╦п╣). п÷я─п╬п╣п╨я┌ net-snmp п╡п╨п╩я▌я┤п╟п╣я┌
+я─п╟п╥п╫п╬п╬п╠я─п╟п╥п╫я▀п╣ SNMP-я┐я┌п╦п╩п╦я┌я▀: я─п╟я│я┬п╦я─я▐п╣п╪я▀п╧ п╟пЁп╣п╫я┌, п╠п╦п╠п╩п╦п╬я┌п╣п╨п╟ SNMP,
+я┐я┌п╦п╩п╦я┌я▀ п╢п╩я▐ п╥п╟п©я─п╬я│п╟ п╦п╩п╦ я┐я│я┌п╟п╫п╬п╡п╨п╦ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬я┌ SNMP-п╟пЁп╣п╫я┌п╬п╡, я┐я┌п╦п╩п╦я┌я▀
+п╢п╩я▐ пЁп╣п╫п╣я─п╟я├п╦п╦ п╦ п╬п╠я─п╟п╠п╬я┌п╨п╦ SNMP-я┌я─п╟п©п╬п╡, п╡п╣я─я│п╦я▐ п╨п╬п╪п╟п╫п╢я▀ netstat,
+п╦я│п©п╬п╩я▄п╥я┐я▌я┴п╣п╧ SNMP, п╦ mib-п╠я─п╟я┐п╥п╣я─ п╫п╟ Tk/Perl. п╜я┌п╬я┌ п©п╟п╨п╣я┌ я│п╬п╢п╣я─п╤п╦я┌
+п╢п╣п╪п╬п╫я▀ snmpd п╦ snmptrapd, п╢п╬п╨я┐п╪п╣п╫я┌п╟я├п╦я▌ п╦ я┌.п╢.
 
-%description -l uk
-SNMP (Simple Network Management Protocol) - це протокол, який
-використовують для керування мережею (зв╕дси ╕ назва). Проект net-snmp
-м╕стить р╕зноман╕тн╕ SNMP-утил╕ти: розширюваний агент, б╕бл╕отека
-SNMP, утил╕ти для запросу та встановлення ╕нформац╕╖ в╕д NMP-агент╕в,
-утил╕ти для генерац╕╖ та обробки SNMP-трап╕в, верс╕я команди netstat,
-яка використову╓ SNMP, та mib-браузер на Tk/Perl. Цей пакет м╕стить
-демони snmpd та snmptrapd, документац╕ю ╕ т.╕.
+%description -l uk.UTF-8
+SNMP (Simple Network Management Protocol) - я├п╣ п©я─п╬я┌п╬п╨п╬п╩, я▐п╨п╦п╧
+п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐я▌я┌я▄ п╢п╩я▐ п╨п╣я─я┐п╡п╟п╫п╫я▐ п╪п╣я─п╣п╤п╣я▌ (п╥п╡я√п╢я│п╦ я√ п╫п╟п╥п╡п╟). п÷я─п╬п╣п╨я┌ net-snmp
+п╪я√я│я┌п╦я┌я▄ я─я√п╥п╫п╬п╪п╟п╫я√я┌п╫я√ SNMP-я┐я┌п╦п╩я√я┌п╦: я─п╬п╥я┬п╦я─я▌п╡п╟п╫п╦п╧ п╟пЁп╣п╫я┌, п╠я√п╠п╩я√п╬я┌п╣п╨п╟
+SNMP, я┐я┌п╦п╩я√я┌п╦ п╢п╩я▐ п╥п╟п©я─п╬я│я┐ я┌п╟ п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╫я▐ я√п╫я└п╬я─п╪п╟я├я√я≈ п╡я√п╢ NMP-п╟пЁп╣п╫я┌я√п╡,
+я┐я┌п╦п╩я√я┌п╦ п╢п╩я▐ пЁп╣п╫п╣я─п╟я├я√я≈ я┌п╟ п╬п╠я─п╬п╠п╨п╦ SNMP-я┌я─п╟п©я√п╡, п╡п╣я─я│я√я▐ п╨п╬п╪п╟п╫п╢п╦ netstat,
+я▐п╨п╟ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐я■ SNMP, я┌п╟ mib-п╠я─п╟я┐п╥п╣я─ п╫п╟ Tk/Perl. п╕п╣п╧ п©п╟п╨п╣я┌ п╪я√я│я┌п╦я┌я▄
+п╢п╣п╪п╬п╫п╦ snmpd я┌п╟ snmptrapd, п╢п╬п╨я┐п╪п╣п╫я┌п╟я├я√я▌ я√ я┌.я√.
 
 %package libs
 Summary:	NET SNMP libraries
-Summary(pl):	Biblioteki SNMP
+Summary(pl.UTF-8):   Biblioteki SNMP
 Group:		Libraries
 Requires:	%{name}-mibs = %{version}-%{release}
 Obsoletes:	net-snmp-compat-libs
@@ -122,16 +122,16 @@ Obsoletes:	ucd-snmp-libs
 %description libs
 NET SNMP libraries.
 
-%description libs -l pl
+%description libs -l pl.UTF-8
 Biblioteki SNMP.
 
 %package devel
 Summary:	The development environment for the net-snmp project
-Summary(es):	Archivos de inclusiСn y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl):	Pliki dla programistСw u©ywaj╠cych bibliotek net-snmp
-Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para desenvolvimento no SNMP da UCD
-Summary(ru):	Среда разработки для проекта UCD-SNMP
-Summary(uk):	Середовище розробки для проекту UCD-SNMP
+Summary(es.UTF-8):   Archivos de inclusiцЁn y bibliotecas para desarrollo en el SNMP de la UCD
+Summary(pl.UTF-8):   Pliki dla programistцЁw uе╪ywajд┘cych bibliotek net-snmp
+Summary(pt_BR.UTF-8):   Arquivos de inclusцёo e bibliotecas para desenvolvimento no SNMP da UCD
+Summary(ru.UTF-8):   п║я─п╣п╢п╟ я─п╟п╥я─п╟п╠п╬я┌п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌п╟ UCD-SNMP
+Summary(uk.UTF-8):   п║п╣я─п╣п╢п╬п╡п╦я┴п╣ я─п╬п╥я─п╬п╠п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌я┐ UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
@@ -145,34 +145,34 @@ The ucd-snmp-devel package contains the development libraries and
 header files for use with the net-snmp project's network management
 tools.
 
-%description devel -l es
-Estas son las bibliotecas y archivos de inclusiСn para desarrollo con
-el SNMP de la UCD. Con este paquete es posible la creaciСn de
-programas para uso en la gestiСn de redes.
+%description devel -l es.UTF-8
+Estas son las bibliotecas y archivos de inclusiцЁn para desarrollo con
+el SNMP de la UCD. Con este paquete es posible la creaciцЁn de
+programas para uso en la gestiцЁn de redes.
 
-%description devel -l pl
-Pakiet zawiera pliki nagЁСwkowe i biblioteki potrzebne do rozwoju
-aplikacji u©ywaj╠cych protokoЁu SNMP.
+%description devel -l pl.UTF-8
+Pakiet zawiera pliki nagе┌цЁwkowe i biblioteki potrzebne do rozwoju
+aplikacji uе╪ywajд┘cych protokoе┌u SNMP.
 
-%description devel -l pt_BR
-Estas sЦo as bibliotecas e arquivos de inclusЦo para desenvolvimento
-com o SNMP da UCD. Com este pacote И possМvel a criaГЦo de programas
+%description devel -l pt_BR.UTF-8
+Estas sцёo as bibliotecas e arquivos de inclusцёo para desenvolvimento
+com o SNMP da UCD. Com este pacote ц╘ possц╜vel a criaц╖цёo de programas
 para uso no gerenciamento de redes.
 
-%description devel -l ru
-Пакет ucd-snmp-devel содержит библиотеки разработчика и хедера для
-использования с утилитами управления сетью проекта net-snmp.
+%description devel -l ru.UTF-8
+п÷п╟п╨п╣я┌ ucd-snmp-devel я│п╬п╢п╣я─п╤п╦я┌ п╠п╦п╠п╩п╦п╬я┌п╣п╨п╦ я─п╟п╥я─п╟п╠п╬я┌я┤п╦п╨п╟ п╦ я┘п╣п╢п╣я─п╟ п╢п╩я▐
+п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦я▐ я│ я┐я┌п╦п╩п╦я┌п╟п╪п╦ я┐п©я─п╟п╡п╩п╣п╫п╦я▐ я│п╣я┌я▄я▌ п©я─п╬п╣п╨я┌п╟ net-snmp.
 
-%description devel -l uk
-Пакет ucd-snmp-devel м╕стить б╕бл╕отеки програм╕ста та хедери для
-використання з утил╕тами керування мережею проекту net-snmp.
+%description devel -l uk.UTF-8
+п÷п╟п╨п╣я┌ ucd-snmp-devel п╪я√я│я┌п╦я┌я▄ п╠я√п╠п╩я√п╬я┌п╣п╨п╦ п©я─п╬пЁя─п╟п╪я√я│я┌п╟ я┌п╟ я┘п╣п╢п╣я─п╦ п╢п╩я▐
+п╡п╦п╨п╬я─п╦я│я┌п╟п╫п╫я▐ п╥ я┐я┌п╦п╩я√я┌п╟п╪п╦ п╨п╣я─я┐п╡п╟п╫п╫я▐ п╪п╣я─п╣п╤п╣я▌ п©я─п╬п╣п╨я┌я┐ net-snmp.
 
 %package static
 Summary:	Static net-snmp libraries
-Summary(pl):	Statyczne biblioteki net-snmp
-Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com ucd-snmp
-Summary(ru):	Статические библиотеки для проекта net-snmp
-Summary(uk):	Статичн╕ б╕бл╕отеки для проекту net-snmp
+Summary(pl.UTF-8):   Statyczne biblioteki net-snmp
+Summary(pt_BR.UTF-8):   Bibliotecas estц║ticas para desenvolvimento com ucd-snmp
+Summary(ru.UTF-8):   п║я┌п╟я┌п╦я┤п╣я│п╨п╦п╣ п╠п╦п╠п╩п╦п╬я┌п╣п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌п╟ net-snmp
+Summary(uk.UTF-8):   п║я┌п╟я┌п╦я┤п╫я√ п╠я√п╠п╩я√п╬я┌п╣п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌я┐ net-snmp
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
@@ -180,19 +180,19 @@ Obsoletes:	ucd-snmp-static
 %description static
 Static net-snmp libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki net-snmp.
 
-%description static -l pt_BR
-Bibliotecas estАticas para desenvolvimento com net-snmp.
+%description static -l pt_BR.UTF-8
+Bibliotecas estц║ticas para desenvolvimento com net-snmp.
 
 %package compat-devel
 Summary:	The development environment for the UCD-SNMP project
-Summary(es):	Archivos de inclusiСn y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl):	Pliki dla programistСw u©ywaj╠cych bibliotek UCD-SNMP
-Summary(pt_BR):	Arquivos de inclusЦo e bibliotecas para desenvolvimento no SNMP da UCD
-Summary(ru):	Среда разработки для проекта UCD-SNMP
-Summary(uk):	Середовище розробки для проекту UCD-SNMP
+Summary(es.UTF-8):   Archivos de inclusiцЁn y bibliotecas para desarrollo en el SNMP de la UCD
+Summary(pl.UTF-8):   Pliki dla programistцЁw uе╪ywajд┘cych bibliotek UCD-SNMP
+Summary(pt_BR.UTF-8):   Arquivos de inclusцёo e bibliotecas para desenvolvimento no SNMP da UCD
+Summary(ru.UTF-8):   п║я─п╣п╢п╟ я─п╟п╥я─п╟п╠п╬я┌п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌п╟ UCD-SNMP
+Summary(uk.UTF-8):   п║п╣я─п╣п╢п╬п╡п╦я┴п╣ я─п╬п╥я─п╬п╠п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌я┐ UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	openssl-devel >= 0.9.7d
@@ -204,34 +204,34 @@ The ucd-snmp-devel package contains the development libraries and
 header files for use with the UCD-SNMP project's network management
 tools.
 
-%description compat-devel -l es
-Estas son las bibliotecas y archivos de inclusiСn para desarrollo con
-el SNMP de la UCD. Con este paquete es posible la creaciСn de
-programas para uso en la gestiСn de redes.
+%description compat-devel -l es.UTF-8
+Estas son las bibliotecas y archivos de inclusiцЁn para desarrollo con
+el SNMP de la UCD. Con este paquete es posible la creaciцЁn de
+programas para uso en la gestiцЁn de redes.
 
-%description compat-devel -l pl
-Pakiet zawiera pliki nagЁСwkowe i biblioteki potrzebne do rozwoju
-aplikacji u©ywaj╠cych protokoЁu SNMP.
+%description compat-devel -l pl.UTF-8
+Pakiet zawiera pliki nagе┌цЁwkowe i biblioteki potrzebne do rozwoju
+aplikacji uе╪ywajд┘cych protokoе┌u SNMP.
 
-%description compat-devel -l pt_BR
-Estas sЦo as bibliotecas e arquivos de inclusЦo para desenvolvimento
-com o SNMP da UCD. Com este pacote И possМvel a criaГЦo de programas
+%description compat-devel -l pt_BR.UTF-8
+Estas sцёo as bibliotecas e arquivos de inclusцёo para desenvolvimento
+com o SNMP da UCD. Com este pacote ц╘ possц╜vel a criaц╖цёo de programas
 para uso no gerenciamento de redes.
 
-%description compat-devel -l ru
-Пакет ucd-snmp-devel содержит библиотеки разработчика и хедера для
-использования с утилитами управления сетью проекта UCD-SNMP.
+%description compat-devel -l ru.UTF-8
+п÷п╟п╨п╣я┌ ucd-snmp-devel я│п╬п╢п╣я─п╤п╦я┌ п╠п╦п╠п╩п╦п╬я┌п╣п╨п╦ я─п╟п╥я─п╟п╠п╬я┌я┤п╦п╨п╟ п╦ я┘п╣п╢п╣я─п╟ п╢п╩я▐
+п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦я▐ я│ я┐я┌п╦п╩п╦я┌п╟п╪п╦ я┐п©я─п╟п╡п╩п╣п╫п╦я▐ я│п╣я┌я▄я▌ п©я─п╬п╣п╨я┌п╟ UCD-SNMP.
 
-%description compat-devel -l uk
-Пакет ucd-snmp-devel м╕стить б╕бл╕отеки програм╕ста та хедери для
-використання з утил╕тами керування мережею проекту UCD-SNMP.
+%description compat-devel -l uk.UTF-8
+п÷п╟п╨п╣я┌ ucd-snmp-devel п╪я√я│я┌п╦я┌я▄ п╠я√п╠п╩я√п╬я┌п╣п╨п╦ п©я─п╬пЁя─п╟п╪я√я│я┌п╟ я┌п╟ я┘п╣п╢п╣я─п╦ п╢п╩я▐
+п╡п╦п╨п╬я─п╦я│я┌п╟п╫п╫я▐ п╥ я┐я┌п╦п╩я√я┌п╟п╪п╦ п╨п╣я─я┐п╡п╟п╫п╫я▐ п╪п╣я─п╣п╤п╣я▌ п©я─п╬п╣п╨я┌я┐ UCD-SNMP.
 
 %package compat-static
 Summary:	Static UCD-SNMP libraries
-Summary(pl):	Statyczne biblioteki UCD-SNMP
-Summary(pt_BR):	Bibliotecas estАticas para desenvolvimento com ucd-snmp
-Summary(ru):	Статические библиотеки для проекта UCD-SNMP
-Summary(uk):	Статичн╕ б╕бл╕отеки для проекту UCD-SNMP
+Summary(pl.UTF-8):   Statyczne biblioteki UCD-SNMP
+Summary(pt_BR.UTF-8):   Bibliotecas estц║ticas para desenvolvimento com ucd-snmp
+Summary(ru.UTF-8):   п║я┌п╟я┌п╦я┤п╣я│п╨п╦п╣ п╠п╦п╠п╩п╦п╬я┌п╣п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌п╟ UCD-SNMP
+Summary(uk.UTF-8):   п║я┌п╟я┌п╦я┤п╫я√ п╠я√п╠п╩я√п╬я┌п╣п╨п╦ п╢п╩я▐ п©я─п╬п╣п╨я┌я┐ UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-compat-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
@@ -239,27 +239,27 @@ Obsoletes:	ucd-snmp-static
 %description compat-static
 Static UCD-SNMP libraries.
 
-%description compat-static -l pl
+%description compat-static -l pl.UTF-8
 Statyczne biblioteki UCD-SNMP.
 
-%description compat-static -l pt_BR
-Bibliotecas estАticas para desenvolvimento com ucd-snmp.
+%description compat-static -l pt_BR.UTF-8
+Bibliotecas estц║ticas para desenvolvimento com ucd-snmp.
 
 %package mibs
 Summary:	MIB database
-Summary(pl):	Baza danych MIB
+Summary(pl.UTF-8):   Baza danych MIB
 Group:		Applications/System
 Conflicts:	ucd-snmp-libs
 
 %description mibs
 MIB database.
 
-%description mibs -l pl
+%description mibs -l pl.UTF-8
 Baza danych MIB.
 
 %package snmptrapd
 Summary:	SNMP trap daemon
-Summary(pl):	Demon obsЁuguj╠cy puЁapki SNMP
+Summary(pl.UTF-8):   Demon obsе┌ugujд┘cy puе┌apki SNMP
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -270,16 +270,16 @@ Obsoletes:	ucd-snmp-snmptrapd
 %description snmptrapd
 The ucd-snmp-snmptrapd package contains snmp trap daemon.
 
-%description snmptrapd -l pl
-Pakiet zawiera demon obsЁuguj╠cy puЁapki SNMP.
+%description snmptrapd -l pl.UTF-8
+Pakiet zawiera demon obsе┌ugujд┘cy puе┌apki SNMP.
 
 %package utils
 Summary:	Network management utilities using SNMP, from the NET-SNMP project
-Summary(es):	Utilitarios del SNMP de la UCD
-Summary(pl):	NarzЙdzia u©ywaj╠ce protokoЁu SNMP
-Summary(pt_BR):	UtilitАrios do SNMP da UCD
-Summary(ru):	Утилиты управления сетью по SNMP из проекта NET-SNMP
-Summary(uk):	Утил╕ти керування мережею по SNMP з проекту NET-SNMP
+Summary(es.UTF-8):   Utilitarios del SNMP de la UCD
+Summary(pl.UTF-8):   Narzд≥dzia uе╪ywajд┘ce protokoе┌u SNMP
+Summary(pt_BR.UTF-8):   Utilitц║rios do SNMP da UCD
+Summary(ru.UTF-8):   пёя┌п╦п╩п╦я┌я▀ я┐п©я─п╟п╡п╩п╣п╫п╦я▐ я│п╣я┌я▄я▌ п©п╬ SNMP п╦п╥ п©я─п╬п╣п╨я┌п╟ NET-SNMP
+Summary(uk.UTF-8):   пёя┌п╦п╩я√я┌п╦ п╨п╣я─я┐п╡п╟п╫п╫я▐ п╪п╣я─п╣п╤п╣я▌ п©п╬ SNMP п╥ п©я─п╬п╣п╨я┌я┐ NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
@@ -289,29 +289,29 @@ Obsoletes:	ucd-snmp-utils
 This package contains various utilities for managing your network
 using the SNMP protocol.
 
-%description utils -l es
+%description utils -l es.UTF-8
 Varios utilitarios para uso con el SNMP de la UCD. Contiene
 utilitarios como: snmpwalk, snmptest y otros.
 
-%description utils -l pl
-RС©nego rodzaju narzЙdzia do zarz╠dzania sieci╠ przy u©yciu protokoЁu
+%description utils -l pl.UTF-8
+RцЁе╪nego rodzaju narzд≥dzia do zarzд┘dzania sieciд┘ przy uе╪yciu protokoе┌u
 SNMP.
 
-%description utils -l pt_BR
-VАrios utilitАrios para uso com o SNMP da UCD. ContИm utilitАrios
+%description utils -l pt_BR.UTF-8
+Vц║rios utilitц║rios para uso com o SNMP da UCD. Contц╘m utilitц║rios
 como: snmpwalk, snmptest e outros.
 
-%description utils -l ru
-Пакет ucd-snmp-utils содержит разнообразные утилиты для использования
-в проекте управления сетью net-snmp.
+%description utils -l ru.UTF-8
+п÷п╟п╨п╣я┌ ucd-snmp-utils я│п╬п╢п╣я─п╤п╦я┌ я─п╟п╥п╫п╬п╬п╠я─п╟п╥п╫я▀п╣ я┐я┌п╦п╩п╦я┌я▀ п╢п╩я▐ п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦я▐
+п╡ п©я─п╬п╣п╨я┌п╣ я┐п©я─п╟п╡п╩п╣п╫п╦я▐ я│п╣я┌я▄я▌ net-snmp.
 
-%description utils -l uk
-Пакет ucd-snmp-utils м╕стить р╕зноман╕тн╕ утил╕ти для використання в
-проект╕ керування мережею net-snmp.
+%description utils -l uk.UTF-8
+п÷п╟п╨п╣я┌ ucd-snmp-utils п╪я√я│я┌п╦я┌я▄ я─я√п╥п╫п╬п╪п╟п╫я√я┌п╫я√ я┐я┌п╦п╩я√я┌п╦ п╢п╩я▐ п╡п╦п╨п╬я─п╦я│я┌п╟п╫п╫я▐ п╡
+п©я─п╬п╣п╨я┌я√ п╨п╣я─я┐п╡п╟п╫п╫я▐ п╪п╣я─п╣п╤п╣я▌ net-snmp.
 
 %package -n perl-SNMP
 Summary:	SNMP and NetSNMP::* Perl modules
-Summary(pl):	ModuЁy Perla SNMP oraz NetSNMP::*
+Summary(pl.UTF-8):   Moduе┌y Perla SNMP oraz NetSNMP::*
 Group:		Development/Languages/Perl
 Requires:	%{name}-libs = %{version}-%{release}
 Conflicts:	ucd-snmp-utils-perl
@@ -319,12 +319,12 @@ Conflicts:	ucd-snmp-utils-perl
 %description -n perl-SNMP
 SNMP and NetSNMP::* Perl modules - Perl interface to net-snmp.
 
-%description -n perl-SNMP -l pl
-ModuЁy Perla SNMP oraz NetSNMP::* - perlowy interfejs do net-snmp.
+%description -n perl-SNMP -l pl.UTF-8
+Moduе┌y Perla SNMP oraz NetSNMP::* - perlowy interfejs do net-snmp.
 
 %package utils-perl
 Summary:	Perl utilities for network management using SNMP
-Summary(pl):	Perlowe narzЙdzia u©ywaj╠ce protokoЁu SNMP
+Summary(pl.UTF-8):   Perlowe narzд≥dzia uе╪ywajд┘ce protokoе┌u SNMP
 Group:		Applications/System
 Requires:	perl-SNMP = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
@@ -334,12 +334,12 @@ Obsoletes:	ucd-snmp-utils-perl
 This package contains various Perl utilities for managing your network
 using the SNMP protocol.
 
-%description utils-perl -l pl
-Perlowe narzЙdzia do zarz╠dzania sieci╠ przy u©yciu protokoЁu SNMP.
+%description utils-perl -l pl.UTF-8
+Perlowe narzд≥dzia do zarzд┘dzania sieciд┘ przy uе╪yciu protokoе┌u SNMP.
 
 %package snmpconf
 Summary:	snmpconf - creating and modifying SNMP configuration files
-Summary(pl):	snmpconf - tworzenie i modyfikowanie plikСw konfiguracyjnych SNMP
+Summary(pl.UTF-8):   snmpconf - tworzenie i modyfikowanie plikцЁw konfiguracyjnych SNMP
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-SNMP = %{version}-%{release}
@@ -349,13 +349,13 @@ snmpconf is a simple Perl script that walks you through setting up a
 configuration file step by step. It should be fairly straight forward
 to use.
 
-%description snmpconf -l pl
-snmpconf to prosty skrypt Perla pozwalaj╠cy na tworzenie pliku
-konfiguracyjnego krok po kroku. Powinien byФ w miarЙ prosty w u©yciu.
+%description snmpconf -l pl.UTF-8
+snmpconf to prosty skrypt Perla pozwalajд┘cy na tworzenie pliku
+konfiguracyjnego krok po kroku. Powinien byд┤ w miarд≥ prosty w uе╪yciu.
 
 %package tkmib
 Summary:	MIB browser in Tk
-Summary(pl):	Przegl╠darka MIB-Сw w Tk
+Summary(pl.UTF-8):   Przeglд┘darka MIB-цЁw w Tk
 Group:		Applications/System
 Requires:	perl-SNMP = %{version}-%{release}
 Requires:	perl-Tk
@@ -363,12 +363,12 @@ Requires:	perl-Tk
 %description tkmib
 MIB browser in Tk.
 
-%description tkmib -l pl
-Przegl╠darka MIB-Сw w Tk.
+%description tkmib -l pl.UTF-8
+Przeglд┘darka MIB-цЁw w Tk.
 
 %package -n python-netsnmp
 Summary:	Python netsnmp extension module
-Summary(pl):	ModuЁ rozszerzenia netsnmp dla Pythona
+Summary(pl.UTF-8):   Moduе┌ rozszerzenia netsnmp dla Pythona
 Group:		Libraries/Python
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -376,9 +376,9 @@ Requires:	%{name}-libs = %{version}-%{release}
 The 'netsnmp' Python extension module provides a full featured,
 tri-lingual SNMP (SNMPv3, SNMPv2c, SNMPv1) client API.
 
-%description -n python-netsnmp -l pl
-ModuЁ rozszerzenia netsnmp dla Pythona udostЙpnia peЁne API klienckie
-SNMP dla trzech wersji tego protokoЁu (SNMPv3, SNMPv2c, SNMPv1).
+%description -n python-netsnmp -l pl.UTF-8
+Moduе┌ rozszerzenia netsnmp dla Pythona udostд≥pnia peе┌ne API klienckie
+SNMP dla trzech wersji tego protokoе┌u (SNMPv3, SNMPv2c, SNMPv1).
 
 %prep
 %setup -q -a7
@@ -439,7 +439,7 @@ SNMP dla trzech wersji tego protokoЁu (SNMPv3, SNMPv2c, SNMPv1).
 #       magic=0x0) at snmp_agent.c:1792
 #   #12 0xb7e42b1c in _sess_process_packet (sessp=0x812c970, sp=0x80ff868, isp=0x812c698,
 #       transport=0x8142028, opaque=0x812c1a0, olength=16,
-#       packetptr=0x8145cb8 "0f\002\001\0030\021\002\004c [г\002\003", length=104) at snmp_api.c:5208
+#       packetptr=0x8145cb8 "0f\002\001\0030\021\002\004c [ц┤\002\003", length=104) at snmp_api.c:5208
 #   #13 0xb7e434e6 in _sess_read (sessp=0x812c970, fdset=0xbfffe0e0) at snmp_api.c:5606
 #   #14 0xb7e43535 in snmp_sess_read (sessp=0x812c970, fdset=0xbfffe0e0) at snmp_api.c:5625
 #   #15 0xb7e42c44 in snmp_read (fdset=0xbfffe0e0) at snmp_api.c:5260
