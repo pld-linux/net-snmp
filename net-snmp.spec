@@ -4,11 +4,11 @@
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
-Summary(es.UTF-8):   Agente SNMP de la UCD
-Summary(pl.UTF-8):   Kolekcja narzędzi do obsługi protokołu SNMP
-Summary(pt_BR.UTF-8):   Agente SNMP da UCD
-Summary(ru.UTF-8):   Набор утилит для протокола SNMP от UC-Davis
-Summary(uk.UTF-8):   Набір утиліт для протоколу SNMP від UC-Davis
+Summary(es.UTF-8):	Agente SNMP de la UCD
+Summary(pl.UTF-8):	Kolekcja narzędzi do obsługi protokołu SNMP
+Summary(pt_BR.UTF-8):	Agente SNMP da UCD
+Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
+Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4
 Release:	2
@@ -113,7 +113,7 @@ SNMP, утиліти для запросу та встановлення інф�
 
 %package libs
 Summary:	NET SNMP libraries
-Summary(pl.UTF-8):   Biblioteki SNMP
+Summary(pl.UTF-8):	Biblioteki SNMP
 Group:		Libraries
 Requires:	%{name}-mibs = %{version}-%{release}
 Obsoletes:	net-snmp-compat-libs
@@ -127,11 +127,11 @@ Biblioteki SNMP.
 
 %package devel
 Summary:	The development environment for the net-snmp project
-Summary(es.UTF-8):   Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl.UTF-8):   Pliki dla programistów używających bibliotek net-snmp
-Summary(pt_BR.UTF-8):   Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
-Summary(ru.UTF-8):   Среда разработки для проекта UCD-SNMP
-Summary(uk.UTF-8):   Середовище розробки для проекту UCD-SNMP
+Summary(es.UTF-8):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
+Summary(pl.UTF-8):	Pliki dla programistów używających bibliotek net-snmp
+Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
+Summary(ru.UTF-8):	Среда разработки для проекта UCD-SNMP
+Summary(uk.UTF-8):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
@@ -169,10 +169,10 @@ para uso no gerenciamento de redes.
 
 %package static
 Summary:	Static net-snmp libraries
-Summary(pl.UTF-8):   Statyczne biblioteki net-snmp
-Summary(pt_BR.UTF-8):   Bibliotecas estáticas para desenvolvimento com ucd-snmp
-Summary(ru.UTF-8):   Статические библиотеки для проекта net-snmp
-Summary(uk.UTF-8):   Статичні бібліотеки для проекту net-snmp
+Summary(pl.UTF-8):	Statyczne biblioteki net-snmp
+Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com ucd-snmp
+Summary(ru.UTF-8):	Статические библиотеки для проекта net-snmp
+Summary(uk.UTF-8):	Статичні бібліотеки для проекту net-snmp
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
@@ -188,11 +188,11 @@ Bibliotecas estáticas para desenvolvimento com net-snmp.
 
 %package compat-devel
 Summary:	The development environment for the UCD-SNMP project
-Summary(es.UTF-8):   Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl.UTF-8):   Pliki dla programistów używających bibliotek UCD-SNMP
-Summary(pt_BR.UTF-8):   Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
-Summary(ru.UTF-8):   Среда разработки для проекта UCD-SNMP
-Summary(uk.UTF-8):   Середовище розробки для проекту UCD-SNMP
+Summary(es.UTF-8):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
+Summary(pl.UTF-8):	Pliki dla programistów używających bibliotek UCD-SNMP
+Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
+Summary(ru.UTF-8):	Среда разработки для проекта UCD-SNMP
+Summary(uk.UTF-8):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	openssl-devel >= 0.9.7d
@@ -228,10 +228,10 @@ para uso no gerenciamento de redes.
 
 %package compat-static
 Summary:	Static UCD-SNMP libraries
-Summary(pl.UTF-8):   Statyczne biblioteki UCD-SNMP
-Summary(pt_BR.UTF-8):   Bibliotecas estáticas para desenvolvimento com ucd-snmp
-Summary(ru.UTF-8):   Статические библиотеки для проекта UCD-SNMP
-Summary(uk.UTF-8):   Статичні бібліотеки для проекту UCD-SNMP
+Summary(pl.UTF-8):	Statyczne biblioteki UCD-SNMP
+Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com ucd-snmp
+Summary(ru.UTF-8):	Статические библиотеки для проекта UCD-SNMP
+Summary(uk.UTF-8):	Статичні бібліотеки для проекту UCD-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-compat-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
@@ -247,7 +247,7 @@ Bibliotecas estáticas para desenvolvimento com ucd-snmp.
 
 %package mibs
 Summary:	MIB database
-Summary(pl.UTF-8):   Baza danych MIB
+Summary(pl.UTF-8):	Baza danych MIB
 Group:		Applications/System
 Conflicts:	ucd-snmp-libs
 
@@ -259,7 +259,7 @@ Baza danych MIB.
 
 %package snmptrapd
 Summary:	SNMP trap daemon
-Summary(pl.UTF-8):   Demon obsługujący pułapki SNMP
+Summary(pl.UTF-8):	Demon obsługujący pułapki SNMP
 Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
@@ -275,11 +275,11 @@ Pakiet zawiera demon obsługujący pułapki SNMP.
 
 %package utils
 Summary:	Network management utilities using SNMP, from the NET-SNMP project
-Summary(es.UTF-8):   Utilitarios del SNMP de la UCD
-Summary(pl.UTF-8):   Narzędzia używające protokołu SNMP
-Summary(pt_BR.UTF-8):   Utilitários do SNMP da UCD
-Summary(ru.UTF-8):   Утилиты управления сетью по SNMP из проекта NET-SNMP
-Summary(uk.UTF-8):   Утиліти керування мережею по SNMP з проекту NET-SNMP
+Summary(es.UTF-8):	Utilitarios del SNMP de la UCD
+Summary(pl.UTF-8):	Narzędzia używające protokołu SNMP
+Summary(pt_BR.UTF-8):	Utilitários do SNMP da UCD
+Summary(ru.UTF-8):	Утилиты управления сетью по SNMP из проекта NET-SNMP
+Summary(uk.UTF-8):	Утиліти керування мережею по SNMP з проекту NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
@@ -311,7 +311,7 @@ como: snmpwalk, snmptest e outros.
 
 %package -n perl-SNMP
 Summary:	SNMP and NetSNMP::* Perl modules
-Summary(pl.UTF-8):   Moduły Perla SNMP oraz NetSNMP::*
+Summary(pl.UTF-8):	Moduły Perla SNMP oraz NetSNMP::*
 Group:		Development/Languages/Perl
 Requires:	%{name}-libs = %{version}-%{release}
 Conflicts:	ucd-snmp-utils-perl
@@ -324,7 +324,7 @@ Moduły Perla SNMP oraz NetSNMP::* - perlowy interfejs do net-snmp.
 
 %package utils-perl
 Summary:	Perl utilities for network management using SNMP
-Summary(pl.UTF-8):   Perlowe narzędzia używające protokołu SNMP
+Summary(pl.UTF-8):	Perlowe narzędzia używające protokołu SNMP
 Group:		Applications/System
 Requires:	perl-SNMP = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
@@ -339,7 +339,7 @@ Perlowe narzędzia do zarządzania siecią przy użyciu protokołu SNMP.
 
 %package snmpconf
 Summary:	snmpconf - creating and modifying SNMP configuration files
-Summary(pl.UTF-8):   snmpconf - tworzenie i modyfikowanie plików konfiguracyjnych SNMP
+Summary(pl.UTF-8):	snmpconf - tworzenie i modyfikowanie plików konfiguracyjnych SNMP
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-SNMP = %{version}-%{release}
@@ -355,7 +355,7 @@ konfiguracyjnego krok po kroku. Powinien być w miarę prosty w użyciu.
 
 %package tkmib
 Summary:	MIB browser in Tk
-Summary(pl.UTF-8):   Przeglądarka MIB-ów w Tk
+Summary(pl.UTF-8):	Przeglądarka MIB-ów w Tk
 Group:		Applications/System
 Requires:	perl-SNMP = %{version}-%{release}
 Requires:	perl-Tk
@@ -368,7 +368,7 @@ Przeglądarka MIB-ów w Tk.
 
 %package -n python-netsnmp
 Summary:	Python netsnmp extension module
-Summary(pl.UTF-8):   Moduł rozszerzenia netsnmp dla Pythona
+Summary(pl.UTF-8):	Moduł rozszerzenia netsnmp dla Pythona
 Group:		Libraries/Python
 Requires:	%{name}-libs = %{version}-%{release}
 
