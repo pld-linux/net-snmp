@@ -1,3 +1,4 @@
+# TODO: python-netsnmp links with libnetsnmp.so.* installed on builder
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
