@@ -5,12 +5,12 @@ diff -ruN net-snmp-5.2.1.2.orig/snmplib/asn1.c net-snmp-5.2.1.2/snmplib/asn1.c
      while (asn_length--)
          value = (value << 8) | *bufp++;
  
-+#if SIZEOF_LONG != 4
++/*#if SIZEOF_LONG != 4
 +    if ((unsigned long)value > 0xffffffff) {
 +        snmp_log(LOG_ERR,"truncating integer value to 32 bits\n");
 +        value &= 0xffffffff;
 +    }
-+#endif
++#endif*/
 +
      DEBUGMSG(("dumpv_recv", "  Integer:\t%ld (0x%.2X)\n", value, value));
  
