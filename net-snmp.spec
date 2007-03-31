@@ -12,7 +12,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -41,7 +41,7 @@ URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-BuildRequires:	heimdal-devel
+BuildRequires:	krb5-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
 BuildRequires:	lm_sensors-devel
