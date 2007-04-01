@@ -12,7 +12,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -403,51 +403,33 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %{__autoconf}
 %{__autoheader}
 %configure \
+	--disable-debugging \
+	--enable-as-needed \
 	--with-cflags="%{rpmcflags} -I/usr/include/et" \
 	--with-ldflags="%{rpmldflags}" \
 	--with-defaults \
 	--with-default-snmp-version=3 \
-	--with-krb5 \
-	--with-libwrap \
+	--with-krb5=%{_prefix} \
+	--with-openssl=%{_prefix} \
+	--with-libwrap=%{_prefix} \
 	--with-logfile="%{logfile}" \
-	--with-mib-modules="host disman/event-mib smux mibII/mta_sendmail \
-%ifarch %{ix86} %{x8664}
-		ucd-snmp/lmSensors ucd-snmp/diskio \
-%endif
-		agentx target misc/ipfwacc" \
-	--with-openssl \
+	--with-zlib=%{_prefix} \
+	--with-bzip2=%{_prefix} \
 	--with-perl-modules \
-	--with-persistent-directory="/var/lib/net-snmp" \
 	--with-python-modules \
+	--with-mib-modules="host agentx smux mibII/mta_sendmail \
+%ifarch %{ix86} %{x8664}
+			ucd-snmp/lmSensors \
+%endif
+			disman/event disman/schedule ucd-snmp/diskio \
+			target misc/ipfwacc" \
 	--with-security-modules="ksm" \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
 	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
-	--disable-debugging \
-	--enable-as-needed \
-	--enable-ipv6 \
-	--enable-ucd-snmp-compatibility
-
-#	--enable-reentrant is broken - snmpd deadlocks on send (tries to lock the same mutex twice):
-#   #4  0xb760f54e in siglongjmp () from /lib/tls/libpthread.so.0
-#   #5  0xb7e5e0cf in snmp_res_lock (groupID=0, resourceID=1) at mt_support.c:103
-#   #6  0xb7e45698 in snmp_sess_pointer (session=0x80ff868) at snmp_api.c:6975
-#   #7  0xb7e41aca in snmp_async_send (session=0x80ff868, pdu=0x8141848, callback=0, cb_data=0x0)
-#       at snmp_api.c:4564
-#   #8  0xb7e41a6d in snmp_send (session=0x80ff868, pdu=0x8141848) at snmp_api.c:4551
-#   #9  0xb7ebf6fd in netsnmp_wrap_up_request (asp=0x812d828, status=0) at snmp_agent.c:1627
-#   #10 0xb7ec12e3 in netsnmp_handle_request (asp=0x812d828, status=0) at snmp_agent.c:2996
-#   #11 0xb7ebfa65 in handle_snmp_packet (op=1, session=0x80ff868, reqid=628270607, pdu=0x81419b8,
-#       magic=0x0) at snmp_agent.c:1792
-#   #12 0xb7e42b1c in _sess_process_packet (sessp=0x812c970, sp=0x80ff868, isp=0x812c698,
-#       transport=0x8142028, opaque=0x812c1a0, olength=16,
-#       packetptr=0x8145cb8 "0f\002\001\0030\021\002\004c [Ç\002\003", length=104) at snmp_api.c:5208
-#   #13 0xb7e434e6 in _sess_read (sessp=0x812c970, fdset=0xbfffe0e0) at snmp_api.c:5606
-#   #14 0xb7e43535 in snmp_sess_read (sessp=0x812c970, fdset=0xbfffe0e0) at snmp_api.c:5625
-#   #15 0xb7e42c44 in snmp_read (fdset=0xbfffe0e0) at snmp_api.c:5260
-#   #16 0x0804bbe5 in receive () at snmpd.c:1149
-#   #17 0x0804b53d in main (argc=5, argv=0xbffff344) at snmpd.c:993
-# [res mutex with groupID=0, resourceID=1 already locked in snmp_read() at snmp_api.c:5258]
+	--with-persistent-directory="/var/lib/net-snmp" \
+	--enable-ucd-snmp-compatibility \
+	--enable-ipv6
 
 # build this subdir first. it's causing STRANGE compile failures # otherwise (for me at least). glen
 %{__make} -C agent/mibgroup
