@@ -14,6 +14,27 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
      if test no = $trykrb5; then
        AC_MSG_NOTICE([configured not to use krb5. disabling ksm])
        continue
+@@ -1763,15 +1763,13 @@
+ 
+     AC_MSG_CHECKING([to see which crypto API we need to use])
+     AC_CHECK_FUNC(krb5_c_encrypt,[
+-    AC_CACHE_VAL(ac_cv_NETSNMP_USE_KERBEROS_MIT,
+-      AC_CHECK_LIB(k5crypto, krb5_init_context,
+-	ac_cv_NETSNMP_USE_KERBEROS_MIT=yes, ac_cv_MIT_NEW_CRYPTo=no
+-      )
+-    )
++	AC_CHECK_LIB(k5crypto, krb5_init_context,
++		     ac_cv_MIT_NEW_CRYPTo=yes, ac_cv_MIT_NEW_CRYPTo=no
++	)
+ 
+-    if test yes = $ac_cv_NETSNMP_USE_KERBEROS_MIT; then
++    AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
++    if test yes = $ac_cv_MIT_NEW_CRYPTo; then
+       AC_MSG_RESULT(new MIT crypto API)
+-      AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
+       if test no = $krb5_config; then
+ 	LIBS="$LIBS -lk5crypto"
+       fi
 @@ -2661,23 +2661,6 @@
      LIBS="${LIBS} -ladm"
      AGENTLIBS="${AGENTLIBS} -ladm"))
