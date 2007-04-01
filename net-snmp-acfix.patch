@@ -1,7 +1,14 @@
 diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
 --- net-snmp-5.3.org/configure.in	2005-12-28 18:20:56.000000000 +0100
 +++ net-snmp-5.3/configure.in	2006-01-09 01:07:39.031490000 +0100
-@@ -1704,11 +1704,11 @@
+@@ -1699,16 +1699,18 @@
+ rebuilt_new_with_security=
+ already_checked_krb5=no
+ 
++KRB5_LIBS=
++AC_SUBST(KRB5_LIBS)
+ for sec in $new_with_security
+ do
    if test "x$sec" = "xksm" -a "xyes" = "x$already_checked_krb5"; then
      continue
    fi
@@ -14,8 +21,29 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
      if test no = $trykrb5; then
        AC_MSG_NOTICE([configured not to use krb5. disabling ksm])
        continue
-@@ -1763,15 +1763,13 @@
+@@ -1718,7 +1720,7 @@
  
+     if test no != $krb5_config; then
+       CPPFLAGS="$CPPFLAGS `$krb5_config --cflags`"
+-      LIBS="$LIBS `$krb5_config --libs`"
++      KRB5_LIBS="`$krb5_config --libs`"
+     elif test $krb5path != no; then
+       AC_ADD_SEARCH_PATH($krb5path)
+     else
+@@ -1755,29 +1757,34 @@
+     if test $ac_cv_heimdal = yes; then
+       AC_DEFINE(NETSNMP_USE_KERBEROS_HEIMDAL)
+       if test no = $krb5_config; then
+-	LIBS="$LIBS -lkrb5 -lasn1 -lcom_err -lroken"
++	KRB5_LIBS="-lkrb5 -lasn1 -lcom_err -lroken"
+       fi
+     elif test no = $krb5_config; then
+-	LIBS="$LIBS -lkrb5 -lcom_err"
++	KRB5_LIBS="-lkrb5 -lcom_err"
+     fi
+ 
++    old_LIBS="$LIBS"
++    LIBS="$LIBS $KRB5_LIBS"
      AC_MSG_CHECKING([to see which crypto API we need to use])
      AC_CHECK_FUNC(krb5_c_encrypt,[
 -    AC_CACHE_VAL(ac_cv_NETSNMP_USE_KERBEROS_MIT,
@@ -33,8 +61,21 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
        AC_MSG_RESULT(new MIT crypto API)
 -      AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
        if test no = $krb5_config; then
- 	LIBS="$LIBS -lk5crypto"
+-	LIBS="$LIBS -lk5crypto"
++	KRB5_LIBS="$LIBS -lk5crypto"
++      else
++	CFLAGS="$CFLAGS `$krb5_config --cflags`"
++	KRB5_LIBS="$LIBS `$krb5_config --libs`"
        fi
+     else
+-      AC_MSG_RESULT(old MIT crypto API)])
++      AC_MSG_RESULT(old MIT crypto API)
+     fi
++    ])
++    LIBS="$old_LIBS"
+   fi
+ done
+
 @@ -2661,23 +2661,6 @@
      LIBS="${LIBS} -ladm"
      AGENTLIBS="${AGENTLIBS} -ladm"))

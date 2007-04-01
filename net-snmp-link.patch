@@ -76,8 +76,12 @@ diff -urN net-snmp-5.4.org/snmplib/Makefile.in net-snmp-5.4/snmplib/Makefile.in
  
  #
  # Things to build
-@@ -188,10 +187,6 @@
- 	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
+@@ -188,13 +187,9 @@
+ 
+ # how to build the libraries.
+ libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
+-	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @LIBCRYPTO@
++	$(LIB_LD_CMD) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION) ${TOBJS} ${LDFLAGS} @KRB5_LIBS@ @LIBCRYPTO@
  	$(RANLIB) libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
  
 -libsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    ${TOBJS}
