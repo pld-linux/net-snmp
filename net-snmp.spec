@@ -2,6 +2,11 @@
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
+%bcond_without	rpm		# don't include RPM support
+%bcond_without	kerberos5	# don't include kerberos support
+%bcond_without	lm_sensors	# don't include sensors support
+%bcond_without	perl		# don't include Perl modules and utils
+%bcond_without	python		# don't include Python modules
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
@@ -41,17 +46,21 @@ URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.57-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-BuildRequires:	krb5-devel
+%{?with_kerberos5:BuildRequires:	krb5-devel}
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-BuildRequires:	lm_sensors-devel
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
+%if %{with python}
 BuildRequires:	python-devel >= 1:2.5
 BuildRequires:	python-setuptools
+%endif
+%if %{with rpm}
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.176
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
@@ -137,9 +146,9 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 Requires:	libwrap-devel
-Requires:	lm_sensors-devel
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
-Requires:	rpm-devel
+%{?with_rpm:Requires:	rpm-devel}
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -409,27 +418,31 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--with-ldflags="%{rpmldflags}" \
 	--with-defaults \
 	--with-default-snmp-version=3 \
-	--with-krb5=%{_prefix} \
+	%{?with_kerberos5:--with-krb5=%{_prefix}} \
+	%{?with_kerberos5:--without-krb5} \
 	--with-openssl=%{_prefix} \
 	--with-libwrap=%{_prefix} \
 	--with-logfile="%{logfile}" \
 	--with-zlib=%{_prefix} \
 	--with-bzip2=%{_prefix} \
-	--with-perl-modules \
-	--with-python-modules \
+	--with%{!?with_rpm:out}-perl-modules \
+	--with%{!?with_rpm:out}-python-modules \
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
+%if %{with sensors}
 			ucd-snmp/lmSensors \
+%endif
 %endif
 			disman/event disman/schedule ucd-snmp/diskio \
 			target misc/ipfwacc" \
-	--with-security-modules="ksm" \
+	%{?with_kerberos5:--with-security-modules="ksm"} \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
 	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
 	--with-persistent-directory="/var/lib/net-snmp" \
 	--enable-ucd-snmp-compatibility \
-	--enable-ipv6
+	--enable-ipv6 \
+	--with%{!?with_rpm:out}-rpm
 
 # build this subdir first. it's causing STRANGE compile failures # otherwise (for me at least). glen
 %{__make} -C agent/mibgroup
@@ -586,7 +599,9 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/snmptrapd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmptrapd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmptrapd.conf
+%if %{with perl}
 %attr(755,root,root) %{_datadir}/snmp/snmp_perl_trapd.pl
+%endif
 %{_mandir}/man5/snmptrapd.conf.5*
 %{_mandir}/man8/snmptrapd.8*
 
@@ -634,6 +649,7 @@ fi
 
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmp.conf
 
+%if %{with perl}
 %files -n perl-SNMP
 %defattr(644,root,root,755)
 %doc perl/SNMP/{BUG,README,TODO} perl/SNMP/examples
@@ -663,6 +679,7 @@ fi
 %attr(755,root,root) %{_bindir}/traptoemail
 %{_mandir}/man1/fixproc.1*
 %{_mandir}/man1/traptoemail.1*
+%endif
 
 %files snmpconf
 %defattr(644,root,root,755)
@@ -670,14 +687,18 @@ fi
 %{_mandir}/man1/snmpconf.1*
 %{_datadir}/snmp/snmpconf-data
 
+%if %{with perl}
 %files tkmib
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/tkmib
 %{_mandir}/man1/tkmib.1*
+%endif
 
+%if %{with python}
 %files -n python-netsnmp
 %defattr(644,root,root,755)
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
 %{py_sitedir}/netsnmp_python-*.egg-info
+%endif
