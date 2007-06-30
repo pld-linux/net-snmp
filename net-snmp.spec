@@ -419,7 +419,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--with-defaults \
 	--with-default-snmp-version=3 \
 	%{?with_kerberos5:--with-krb5=%{_prefix}} \
-	%{?with_kerberos5:--without-krb5} \
+	%{!?with_kerberos5:--without-krb5} \
 	--with-openssl=%{_prefix} \
 	--with-libwrap=%{_prefix} \
 	--with-logfile="%{logfile}" \
