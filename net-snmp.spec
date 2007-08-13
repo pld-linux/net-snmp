@@ -12,7 +12,7 @@ Summary(ru):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk):	Наб╕р утил╕т для протоколу SNMP в╕д UC-Davis
 Name:		net-snmp
 Version:	5.2.1.2
-Release:	9
+Release:	10
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -40,7 +40,7 @@ Patch11:	%{name}-fix-insecure-fixproc.patch
 Patch12:	%{name}-fix-64bit-interface-counters.patch
 Patch13:	%{name}-64bit-error-checking.patch
 URL:		http://www.net-snmp.org/
-BuildRequires:	autoconf >= 2.57-3
+BuildRequires:	autoconf >= 2.61-2
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 BuildRequires:	libtool >= 1.4
