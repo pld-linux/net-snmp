@@ -45,7 +45,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/snmpd ]; then
 		msg_starting "snmpd"
 		daemon /usr/bin/setsid /usr/sbin/snmpd \
-			$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
+			$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE -p /var/run/snmpd.pid") \
 			$( is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && \
 				echo "-Lsd" ) </dev/null
 		RETVAL=$?
