@@ -424,7 +424,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--with%{!?with_rpm:out}-python-modules \
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
-%if %{with sensors}
+%if %{with lm_sensors}
 			ucd-snmp/lmSensors \
 %endif
 %endif
