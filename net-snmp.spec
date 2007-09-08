@@ -1,4 +1,3 @@
-# TODO: python-netsnmp links with libnetsnmp.so.* installed on builder
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -16,12 +15,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.4
-Release:	6
+Version:	5.4.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	46d893281056ff476e597659cb91574d
+# Source0-md5:	6c974df7a5a5b1579f72115e6b045bda
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -33,17 +32,15 @@ Source7:	ucd-ipchains.tar.gz
 Patch0:		%{name}-acfix.patch
 Patch1:		%{name}-rpm-implicit-libs.patch
 Patch2:		%{name}-config-noflags.patch
-Patch3:		%{name}-dlopen-fix.patch
-Patch4:		%{name}-manpage.patch
-Patch5:		%{name}-link.patch
-Patch6:		%{name}-llinterfaces.patch
-Patch7:		%{name}-kernel_headers.patch
-Patch8:		%{name}-rpmpath.patch
-Patch9:		%{name}-snmpksm.patch
-Patch10:	%{name}-python.patch
-Patch11:	%{name}-python-includes.patch
+Patch3:		%{name}-manpage.patch
+Patch4:		%{name}-link.patch
+Patch5:		%{name}-llinterfaces.patch
+Patch6:		%{name}-kernel_headers.patch
+Patch7:		%{name}-rpmpath.patch
+Patch8:		%{name}-snmpksm.patch
+Patch9:		%{name}-python.patch
 URL:		http://www.net-snmp.org/
-BuildRequires:	autoconf >= 2.57-3
+BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 %{?with_kerberos5:BuildRequires:	krb5-devel}
@@ -403,8 +400,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p1
-%patch11 -p1
 
 %build
 %{__libtoolize}
