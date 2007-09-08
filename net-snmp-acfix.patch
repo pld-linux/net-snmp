@@ -1,7 +1,6 @@
-diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
---- net-snmp-5.3.org/configure.in	2005-12-28 18:20:56.000000000 +0100
-+++ net-snmp-5.3/configure.in	2006-01-09 01:07:39.031490000 +0100
-@@ -1699,16 +1699,18 @@
+--- net-snmp-5.4.1/configure.in.orig	2007-07-27 19:02:00.000000000 +0200
++++ net-snmp-5.4.1/configure.in	2007-09-08 16:13:11.531748373 +0200
+@@ -1726,16 +1726,18 @@
  rebuilt_new_with_security=
  already_checked_krb5=no
  
@@ -21,7 +20,7 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
      if test no = $trykrb5; then
        AC_MSG_NOTICE([configured not to use krb5. disabling ksm])
        continue
-@@ -1718,7 +1720,7 @@
+@@ -1745,7 +1747,7 @@
  
      if test no != $krb5_config; then
        CPPFLAGS="$CPPFLAGS `$krb5_config --cflags`"
@@ -30,7 +29,7 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
      elif test $krb5path != no; then
        AC_ADD_SEARCH_PATH($krb5path)
      else
-@@ -1755,29 +1757,34 @@
+@@ -1782,29 +1784,35 @@
      if test $ac_cv_heimdal = yes; then
        AC_DEFINE(NETSNMP_USE_KERBEROS_HEIMDAL)
        if test no = $krb5_config; then
@@ -72,60 +71,8 @@ diff -ur net-snmp-5.3.org/configure.in net-snmp-5.3/configure.in
 +      AC_MSG_RESULT(old MIT crypto API)
      fi
 +    ])
++    LNETSNMPLIBS="$LNETSNMPLIBS $KRB5_LIBS"
 +    LIBS="$old_LIBS"
    fi
  done
-
-@@ -2661,23 +2661,6 @@
-     LIBS="${LIBS} -ladm"
-     AGENTLIBS="${AGENTLIBS} -ladm"))
  
--case $target_os in
--    aix*) # AIX perfstat library, needed for CPU/memory statistics
--        AC_CHECK_HEADERS(libperfstat.h,
--            AC_CHECK_LIB(perfstat, perfstat_cpu_total, AC_DEFINE(HAVE_PERFSTAT)
--            AGENTLIBS="${AGENTLIBS} -lperfstat"), AC_MSG_ERROR([
--
--*** To monitor CPU/memory values in AIX you need to install
--*** libperfstat which can be found in bos.perf
--]))
--        ;;
--    hpux*) # HP-UX agent needs open_mib
--        AC_CHECK_LIB(nm, open_mib, AC_DEFINE(HAVE_LIBNM)
--            AGENTLIBS="${AGENTLIBS} -lnm")
--        ;;
--    *)
--        ;;
--esac
- # WIN32
- # (mingw32 must link winsock explicitly)
- AC_CHECK_HEADERS(winsock.h,[
-@@ -2880,7 +2863,7 @@
- 
- AC_MSG_RESULT([$ac_cv_type_ssize_t])
- if test $ac_cv_type_ssize_t = yes; then
--  AC_DEFINE(HAVE_SSIZE_T)
-+  AC_DEFINE(HAVE_SSIZE_T,,[have ssize_t])
- fi
- 
- # Check ps args
---- net-snmp-5.4/agent/mibgroup/Makefile.in.orig	2006-09-13 19:00:27.000000000 +0200
-+++ net-snmp-5.4/agent/mibgroup/Makefile.in	2006-12-02 11:51:38.369040000 +0100
-@@ -22,9 +22,13 @@
- .c.o:
- 	$(CC) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
- 
--OBJS  = @mib_module_list_o@
--LOBJS = @mib_module_list_lo@
--SRCS  = @mib_module_list_c@
-+@mib_module_list_o@
-+@mib_module_list_lo@
-+@mib_module_list_c@
-+
-+OBJS  = $(mib_module_list_o)
-+LOBJS = $(mib_module_list_lo)
-+SRCS  = $(mib_module_list_c)
- 
- all: standardall $(LOBJS)
- 
-
