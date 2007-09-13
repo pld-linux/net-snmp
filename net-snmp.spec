@@ -142,6 +142,7 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
+%{?with_kerberos5:Requires:	krb5-devel}
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
