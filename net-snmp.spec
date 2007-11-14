@@ -442,9 +442,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--enable-ipv6 \
 	--with%{!?with_rpm:out}-rpm
 
-# build this subdir first. it's causing STRANGE compile failures # otherwise (for me at least). glen
-%{__make} -C agent/mibgroup
-%{__make}
+%{__make} -j1
 
 cd perl
 
