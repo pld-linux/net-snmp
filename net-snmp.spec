@@ -504,8 +504,8 @@ cd ..
 rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
 rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
-rm -f $RPM_BUILD_ROOT %{perl_vendorarch}/Bundle/Makefile.subs.pl
-rm -f $RPM_BUILD_ROOT %{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
+rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
+rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
 %clean
 rm -rf $RPM_BUILD_ROOT
