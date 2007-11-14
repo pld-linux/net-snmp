@@ -1,3 +1,14 @@
+# TODO
+# - package or remove:
+#   %{py_sitedir}/netsnmp/__init__.py
+#   %{py_sitedir}/netsnmp/client.py
+#   %{py_sitedir}/netsnmp/tests/__init__.py
+#   %{py_sitedir}/netsnmp/tests/__init__.pyc
+#   %{py_sitedir}/netsnmp/tests/__init__.pyo
+#   %{py_sitedir}/netsnmp/tests/test.py
+#   %{py_sitedir}/netsnmp/tests/test.pyc
+#   %{py_sitedir}/netsnmp/tests/test.pyo
+#   %{_datadir}/snmp/snmp_perl.pl
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -491,6 +502,10 @@ cd ..
 
 # IP-Filter (non-Linux)
 rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
+
+rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
+rm -f $RPM_BUILD_ROOT %{perl_vendorarch}/Bundle/Makefile.subs.pl
+rm -f $RPM_BUILD_ROOT %{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
 %clean
 rm -rf $RPM_BUILD_ROOT
