@@ -1,5 +1,5 @@
---- net-snmp-5.4.1/configure.in.orig	2007-07-27 19:02:00.000000000 +0200
-+++ net-snmp-5.4.1/configure.in	2007-09-08 16:13:11.531748373 +0200
+--- net-snmp-5.4.1/configure.in	2007-09-08 16:13:11.531748373 +0200
++++ net-snmp-5.4.1-ac/configure.in	2007-11-14 20:58:16.361317122 +0200
 @@ -1726,16 +1726,18 @@
  rebuilt_new_with_security=
  already_checked_krb5=no
@@ -55,10 +55,10 @@
 +	)
  
 -    if test yes = $ac_cv_NETSNMP_USE_KERBEROS_MIT; then
-+    AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
+-      AC_MSG_RESULT(new MIT crypto API)
 +    if test yes = $ac_cv_MIT_NEW_CRYPTo; then
-       AC_MSG_RESULT(new MIT crypto API)
--      AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
+       AC_DEFINE(NETSNMP_USE_KERBEROS_MIT)
++      AC_MSG_RESULT(new MIT crypto API)
        if test no = $krb5_config; then
 -	LIBS="$LIBS -lk5crypto"
 +	KRB5_LIBS="$LIBS -lk5crypto"
