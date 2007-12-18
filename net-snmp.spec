@@ -134,7 +134,7 @@ SNMP, утиліти для запросу та встановлення інф�
 Summary:	NET SNMP libraries
 Summary(pl.UTF-8):	Biblioteki SNMP
 Group:		Libraries
-Requires:	%{name}-mibs = %{version}-%{release}
+Requires:	%{name}-mibs
 Obsoletes:	net-snmp-compat-libs
 Obsoletes:	ucd-snmp-libs
 
