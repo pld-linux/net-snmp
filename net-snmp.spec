@@ -74,6 +74,7 @@ BuildRequires:	rpmbuild(macros) >= 1.176
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-mibs = %{version}-%{release}
 Requires:	/usr/bin/setsid
 Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
@@ -303,6 +304,7 @@ Summary(ru.UTF-8):	Утилиты управления сетью по SNMP из
 Summary(uk.UTF-8):	Утиліти керування мережею по SNMP з проекту NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-mibs = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils
 
