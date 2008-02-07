@@ -70,7 +70,6 @@ BuildRequires:	python-setuptools
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.176
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
