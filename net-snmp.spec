@@ -51,6 +51,7 @@ Patch7:		%{name}-rpmpath.patch
 Patch8:		%{name}-snmpksm.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
+Patch11:	%{name}-defaultconfig.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -415,6 +416,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 %{__libtoolize}
