@@ -17,6 +17,7 @@
 %bcond_without	lm_sensors	# don't include sensors support
 %bcond_without	perl		# don't include Perl modules and utils
 %bcond_without	python		# don't include Python modules
+%bcond_without	static_libs	# don't build static library
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
@@ -84,7 +85,6 @@ Obsoletes:	ucd-snmp
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		logfile		/var/log/snmpd.log
-%define		filterout_ld	-Wl,--as-needed
 
 %description
 SNMP (Simple Network Management Protocol) is a protocol used for
@@ -426,6 +426,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %configure \
 	--disable-debugging \
 	--enable-as-needed \
+	%{!?with_static_libs:--disable-static} \
 	--with-cflags="%{rpmcflags} -I/usr/include/et" \
 	--with-ldflags="%{rpmldflags}" \
 	--with-defaults \
@@ -588,9 +589,11 @@ fi
 %{_mandir}/man3/[!NS]*
 %{_mandir}/man5/mib2c.conf.5*
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libnet*.a
+%endif
 
 %files compat-devel
 %defattr(644,root,root,755)
@@ -598,9 +601,11 @@ fi
 %{_libdir}/libsnmp.la
 %{_includedir}/ucd-snmp
 
+%if %{with static_libs}
 %files compat-static
 %defattr(644,root,root,755)
 %{_libdir}/libsnmp.a
+%endif
 
 %files mibs
 %defattr(644,root,root,755)
