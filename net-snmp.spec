@@ -27,7 +27,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -51,6 +51,7 @@ Patch7:		%{name}-rpmpath.patch
 Patch8:		%{name}-snmpksm.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
+Patch11:	%{name}-defaultconfig.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -70,10 +71,10 @@ BuildRequires:	python-setuptools
 BuildRequires:	rpm-devel >= 4.0
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.176
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-mibs = %{version}-%{release}
 Requires:	/usr/bin/setsid
 Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
@@ -134,7 +135,7 @@ SNMP, утиліти для запросу та встановлення інф�
 Summary:	NET SNMP libraries
 Summary(pl.UTF-8):	Biblioteki SNMP
 Group:		Libraries
-Requires:	%{name}-mibs = %{version}-%{release}
+Requires:	%{name}-mibs
 Obsoletes:	net-snmp-compat-libs
 Obsoletes:	ucd-snmp-libs
 
@@ -154,7 +155,7 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
-%{?with_kerberos5:Requires:	heimdal-devel}
+%{?with_kerberos5:Requires:	krb5-devel}
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
@@ -303,6 +304,7 @@ Summary(ru.UTF-8):	Утилиты управления сетью по SNMP из
 Summary(uk.UTF-8):	Утиліти керування мережею по SNMP з проекту NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-mibs = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils
 
@@ -414,6 +416,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 %{__libtoolize}
