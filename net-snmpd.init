@@ -23,6 +23,7 @@
 
 CONF_FILE=""
 LOG_WARNINGS_MESSAGES_TO_SYSLOG="yes"
+SNMPD_LISTEN_ADDRS=""
 
 # Get service config
 [ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
@@ -44,7 +45,7 @@ start() {
 		daemon /usr/bin/setsid /usr/sbin/snmpd \
 			$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
 			$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-Lsd" ) \
-		   	-p /var/run/snmpd.pid </dev/null
+		   	-p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS </dev/null
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmpd
 	else

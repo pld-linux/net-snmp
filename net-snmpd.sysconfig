@@ -10,3 +10,6 @@ SERVICE_RUN_NICE_LEVEL="+0"
 
 # Log warnings/messages to syslog (otherwise to /var/log/snmpd.log)
 LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
+
+# Addresses snmpd should listen too. See snmpd(8)
+#SNMPD_LISTEN_ADDRS="udp:127.0.0.1"
