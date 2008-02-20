@@ -511,6 +511,7 @@ rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
+%if %{with static_libs}
 # hack: convert DynaLoader.a inside .a file to .o, as strip(1) would otherwise say invalid argument
 for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
 	rm -f *.o *.a
@@ -523,6 +524,7 @@ for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
 		ar d $a DynaLoader.a
 	fi
 done
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
