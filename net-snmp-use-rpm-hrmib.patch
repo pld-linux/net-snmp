@@ -1,0 +1,21 @@
+--- net-snmp-5.4.1/agent/mibgroup/host/hr_swinst.c~	2008-02-20 20:14:05.000000000 +0200
++++ net-snmp-5.4.1/agent/mibgroup/host/hr_swinst.c	2008-02-20 20:19:07.078169853 +0200
+@@ -5,6 +5,8 @@
+ 
+ #include <net-snmp/net-snmp-config.h>
+ 
++#undef HAVE_LIBRPM
++
+ #if HAVE_SYS_PARAM_H
+ #include <sys/param.h>
+ #endif
+@@ -183,6 +185,9 @@
+ #define	_PATH_HRSW_directory	"/var/db/pkg"
+ #endif
+ 
++#undef _PATH_HRSW_directory
++#define	_PATH_HRSW_directory	"/var/cache/hrmib"
++
+ void
+ init_hr_swinst(void)
+ {
