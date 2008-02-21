@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1
-Release:	7
+Release:	8
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -53,6 +53,7 @@ Patch8:		%{name}-snmpksm.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
+Patch12:	%{name}-use-rpm-hrmib.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -82,6 +83,7 @@ Provides:	snmpd
 Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
+Conflicts:	rpm < 4.4.9-43.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		logfile		/var/log/snmpd.log
@@ -417,6 +419,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 %build
 %{__libtoolize}
