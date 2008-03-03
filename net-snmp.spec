@@ -17,6 +17,7 @@
 %bcond_without	lm_sensors	# don't include sensors support
 %bcond_without	perl		# don't include Perl modules and utils
 %bcond_without	python		# don't include Python modules
+%bcond_without	static_libs	# don't build static library
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
@@ -27,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1
-Release:	8
+Release:	9
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -52,6 +53,7 @@ Patch8:		%{name}-snmpksm.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
+Patch12:	%{name}-use-rpm-hrmib.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -81,10 +83,10 @@ Provides:	snmpd
 Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
+Conflicts:	rpm < 4.4.9-43.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		logfile		/var/log/snmpd.log
-%define		filterout_ld	-Wl,--as-needed
 
 %description
 SNMP (Simple Network Management Protocol) is a protocol used for
@@ -417,6 +419,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 %build
 %{__libtoolize}
@@ -426,6 +429,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %configure \
 	--disable-debugging \
 	--enable-as-needed \
+	%{!?with_static_libs:--disable-static} \
 	--with-cflags="%{rpmcflags} -I/usr/include/et" \
 	--with-ldflags="%{rpmldflags}" \
 	--with-defaults \
@@ -510,6 +514,21 @@ rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
+%if %{with static_libs}
+# hack: convert DynaLoader.a inside .a file to .o, as strip(1) would otherwise say invalid argument
+for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
+	rm -f *.o *.a
+	ar x $a DynaLoader.a
+	if [ -f DynaLoader.a ]; then
+		ar x DynaLoader.a
+		ar cr $a DynaLoader.o
+		ar d $a DynaLoader.a
+		# remove second file too
+		ar d $a DynaLoader.a
+	fi
+done
+%endif
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -588,9 +607,11 @@ fi
 %{_mandir}/man3/[!NS]*
 %{_mandir}/man5/mib2c.conf.5*
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libnet*.a
+%endif
 
 %files compat-devel
 %defattr(644,root,root,755)
@@ -598,9 +619,11 @@ fi
 %{_libdir}/libsnmp.la
 %{_includedir}/ucd-snmp
 
+%if %{with static_libs}
 %files compat-static
 %defattr(644,root,root,755)
 %{_libdir}/libsnmp.a
+%endif
 
 %files mibs
 %defattr(644,root,root,755)
