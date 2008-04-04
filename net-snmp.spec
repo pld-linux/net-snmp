@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1
-Release:	9
+Release:	10
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -441,8 +441,8 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--with-logfile="%{logfile}" \
 	--with-zlib=%{_prefix} \
 	--with-bzip2=%{_prefix} \
-	--with%{!?with_rpm:out}-perl-modules \
-	--with%{!?with_rpm:out}-python-modules \
+	--with%{!?with_perl:out}-perl-modules \
+	--with%{!?with_python:out}-python-modules \
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
