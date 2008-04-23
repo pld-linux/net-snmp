@@ -1,0 +1,267 @@
+Index: snmplib/container_binary_array.c
+===================================================================
+--- snmplib/container_binary_array.c	(revision 16471)
++++ snmplib/container_binary_array.c	(working copy)
+@@ -579,6 +579,11 @@
+     return va;
+ }
+ 
++static int _ba_options(netsnmp_container *c, int set, u_int flags)
++{
++	return netsnmp_binary_array_options_set(c, set, flags);
++}
++
+ netsnmp_container *
+ netsnmp_container_get_binary_array(void)
+ {
+@@ -604,6 +609,7 @@
+     c->get_iterator = _ba_iterator_get;
+     c->for_each = _ba_for_each;
+     c->clear = _ba_clear;
++    c->options = _ba_options;
+         
+     return c;
+ }
+Index: snmplib/container.c
+===================================================================
+--- snmplib/container.c	(revision 16471)
++++ snmplib/container.c	(working copy)
+@@ -268,19 +268,64 @@
+ int CONTAINER_INSERT(netsnmp_container *x, const void *k)
+ { 
+     int rc2, rc = 0;
++    netsnmp_container *start;
++    int silent = 0;
+     
+     /** start at first container */
+     while(x->prev)
+         x = x->prev;
++    start = x;
++    
++    if (start->next != NULL) { 
++        /* Check if the key would create duplicity in any index.
++         * This is not needed if there is only one index - x->insert
++         * will check it instead. */
++        for(; x; x = x->next) {
++        	int key_allow_duplicates = 0;
++            CONTAINER_CHECK_OPTION(x, CONTAINER_KEY_ALLOW_DUPLICATES, key_allow_duplicates);
++            if (key_allow_duplicates < 0)
++                key_allow_duplicates = 0;  /* cannot read the flag -> use default value */
++                
++            if (key_allow_duplicates)
++                continue;  /* no need to check this index - duplicates are allowed */
++                
++            if ((NULL != x->insert_filter) &&
++                (x->insert_filter(x,k) == 1))
++                continue; /* no need to check this index - index is filtered out */
++                
++            rc2 = x->find(x,k);
++            if (rc2) {
++                /* key is already in the index -> forbid the insert */
++                CONTAINER_CHECK_OPTION(start, CONTAINER_SILENT, silent);
++                if (silent < 0)
++                    silent = 0; /* cannot read the flag -> use default value */
++                
++                if (!silent) {
++                    snmp_log(LOG_ERR,"error on subcontainer '%s' insert would create duplicity (%d)\n",
++                        x->container_name ? x->container_name : "", rc2);
++                }
++                return -1;
++            }
++        }
++    }
++    
++    x = start; 
+     for(; x; x = x->next) {
+         if ((NULL != x->insert_filter) &&
+             (x->insert_filter(x,k) == 1))
+             continue;
+         rc2 = x->insert(x,k);
+         if (rc2) {
+-            snmp_log(LOG_ERR,"error on subcontainer '%s' insert (%d)\n",
+-                     x->container_name ? x->container_name : "", rc2);
++            /* insert failed */
++            CONTAINER_CHECK_OPTION(start, CONTAINER_SILENT, silent);
++            if (silent < 0)
++                silent = 0; /* cannot read the flag -> use default value */
++                
++            if (!silent) {
++                snmp_log(LOG_ERR,"error on subcontainer '%s' insert (%d)\n",
++                         x->container_name ? x->container_name : "", rc2);
++            }
+             rc = rc2;
+         }
+     }
+     return rc;
+Index: include/net-snmp/library/container.h
+===================================================================
+--- include/net-snmp/library/container.h	(revision 16471)
++++ include/net-snmp/library/container.h	(working copy)
+@@ -284,6 +284,8 @@
+  */
+ #define CONTAINER_KEY_ALLOW_DUPLICATES             0x00000001
+ #define CONTAINER_KEY_UNSORTED                     0x00000002
++/* do not print anything to log on CONTAINER_INSERT error */  
++#define CONTAINER_SILENT                           0x00000004  
+ 
+ #define CONTAINER_SET_OPTIONS(x,o,rc)  do {                             \
+         if (NULL==(x)->options)                                         \
+@@ -354,23 +356,68 @@
+     int CONTAINER_INSERT(netsnmp_container *x, const void *k)
+     {
+         int rc2, rc = 0;
++        netsnmp_container *start;
++        int silent = 0;
+         
+         /** start at first container */
+         while(x->prev)
+             x = x->prev;
++        start = x;
++        
++        if (start->next != NULL) { 
++            /* Check if the key would create duplicity in any index.
++             * This is not needed if there is only one index - x->insert
++             * will check it instead. */
++            for(; x; x = x->next) {
++            	int key_allow_duplicates = 0;
++                CONTAINER_CHECK_OPTION(x, CONTAINER_KEY_ALLOW_DUPLICATES, key_allow_duplicates);
++                if (key_allow_duplicates < 0)
++                    key_allow_duplicates = 0;  /* cannot read the flag -> use default value */
++                    
++                if (key_allow_duplicates)
++                    continue;  /* no need to check this index - duplicates are allowed */
++                    
++                if ((NULL != x->insert_filter) &&
++                    (x->insert_filter(x,k) == 1))
++                    continue; /* no need to check this index - index is filtered out */
++                    
++                rc2 = x->find(x,k);
++                if (rc2) {
++                    /* key is already in the index -> forbid the insert */
++                    CONTAINER_CHECK_OPTION(start, CONTAINER_SILENT, silent);
++                    if (silent < 0)
++                        silent = 0; /* cannot read the flag -> use default value */
++                    
++                    if (!silent) {
++                        snmp_log(LOG_ERR,"error on subcontainer '%s' insert would create duplicity (%d)\n",
++                            x->container_name ? x->container_name : "", rc2);
++                    }
++                    return -1;
++                }
++            }            
++        }      
++        
++        x = start; 
+         for(; x; x = x->next) {
+             if ((NULL != x->insert_filter) &&
+                 (x->insert_filter(x,k) == 1))
+                 continue;
+             rc2 = x->insert(x,k);
+             if (rc2) {
+-                snmp_log(LOG_ERR,"error on subcontainer '%s' insert (%d)\n",
+-                         x->container_name ? x->container_name : "", rc2);
++                /* insert failed */
++                CONTAINER_CHECK_OPTION(start, CONTAINER_SILENT, silent);
++                if (silent < 0)
++                    silent = 0; /* cannot read the flag -> use default value */
++                    
++                if (!silent) {
++                    snmp_log(LOG_ERR,"error on subcontainer '%s' insert (%d)\n",
++                             x->container_name ? x->container_name : "", rc2);
++                }
+                 rc = rc2;
+             }
+         }
+         return rc;
+-    }
++    }    
+     
+     /*------------------------------------------------------------------
+      * These functions should EXACTLY match the function version in
+Index: agent/mibgroup/ip-mib/data_access/ipaddress_ioctl.c
+===================================================================
+--- agent/mibgroup/ip-mib/data_access/ipaddress_ioctl.c    2008-04-23 11:27:45.000000000 +0300
++++ agent/mibgroup/ip-mib/data_access/ipaddress_ioctl.c    2008-04-23 11:37:29.000000000 +0300
+@@ -272,11 +272,14 @@
+         /*
+          * add entry to container
+          */
+-        if (CONTAINER_INSERT(container, entry) < 0)
+-        {
+-            DEBUGMSGTL(("access:ipaddress:container","error with ipaddress_entry: insert into container failed.\n"));
+-            netsnmp_access_ipaddress_entry_free(entry);
+-            continue;
++
++        rc = CONTAINER_INSERT(container, entry);
++        if (rc < 0) {
++           static int logged = 0;
++            if (!logged) {
++               snmp_log(LOG_NOTICE, "Duplicate IPv4 address detected, some interfaces may not be visible in IP-MIB\n");
++                logged = 1;
++            }
+         }
+     }
+
+Index: agent/mibgroup/ip-mib/data_access/ipaddress_common.c
+===================================================================
+--- agent/mibgroup/ip-mib/data_access/ipaddress_common.c	(revision 16471)
++++ agent/mibgroup/ip-mib/data_access/ipaddress_common.c	(working copy)
+@@ -54,6 +54,7 @@
+ netsnmp_access_ipaddress_container_init(u_int flags)
+ {
+     netsnmp_container *container1;
++    int rc;
+ 
+     DEBUGMSGTL(("access:ipaddress:container", "init\n"));
+ 
+@@ -67,6 +68,12 @@
+         return NULL;
+     }
+     container1->container_name = strdup("ia_index");
++    CONTAINER_SET_OPTIONS(container1, CONTAINER_SILENT, rc);
++    if (rc < 0) {
++    	snmp_log(LOG_ERR, "ipaddress container: cannot set CONTAINER_SILENT flag\n");
++    	CONTAINER_FREE(container1);
++    	return NULL;
++    }
+ 
+     if (flags & NETSNMP_ACCESS_IPADDRESS_INIT_ADDL_IDX_BY_ADDR) {
+         netsnmp_container *container2 =
+@@ -79,6 +86,14 @@
+         
+         container2->compare = _access_ipaddress_entry_compare_addr;
+         container2->container_name = strdup("ia_addr");
++
++	    CONTAINER_SET_OPTIONS(container2, CONTAINER_SILENT, rc);
++    	if (rc < 0) {
++    		snmp_log(LOG_ERR, "ipaddress secondary container: cannot set CONTAINER_SILENT flag\n");
++	    	CONTAINER_FREE(container1);
++	    	CONTAINER_FREE(container2);
++    		return NULL;
++    	}
+         
+         netsnmp_container_add_index(container1, container2);
+     }
+Index: agent/mibgroup/ip-mib/data_access/ipaddress_linux.c
+===================================================================
+--- agent/mibgroup/ip-mib/data_access/ipaddress_linux.c	(revision 16471)
++++ agent/mibgroup/ip-mib/data_access/ipaddress_linux.c	(working copy)
+@@ -340,7 +340,16 @@
+         /*
+          * add entry to container
+          */
+-        CONTAINER_INSERT(container, entry);
++        rc = CONTAINER_INSERT(container, entry);
++        if (rc < 0) {
++            static int logged = 0;
++            if (!logged) {
++                snmp_log(LOG_NOTICE, "Duplicate IPv6 address detected, some interfaces may not be visible in IP-MIB\n");
++                logged = 1;
++            }
++            netsnmp_access_ipaddress_entry_free(entry);
++        }
++                                    
+     }
+ 
+     fclose(in);
+
