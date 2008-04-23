@@ -1,7 +1,0 @@
-# Customized setings for snmpd
-
-# Define nice level for snmpd
-SERVICE_RUN_NICE_LEVEL="+0"
-
-# Additional options passed to snmptrapd:
-#SNMPTRAPD_OPTIONS=""
