@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1
-Release:	12
+Release:	14
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -72,7 +72,7 @@ BuildRequires:	python-devel >= 1:2.5
 BuildRequires:	python-setuptools
 %endif
 %if %{with rpm}
-BuildRequires:	rpm-devel >= 4.0
+BuildRequires:	rpm
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -163,7 +163,6 @@ Requires:	elfutils-devel
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
 Requires:	openssl-devel >= 0.9.7c
-%{?with_rpm:Requires:	rpm-devel}
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -531,6 +530,8 @@ for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
 		ar d $a DynaLoader.a
 	fi
 done
+%else
+rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
 
 %clean
@@ -594,15 +595,32 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/snmp
-%attr(755,root,root) %{_libdir}/libnet*.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.15
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mib2c
 %attr(755,root,root) %{_bindir}/mib2c-update
 %attr(755,root,root) %{_bindir}/net-snmp-config
-%attr(755,root,root) %{_libdir}/libnet*[a-z].so
-%{_libdir}/libnet*.la
+%attr(755,root,root) %{_libdir}/libnetsnmp.so
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so
+%{_libdir}/libnetsnmp.la
+%{_libdir}/libnetsnmpagent.la
+%{_libdir}/libnetsnmphelpers.la
+%{_libdir}/libnetsnmpmibs.la
+%{_libdir}/libnetsnmptrapd.la
 %{_includedir}/net-snmp
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
