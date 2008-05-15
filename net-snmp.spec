@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1
-Release:	10
+Release:	11
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -53,8 +53,8 @@ Patch8:		%{name}-snmpksm.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
-Patch12:	%{name}-use-rpm-hrmib.patch
-Patch13:	%{name}-duplicate-ip.patch
+Patch12:	%{name}-duplicate-ip.patch
+Patch13:	%{name}-use-rpm-hrmib.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -71,7 +71,7 @@ BuildRequires:	python-devel
 BuildRequires:	python-setuptools
 %endif
 %if %{with rpm}
-BuildRequires:	rpm-devel >= 4.0
+BuildRequires:	rpm
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -162,7 +162,6 @@ Requires:	elfutils-devel
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
-%{?with_rpm:Requires:	rpm-devel}
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -420,8 +419,8 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p1
-%patch13 -p3
+%patch12 -p3
+%patch13 -p1
 
 %build
 %{__libtoolize}
@@ -443,8 +442,8 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--with-logfile="%{logfile}" \
 	--with-zlib=%{_prefix} \
 	--with-bzip2=%{_prefix} \
-	--with%{!?with_rpm:out}-perl-modules \
-	--with%{!?with_rpm:out}-python-modules \
+	--with%{!?with_perl:out}-perl-modules \
+	--with%{!?with_python:out}-python-modules \
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
@@ -529,6 +528,8 @@ for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
 		ar d $a DynaLoader.a
 	fi
 done
+%else
+rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
 
 %clean
@@ -592,15 +593,32 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/snmp
-%attr(755,root,root) %{_libdir}/libnet*.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.15
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mib2c
 %attr(755,root,root) %{_bindir}/mib2c-update
 %attr(755,root,root) %{_bindir}/net-snmp-config
-%attr(755,root,root) %{_libdir}/libnet*[a-z].so
-%{_libdir}/libnet*.la
+%attr(755,root,root) %{_libdir}/libnetsnmp.so
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so
+%{_libdir}/libnetsnmp.la
+%{_libdir}/libnetsnmpagent.la
+%{_libdir}/libnetsnmphelpers.la
+%{_libdir}/libnetsnmpmibs.la
+%{_libdir}/libnetsnmptrapd.la
 %{_includedir}/net-snmp
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
