@@ -1,13 +1,5 @@
 # TODO
 # - package or remove:
-#   %{py_sitedir}/netsnmp/__init__.py
-#   %{py_sitedir}/netsnmp/client.py
-#   %{py_sitedir}/netsnmp/tests/__init__.py
-#   %{py_sitedir}/netsnmp/tests/__init__.pyc
-#   %{py_sitedir}/netsnmp/tests/__init__.pyo
-#   %{py_sitedir}/netsnmp/tests/test.py
-#   %{py_sitedir}/netsnmp/tests/test.pyc
-#   %{py_sitedir}/netsnmp/tests/test.pyo
 #   %{_datadir}/snmp/snmp_perl.pl
 #
 # Conditional build:
@@ -27,12 +19,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.4.1
-Release:	11
+Version:	5.4.1.2
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	6c974df7a5a5b1579f72115e6b045bda
+# Source0-md5:	2dfcf97d65f3b7d34b78c8d4be11fc83
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -53,8 +45,8 @@ Patch8:		%{name}-snmpksm.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
-Patch12:	%{name}-duplicate-ip.patch
-Patch13:	%{name}-use-rpm-hrmib.patch
+Patch12:	%{name}-use-rpm-hrmib.patch
+Patch13:	%{name}-duplicate-ip.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -419,14 +411,15 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
-%patch12 -p3
-%patch13 -p1
+%patch12 -p1
+%patch13 -p3
 
 %build
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__autoheader}
+cp -f /usr/share/automake/config.sub .
 %configure \
 	--disable-debugging \
 	--enable-as-needed \
@@ -531,6 +524,9 @@ done
 %else
 rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
+
+%{__rm} -r $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/tests
+%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
 
 %clean
 rm -rf $RPM_BUILD_ROOT
