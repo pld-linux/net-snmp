@@ -1,13 +1,5 @@
 # TODO
 # - package or remove:
-#   %{py_sitedir}/netsnmp/__init__.py
-#   %{py_sitedir}/netsnmp/client.py
-#   %{py_sitedir}/netsnmp/tests/__init__.py
-#   %{py_sitedir}/netsnmp/tests/__init__.pyc
-#   %{py_sitedir}/netsnmp/tests/__init__.pyo
-#   %{py_sitedir}/netsnmp/tests/test.py
-#   %{py_sitedir}/netsnmp/tests/test.pyc
-#   %{py_sitedir}/netsnmp/tests/test.pyo
 #   %{_datadir}/snmp/snmp_perl.pl
 #
 # Conditional build:
@@ -27,12 +19,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.4.1
-Release:	12
+Version:	5.4.1.2
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	6c974df7a5a5b1579f72115e6b045bda
+# Source0-md5:	2dfcf97d65f3b7d34b78c8d4be11fc83
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -55,24 +47,23 @@ Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-duplicate-ip.patch
-Patch14:	%{name}-lm_sensors_3.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-%{?with_kerberos5:BuildRequires:	krb5-devel}
+%{?with_kerberos5:BuildRequires:	heimdal-devel}
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-%{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
 %if %{with python}
-BuildRequires:	python-devel >= 1:2.5
+BuildRequires:	python-devel
 BuildRequires:	python-setuptools
 %endif
 %if %{with rpm}
-BuildRequires:	rpm-devel >= 4.0
+BuildRequires:	rpm
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -159,11 +150,10 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
-%{?with_kerberos5:Requires:	krb5-devel}
+%{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
-%{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
-%{?with_rpm:Requires:	rpm-devel}
 Obsoletes:	ucd-snmp-devel
 
 %description devel
@@ -422,14 +412,14 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p0
-%patch14 -p0
+%patch13 -p3
 
 %build
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__autoheader}
+cp -f /usr/share/automake/config.sub .
 %configure \
 	--disable-debugging \
 	--enable-as-needed \
@@ -450,7 +440,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
-			ucd-snmp/lmsensorsMib \
+			ucd-snmp/lmSensors \
 %endif
 %endif
 			disman/event disman/schedule ucd-snmp/diskio \
@@ -531,7 +521,12 @@ for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
 		ar d $a DynaLoader.a
 	fi
 done
+%else
+rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
+
+%{__rm} -r $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/tests
+%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -594,15 +589,32 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/snmp
-%attr(755,root,root) %{_libdir}/libnet*.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.15
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mib2c
 %attr(755,root,root) %{_bindir}/mib2c-update
 %attr(755,root,root) %{_bindir}/net-snmp-config
-%attr(755,root,root) %{_libdir}/libnet*[a-z].so
-%{_libdir}/libnet*.la
+%attr(755,root,root) %{_libdir}/libnetsnmp.so
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so
+%{_libdir}/libnetsnmp.la
+%{_libdir}/libnetsnmpagent.la
+%{_libdir}/libnetsnmphelpers.la
+%{_libdir}/libnetsnmpmibs.la
+%{_libdir}/libnetsnmptrapd.la
 %{_includedir}/net-snmp
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
@@ -741,5 +753,4 @@ fi
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
