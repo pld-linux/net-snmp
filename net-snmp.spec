@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1.2
-Release:	1
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -47,20 +47,19 @@ Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-duplicate-ip.patch
-Patch14:	%{name}-lm_sensors_3.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-%{?with_kerberos5:BuildRequires:	krb5-devel}
+%{?with_kerberos5:BuildRequires:	heimdal-devel}
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-%{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
 %if %{with python}
-BuildRequires:	python-devel >= 1:2.5
+BuildRequires:	python-devel
 BuildRequires:	python-setuptools
 %endif
 %if %{with rpm}
@@ -151,9 +150,9 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
-%{?with_kerberos5:Requires:	krb5-devel}
+%{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
-%{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
 
@@ -413,8 +412,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p0
-%patch14 -p0
+%patch13 -p3
 
 %build
 %{__libtoolize}
@@ -439,10 +437,11 @@ cp -f /usr/share/automake/config.sub .
 	--with-bzip2=%{_prefix} \
 	--with%{!?with_perl:out}-perl-modules \
 	--with%{!?with_python:out}-python-modules \
+	--enable-local-smux \
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
-			ucd-snmp/lmsensorsMib \
+			ucd-snmp/lmSensors \
 %endif
 %endif
 			disman/event disman/schedule ucd-snmp/diskio \
@@ -450,7 +449,7 @@ cp -f /usr/share/automake/config.sub .
 	%{?with_kerberos5:--with-security-modules="ksm"} \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
-	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
+	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback" \
 	--with-persistent-directory="/var/lib/net-snmp" \
 	--enable-ucd-snmp-compatibility \
 	--enable-ipv6 \
@@ -755,5 +754,4 @@ fi
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
