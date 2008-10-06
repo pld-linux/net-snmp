@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.1.2
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -437,6 +437,7 @@ cp -f /usr/share/automake/config.sub .
 	--with-bzip2=%{_prefix} \
 	--with%{!?with_perl:out}-perl-modules \
 	--with%{!?with_python:out}-python-modules \
+	--enable-local-smux \
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
@@ -448,7 +449,7 @@ cp -f /usr/share/automake/config.sub .
 	%{?with_kerberos5:--with-security-modules="ksm"} \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
-	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback " \
+	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback" \
 	--with-persistent-directory="/var/lib/net-snmp" \
 	--enable-ucd-snmp-compatibility \
 	--enable-ipv6 \
