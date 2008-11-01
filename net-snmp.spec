@@ -526,8 +526,10 @@ done
 rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
 
+%if %{with python}
 %{__rm} -r $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/tests
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
