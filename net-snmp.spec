@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -595,9 +595,13 @@ fi
 %attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.15
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.15
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.15
 
 %files devel
 %defattr(644,root,root,755)
@@ -607,9 +611,13 @@ fi
 %attr(755,root,root) %{_libdir}/libnetsnmp.so
 %attr(755,root,root) %{_libdir}/libnetsnmpagent.so
 %attr(755,root,root) %{_libdir}/libnetsnmphelpers.so
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so
 %{_libdir}/libnetsnmp.la
 %{_libdir}/libnetsnmpagent.la
 %{_libdir}/libnetsnmphelpers.la
+%{_libdir}/libnetsnmpmibs.la
+%{_libdir}/libnetsnmptrapd.la
 %{_includedir}/net-snmp
 %{_datadir}/snmp/mib2c*
 %{_mandir}/man1/mib2c.1*
