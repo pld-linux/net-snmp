@@ -63,6 +63,16 @@ stop() {
 	fi
 }
 
+condrestart() {
+	if [ -f /var/lock/subsys/snmpd ]; then
+		stop
+		start
+	else
+		msg_not_running "snmpd"
+		RETVAL=$1
+	fi
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -72,7 +82,14 @@ case "$1" in
   stop)
   	stop
 	;;
-  reload)
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  reload|force-reload)
 	if [ -f /var/lock/subsys/snmpd ]; then
 		msg_reloading "snmpd"
 		killproc snmpd -HUP
@@ -80,16 +97,12 @@ case "$1" in
 		msg_not_running "snmpd"
 	fi
 	;;
-  restart|force-reload)
-	stop
-	start
-	;;
   status)
 	status snmpd
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|reload|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 
