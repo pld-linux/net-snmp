@@ -79,6 +79,9 @@ Obsoletes:	ucd-snmp
 Conflicts:	rpm < 4.4.9-43.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# linking libraries is ugly in this package
+%define		no_install_post_check_so	1
+
 %define		logfile		/var/log/snmpd.log
 
 %description
