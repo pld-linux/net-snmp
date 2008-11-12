@@ -19,12 +19,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.4.1.2
-Release:	3
+Version:	5.4.2.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	2dfcf97d65f3b7d34b78c8d4be11fc83
+# Source0-md5:	984932520143f0c8bf7b7ce1fc9e1da1
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -46,7 +46,6 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
-Patch13:	%{name}-duplicate-ip.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -78,6 +77,9 @@ Obsoletes:	snmpd
 Obsoletes:	ucd-snmp
 Conflicts:	rpm < 4.4.9-43.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# linking libraries is ugly in this package
+%define		no_install_post_check_so	1
 
 %define		logfile		/var/log/snmpd.log
 
@@ -412,7 +414,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch13 -p3
 
 %build
 %{__libtoolize}
@@ -526,8 +527,10 @@ done
 rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
 
+%if %{with python}
 %{__rm} -r $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/tests
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
