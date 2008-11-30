@@ -1,0 +1,11 @@
+--- net-snmp/include/net-snmp/library/container.h	2008/02/13 23:37:48	16804
++++ net-snmp/include/net-snmp/library/container.h	2008/10/14 09:37:21	17254
+@@ -358,7 +358,7 @@
+         if(x) {
+             int rc = x->insert(x,k);
+             if(rc)
+-                snmp_log(LOG_ERR,"error on subcontainer '%s' insert (%d)\n",
++                snmp_log(LOG_DEBUG,"error on subcontainer '%s' insert (%d)\n",
+                          x->container_name ? x->container_name : "", rc);
+             else {
+                 rc = CONTAINER_INSERT_HELPER(x->next, k);
