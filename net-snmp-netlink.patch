@@ -1,5 +1,5 @@
---- net-snmp-5.4.2.1-dev/configure.in	2009-01-22 00:49:25.233782506 +0200
-+++ net-snmp-5.4.2.1-dev/configure.in	2009-01-22 20:00:37.030183514 +0200
+--- net-snmp-5.4.2.1-dev/configure.in	2009-01-22 20:00:37.030183514 +0200
++++ net-snmp-5.4.2.1-netlink/configure.in	2009-01-23 01:30:24.148211644 +0200
 @@ -310,6 +310,12 @@
  AC_ARG_ENABLE(efence,,
  	AC_MSG_ERROR([ Invalid option. Use --with-efence/--without-efence instead ]) )
@@ -22,16 +22,149 @@
 +    linux*) # Check for libnl (linux)
 +	AC_CHECK_HEADERS(netlink/netlink.h,
 +	    AC_CHECK_LIB(nl, nl_connect, [
-+		AC_DEFINE_UNQUOTED(HAVE_NL, "1", [have libnl])
-+		LIBNL_LIBS="-lnl"
-+		LIBNL="Yes"
++			AC_DEFINE_UNQUOTED(HAVE_NL, "1", [have libnl])
++			LIBNL_LIBS="-lnl"
++			LIBNL="Yes"
 +	    ])
 +	)
 +    ;;
 +    esac
 +fi
-+
++AC_SUBST(LIBNL_LIBS)
 +
  # Checks for libraries.
  # AC_CHECK_LIB(des, main)
  # AC_CHECK_LIB(m, asin)
+--- net-snmp-5.4.2.1/agent/Makefile.in~	2009-01-23 01:25:58.000000000 +0200
++++ net-snmp-5.4.2.1/agent/Makefile.in	2009-01-23 01:31:48.951541328 +0200
+@@ -147,7 +147,7 @@
+ 	$(RANLIB) $(AGENTLIB)
+ 
+ libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION): ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS)
+-	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS) $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS)
++	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS) @LIBNL_LIBS@ $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS)
+ 	$(RANLIB) $(MIBLIB)
+ 
+ agentlib: $(AGENTLIB)
+--- net-snmp-5.4.2.1-dev/agent/mibgroup/mibII/tcpTable.c	2007-10-14 15:12:58.000000000 +0300
++++ net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-01-23 01:22:10.435006124 +0200
+@@ -29,6 +29,12 @@
+ #if HAVE_NETINET_TCP_VAR_H
+ #include <netinet/tcp_var.h>
+ #endif
++#if HAVE_NETLINK_NETLINK_H
++#include <netlink/netlink.h>
++#include <linux/inet_diag.h>
++#include <sys/socket.h>
++#include <sys/types.h>
++#endif
+ 
+ #include <net-snmp/net-snmp-includes.h>
+ #include <net-snmp/agent/net-snmp-agent-includes.h>
+@@ -543,6 +549,95 @@
+ #else                           /* hpux11 */
+ 
+ #ifdef linux
++
++// see <netinet/tcp.h>
++#define TCP_ALL ((1 << TCP_CLOSING + 1) - 1)
++
++static int
++tcpTable_load_netlink()
++{
++	struct inpcb    pcb, *nnew;
++	struct nl_handle nl;
++
++	memset(&nl, 0, sizeof(nl));
++
++	if (nl_connect(&nl, NETLINK_TCPDIAG) < 0) {
++        DEBUGMSGTL(("mibII/tcpTable", "Failed to connect to netlink: %s\n", nl_geterror()));
++        snmp_log(LOG_ERR, "snmpd: Couldn't connect to netlink: %s\n", nl_geterror());
++		return -1;
++	}
++
++	struct inet_diag_req req = {
++		.idiag_family = AF_INET || AF_INET6,
++		.idiag_states = TCP_ALL,
++	};
++
++	if (nl_request_with_data(&nl, TCPDIAG_GETSOCK, NLM_F_ROOT|NLM_F_MATCH|NLM_F_REQUEST, (void *)&req, sizeof(struct inet_diag_req)) < 0) {
++        DEBUGMSGTL(("mibII/tcpTable", "nl_send(): %s\n", nl_geterror()));
++        snmp_log(LOG_ERR, "snmpd: nl_send(): %s\n", nl_geterror());
++		return -1;
++	}
++
++	struct sockaddr_nl addr;
++	char *buf = NULL;
++	int running = 1, len;
++
++	while (running) {
++		if ((len = nl_recv(&nl, &addr, (void *)&buf)) <= 0) {
++			DEBUGMSGTL(("mibII/tcpTable", "nl_recv(): %s\n", nl_geterror()));
++			snmp_log(LOG_ERR, "snmpd: nl_recv(): %s\n", nl_geterror());
++			return -1;
++		}
++
++		struct nlmsghdr *h = (struct nlmsghdr*)buf;
++		while (NLMSG_OK(h, len)) {
++			if (h->nlmsg_type == NLMSG_DONE) {
++				running = 0;
++				break;
++			}
++
++			struct inet_diag_msg *r = NLMSG_DATA(h);
++			struct inpcb    pcb, *nnew;
++			static int      linux_states[12] =
++				{ 1, 5, 3, 4, 6, 7, 11, 1, 8, 9, 2, 10 };
++
++			memcpy(&pcb.inp_laddr.s_addr, r->id.idiag_src, r->idiag_family == AF_INET ? 4 : 6);
++			memcpy(&pcb.inp_laddr.s_addr, r->id.idiag_dst, r->idiag_family == AF_INET ? 4 : 6);
++
++			pcb.inp_lport = htons(r->id.idiag_sport);
++			pcb.inp_fport = htons(r->id.idiag_dport);
++
++			pcb.inp_state = (r->idiag_state & 0xf) < 12 ? linux_states[r->idiag_state & 0xf] : 2;
++			if (pcb.inp_state == 5 /* established */ ||
++				pcb.inp_state == 8 /*  closeWait  */ )
++				tcp_estab++;
++			pcb.uid = r->idiag_uid;
++
++			nnew = SNMP_MALLOC_TYPEDEF(struct inpcb);
++			if (nnew == NULL) {
++				running = 0;
++				// XXX report malloc error and return -1?
++				break;
++			}
++			memcpy(nnew, &pcb, sizeof(struct inpcb));
++			nnew->inp_next = tcp_head;
++			tcp_head       = nnew;
++
++			h = NLMSG_NEXT(h, len);
++		}
++		free(buf);
++	}
++
++	nl_close(&nl);
++
++    if (tcp_head) {
++		DEBUGMSGTL(("mibII/tcpTable", "Loaded TCP Table using netlink\n"));
++        return 0;
++    }
++    DEBUGMSGTL(("mibII/tcpTable", "Failed to load TCP Table (netlink)\n"));
++    return -1;
++}
++
+ int
+ tcpTable_load(netsnmp_cache *cache, void *vmagic)
+ {
+@@ -551,6 +646,10 @@
+ 
+     tcpTable_free(cache, NULL);
+ 
++	if (tcpTable_load_netlink() == 0) {
++		return 0;
++	}
++
+     if (!(in = fopen("/proc/net/tcp", "r"))) {
+         DEBUGMSGTL(("mibII/tcpTable", "Failed to load TCP Table (linux1)\n"));
+         snmp_log(LOG_ERR, "snmpd: cannot open /proc/net/tcp ...\n");
