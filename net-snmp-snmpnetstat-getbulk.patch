@@ -269,7 +269,7 @@
  int	interval;	/* repeat interval for i/f stats */
  char	*intrface;	/* desired i/f for stats, or NULL for all i/fs */
  int	af;		/* address family */
-+int     max_getbulk = 256;  /* specifies the max-repeaters value to use with GETBULK requests */
++int     max_getbulk = 32;  /* specifies the max-repeaters value to use with GETBULK requests */
  
  char    *progname = NULL;
  
