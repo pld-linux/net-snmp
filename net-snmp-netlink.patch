@@ -84,7 +84,7 @@
 +	}
 +
 +	struct inet_diag_req req = {
-+		.idiag_family = AF_INET || AF_INET6,
++		.idiag_family = AF_INET,
 +		.idiag_states = TCP_ALL,
 +	};
 +
