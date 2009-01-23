@@ -46,8 +46,8 @@
  	$(RANLIB) $(MIBLIB)
  
  agentlib: $(AGENTLIB)
---- net-snmp-5.4.2.1-dev/agent/mibgroup/mibII/tcpTable.c	2007-10-14 15:12:58.000000000 +0300
-+++ net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-01-23 01:22:10.435006124 +0200
+--- net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-01-23 01:22:10.435006124 +0200
++++ net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-01-23 02:28:12.726994792 +0200
 @@ -29,6 +29,12 @@
  #if HAVE_NETINET_TCP_VAR_H
  #include <netinet/tcp_var.h>
@@ -120,8 +120,8 @@
 +			memcpy(&pcb.inp_laddr.s_addr, r->id.idiag_src, r->idiag_family == AF_INET ? 4 : 6);
 +			memcpy(&pcb.inp_laddr.s_addr, r->id.idiag_dst, r->idiag_family == AF_INET ? 4 : 6);
 +
-+			pcb.inp_lport = htons(r->id.idiag_sport);
-+			pcb.inp_fport = htons(r->id.idiag_dport);
++			pcb.inp_lport = r->id.idiag_sport;
++			pcb.inp_fport = r->id.idiag_dport;
 +
 +			pcb.inp_state = (r->idiag_state & 0xf) < 12 ? linux_states[r->idiag_state & 0xf] : 2;
 +			if (pcb.inp_state == 5 /* established */ ||
