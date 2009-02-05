@@ -46,33 +46,33 @@
  	$(RANLIB) $(MIBLIB)
  
  agentlib: $(AGENTLIB)
---- net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-01-23 01:22:10.435006124 +0200
-+++ net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-01-23 02:28:12.726994792 +0200
-@@ -29,6 +29,12 @@
+--- net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-01-23 02:28:12.726994792 +0200
++++ net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-02-05 20:46:32.738258556 +0200
+@@ -29,6 +29,13 @@
  #if HAVE_NETINET_TCP_VAR_H
  #include <netinet/tcp_var.h>
  #endif
 +#if HAVE_NETLINK_NETLINK_H
++#include <netlink/helpers.h>
 +#include <netlink/netlink.h>
-+#include <linux/inet_diag.h>
 +#include <sys/socket.h>
 +#include <sys/types.h>
++#include <linux/inet_diag.h>
 +#endif
  
  #include <net-snmp/net-snmp-includes.h>
  #include <net-snmp/agent/net-snmp-agent-includes.h>
-@@ -543,6 +549,95 @@
+@@ -543,6 +550,94 @@
  #else                           /* hpux11 */
  
  #ifdef linux
 +
 +// see <netinet/tcp.h>
-+#define TCP_ALL ((1 << TCP_CLOSING + 1) - 1)
++#define TCP_ALL ((1 << (TCP_CLOSING + 1)) - 1)
 +
 +static int
 +tcpTable_load_netlink()
 +{
-+	struct inpcb    pcb, *nnew;
 +	struct nl_handle nl;
 +
 +	memset(&nl, 0, sizeof(nl));
