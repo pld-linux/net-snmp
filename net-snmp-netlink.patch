@@ -35,17 +35,17 @@
  # Checks for libraries.
  # AC_CHECK_LIB(des, main)
  # AC_CHECK_LIB(m, asin)
---- net-snmp-5.4.2.1/agent/Makefile.in~	2009-01-23 01:25:58.000000000 +0200
-+++ net-snmp-5.4.2.1/agent/Makefile.in	2009-01-23 01:31:48.951541328 +0200
-@@ -147,7 +147,7 @@
- 	$(RANLIB) $(AGENTLIB)
+--- net-snmp-5.4.2.1/agent/Makefile.in	2009-01-23 01:31:48.951541328 +0200
++++ net-snmp-5.4.2.1/agent/Makefile.in	2009-02-05 20:50:30.825174223 +0200
+@@ -81,7 +81,7 @@
  
- libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION): ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS)
--	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS) $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS)
-+	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS) @LIBNL_LIBS@ $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS)
- 	$(RANLIB) $(MIBLIB)
- 
- agentlib: $(AGENTLIB)
+ LOCAL_LIBS	= -L../snmplib/.libs -L../snmplib -L./.libs -L./helpers/.libs -L./helpers
+ LAGENTLIBS	= @LAGENTLIBS@
+-LMIBLIBS	= @LMIBLIBS@
++LMIBLIBS	= @LMIBLIBS@ @LIBNL_LIBS@
+ PERLLDOPTS_FOR_APPS = @PERLLDOPTS_FOR_APPS@
+ PERLLDOPTS_FOR_LIBS = @PERLLDOPTS_FOR_LIBS@
+ LIBS		= $(USELIBS) @AGENTLIBS@ $(PERLLDOPTS_FOR_APPS)
 --- net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-01-23 02:28:12.726994792 +0200
 +++ net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-02-05 20:46:32.738258556 +0200
 @@ -29,6 +29,13 @@
