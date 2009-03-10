@@ -118,7 +118,7 @@
 +				{ 1, 5, 3, 4, 6, 7, 11, 1, 8, 9, 2, 10 };
 +
 +			memcpy(&pcb.inp_laddr.s_addr, r->id.idiag_src, r->idiag_family == AF_INET ? 4 : 6);
-+			memcpy(&pcb.inp_laddr.s_addr, r->id.idiag_dst, r->idiag_family == AF_INET ? 4 : 6);
++			memcpy(&pcb.inp_faddr.s_addr, r->id.idiag_dst, r->idiag_family == AF_INET ? 4 : 6);
 +
 +			pcb.inp_lport = r->id.idiag_sport;
 +			pcb.inp_fport = r->id.idiag_dport;
