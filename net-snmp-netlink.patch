@@ -46,23 +46,21 @@
  PERLLDOPTS_FOR_APPS = @PERLLDOPTS_FOR_APPS@
  PERLLDOPTS_FOR_LIBS = @PERLLDOPTS_FOR_LIBS@
  LIBS		= $(USELIBS) @AGENTLIBS@ $(PERLLDOPTS_FOR_APPS)
---- net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-01-23 02:28:12.726994792 +0200
-+++ net-snmp-5.4.2.1/agent/mibgroup/mibII/tcpTable.c	2009-02-05 20:46:32.738258556 +0200
-@@ -29,6 +29,13 @@
+--- net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-03-10 02:28:04.794084959 +0200
++++ net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-03-10 21:53:36.453773342 +0200
+@@ -29,6 +29,11 @@
  #if HAVE_NETINET_TCP_VAR_H
  #include <netinet/tcp_var.h>
  #endif
 +#if HAVE_NETLINK_NETLINK_H
-+#include <netlink/helpers.h>
 +#include <netlink/netlink.h>
-+#include <sys/socket.h>
-+#include <sys/types.h>
++#include <netlink/msg.h>
 +#include <linux/inet_diag.h>
 +#endif
  
  #include <net-snmp/net-snmp-includes.h>
  #include <net-snmp/agent/net-snmp-agent-includes.h>
-@@ -543,6 +550,94 @@
+@@ -543,6 +548,106 @@
  #else                           /* hpux11 */
  
  #ifdef linux
@@ -73,13 +71,19 @@
 +static int
 +tcpTable_load_netlink()
 +{
-+	struct nl_handle nl;
++	// TODO: perhaps use permanent nl handle?
++	struct nl_handle *nl = nl_handle_alloc();
 +
-+	memset(&nl, 0, sizeof(nl));
++	if (nl == NULL) {
++		DEBUGMSGTL(("mibII/tcpTable", "Failed to allocate netlink handle\n"));
++		snmp_log(LOG_ERR, "snmpd: Failed to allocate netlink handle\n");
++		return -1;
++	}
 +
-+	if (nl_connect(&nl, NETLINK_TCPDIAG) < 0) {
-+        DEBUGMSGTL(("mibII/tcpTable", "Failed to connect to netlink: %s\n", nl_geterror()));
-+        snmp_log(LOG_ERR, "snmpd: Couldn't connect to netlink: %s\n", nl_geterror());
++	if (nl_connect(nl, NETLINK_INET_DIAG) < 0) {
++		DEBUGMSGTL(("mibII/tcpTable", "Failed to connect to netlink: %s\n", nl_geterror()));
++		snmp_log(LOG_ERR, "snmpd: Couldn't connect to netlink: %s\n", nl_geterror());
++		nl_handle_destroy(nl);
 +		return -1;
 +	}
 +
@@ -88,31 +92,37 @@
 +		.idiag_states = TCP_ALL,
 +	};
 +
-+	if (nl_request_with_data(&nl, TCPDIAG_GETSOCK, NLM_F_ROOT|NLM_F_MATCH|NLM_F_REQUEST, (void *)&req, sizeof(struct inet_diag_req)) < 0) {
-+        DEBUGMSGTL(("mibII/tcpTable", "nl_send(): %s\n", nl_geterror()));
-+        snmp_log(LOG_ERR, "snmpd: nl_send(): %s\n", nl_geterror());
++	struct nl_msg *nm = nlmsg_alloc_simple(TCPDIAG_GETSOCK, NLM_F_ROOT|NLM_F_MATCH|NLM_F_REQUEST);
++	nlmsg_append(nm, &req, sizeof(struct inet_diag_req), 0);
++
++	if (nl_send_auto_complete(nl, nm) < 0) {
++		DEBUGMSGTL(("mibII/tcpTable", "nl_send_autocomplete(): %s\n", nl_geterror()));
++		snmp_log(LOG_ERR, "snmpd: nl_send_autocomplete(): %s\n", nl_geterror());
++		nl_handle_destroy(nl);
 +		return -1;
 +	}
++	nlmsg_free(nm);
 +
-+	struct sockaddr_nl addr;
-+	char *buf = NULL;
++	struct sockaddr_nl peer;
++	unsigned char *buf = NULL;
 +	int running = 1, len;
 +
 +	while (running) {
-+		if ((len = nl_recv(&nl, &addr, (void *)&buf)) <= 0) {
++		if ((len = nl_recv(nl, &peer, &buf, NULL)) <= 0) {
 +			DEBUGMSGTL(("mibII/tcpTable", "nl_recv(): %s\n", nl_geterror()));
 +			snmp_log(LOG_ERR, "snmpd: nl_recv(): %s\n", nl_geterror());
++			nl_handle_destroy(nl);
 +			return -1;
 +		}
 +
 +		struct nlmsghdr *h = (struct nlmsghdr*)buf;
-+		while (NLMSG_OK(h, len)) {
++		while (nlmsg_ok(h, len)) {
 +			if (h->nlmsg_type == NLMSG_DONE) {
 +				running = 0;
 +				break;
 +			}
 +
-+			struct inet_diag_msg *r = NLMSG_DATA(h);
++			struct inet_diag_msg *r = nlmsg_data(h);
 +			struct inpcb    pcb, *nnew;
 +			static int      linux_states[12] =
 +				{ 1, 5, 3, 4, 6, 7, 11, 1, 8, 9, 2, 10 };
@@ -139,25 +149,25 @@
 +			nnew->inp_next = tcp_head;
 +			tcp_head       = nnew;
 +
-+			h = NLMSG_NEXT(h, len);
++			h = nlmsg_next(h, &len);
 +		}
 +		free(buf);
 +	}
 +
-+	nl_close(&nl);
++	nl_handle_destroy(nl);
 +
-+    if (tcp_head) {
++	if (tcp_head) {
 +		DEBUGMSGTL(("mibII/tcpTable", "Loaded TCP Table using netlink\n"));
-+        return 0;
-+    }
-+    DEBUGMSGTL(("mibII/tcpTable", "Failed to load TCP Table (netlink)\n"));
-+    return -1;
++		return 0;
++	}
++	DEBUGMSGTL(("mibII/tcpTable", "Failed to load TCP Table (netlink)\n"));
++	return -1;
 +}
 +
  int
  tcpTable_load(netsnmp_cache *cache, void *vmagic)
  {
-@@ -551,6 +646,10 @@
+@@ -551,6 +656,10 @@
  
      tcpTable_free(cache, NULL);
  
