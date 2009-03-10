@@ -46,8 +46,8 @@
  PERLLDOPTS_FOR_APPS = @PERLLDOPTS_FOR_APPS@
  PERLLDOPTS_FOR_LIBS = @PERLLDOPTS_FOR_LIBS@
  LIBS		= $(USELIBS) @AGENTLIBS@ $(PERLLDOPTS_FOR_APPS)
---- net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-03-10 02:28:04.794084959 +0200
-+++ net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-03-10 21:53:36.453773342 +0200
+--- net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-03-10 21:53:36.453773342 +0200
++++ net-snmp-5.4.2.1-nl/agent/mibgroup/mibII/tcpTable.c	2009-03-10 22:49:50.326352782 +0200
 @@ -29,6 +29,11 @@
  #if HAVE_NETINET_TCP_VAR_H
  #include <netinet/tcp_var.h>
@@ -60,7 +60,7 @@
  
  #include <net-snmp/net-snmp-includes.h>
  #include <net-snmp/agent/net-snmp-agent-includes.h>
-@@ -543,6 +548,106 @@
+@@ -543,6 +548,112 @@
  #else                           /* hpux11 */
  
  #ifdef linux
@@ -123,6 +123,12 @@
 +			}
 +
 +			struct inet_diag_msg *r = nlmsg_data(h);
++
++			if (r->idiag_family != AF_INET) {
++				h = nlmsg_next(h, &len);
++				continue;
++			}
++
 +			struct inpcb    pcb, *nnew;
 +			static int      linux_states[12] =
 +				{ 1, 5, 3, 4, 6, 7, 11, 1, 8, 9, 2, 10 };
@@ -167,7 +173,7 @@
  int
  tcpTable_load(netsnmp_cache *cache, void *vmagic)
  {
-@@ -551,6 +656,10 @@
+@@ -551,6 +662,10 @@
  
      tcpTable_free(cache, NULL);
  
