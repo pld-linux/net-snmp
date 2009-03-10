@@ -46,18 +46,18 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
-Patch14:	%{name}-lm_sensors_3.patch
-Patch15:	%{name}-subcontainer.patch
-Patch16:	%{name}-netlink.patch
-Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
+Patch13:	%{name}-subcontainer.patch
+Patch14:	%{name}-snmpnetstat-getbulk.patch
+Patch15:	%{name}-netlink.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-%{?with_kerberos5:BuildRequires:	krb5-devel}
+%{?with_kerberos5:BuildRequires:	heimdal-devel}
+BuildRequires:	libnl-devel >= 0.5.0
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-%{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -156,9 +156,9 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
-%{?with_kerberos5:Requires:	krb5-devel}
+%{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
-%{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
 
@@ -418,10 +418,9 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch14 -p0
+%patch13 -p1
+%patch14 -p1
 %patch15 -p1
-%patch16 -p1
-%patch17 -p1
 
 %build
 %{__libtoolize}
@@ -450,7 +449,7 @@ cp -f /usr/share/automake/config.sub .
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
-			ucd-snmp/lmsensorsMib \
+			ucd-snmp/lmSensors \
 %endif
 %endif
 			disman/event disman/schedule ucd-snmp/diskio \
@@ -765,5 +764,4 @@ fi
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
