@@ -51,6 +51,8 @@ Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
 Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 URL:		http://www.net-snmp.org/
+# http://net-snmp.svn.sourceforge.net/viewvc/net-snmp?view=rev&revision=17367
+BuildRequires:	security(CVE-2008-6123)
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
