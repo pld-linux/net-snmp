@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	6
+Release:	7
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -50,9 +50,8 @@ Patch14:	%{name}-lm_sensors_3.patch
 Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
 Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
+Patch18:	%{name}-src-dst-confusion.patch
 URL:		http://www.net-snmp.org/
-# http://net-snmp.svn.sourceforge.net/viewvc/net-snmp?view=rev&revision=17367
-BuildRequires:	security(CVE-2008-6123)
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
@@ -425,6 +424,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p3
 
 %build
 %{__libtoolize}
