@@ -5,15 +5,14 @@
 # chkconfig:		345 50 50
 #
 # description:		Simple Network Management Protocol (SNMP) Daemon
-# description(es):	Servidor SNMP (Simple Network Management Protocol)
-# description(pt_BR):	Servidor SNMP (Simple Network Management Protocol)
-# description(ru):	äĹÍĎÎ SNMP (Simple Network Management Protocol)
-# description(uk):	äĹÍĎÎ SNMP (Simple Network Management Protocol)
+# description(es.UTF-8):	Servidor SNMP (Simple Network Management Protocol)
+# description(pt_BR.UTF-8):	Servidor SNMP (Simple Network Management Protocol)
+# description(ru.UTF-8):	Демон SNMP (Simple Network Management Protocol)
+# description(uk.UTF-8):	Демон SNMP (Simple Network Management Protocol)
 #
 # processname:		snmpd
 # config:		/etc/snmp/snmpd.local.conf
 # config:		/etc/snmp/snmpd.conf
-
 
 # Source function library
 . /etc/rc.d/init.d/functions
@@ -40,37 +39,40 @@ fi
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/snmpd ]; then
-		msg_starting "snmpd"
-		daemon /usr/bin/setsid /usr/sbin/snmpd \
-			$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
-			$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-LSid" ) \
-		   	-p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS </dev/null
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmpd
-	else
+	if [ -f /var/lock/subsys/snmpd ]; then
 		msg_already_running "snmpd"
+		return
 	fi
+
+	msg_starting "snmpd"
+	daemon /usr/bin/setsid /usr/sbin/snmpd \
+		$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
+		$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-LSid" ) \
+		-p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS </dev/null
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmpd
 }
 
 stop() {
-	if [ -f /var/lock/subsys/snmpd ]; then
-		msg_stopping "snmpd"
-		killproc snmpd
-		rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
-	else
+	if [ ! -f /var/lock/subsys/snmpd ]; then
 		msg_not_running "snmpd"
+		return
 	fi
+
+	msg_stopping "snmpd"
+	killproc snmpd
+	rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
 }
 
 condrestart() {
-	if [ -f /var/lock/subsys/snmpd ]; then
-		stop
-		start
-	else
+	if [ ! -f /var/lock/subsys/snmpd ]; then
 		msg_not_running "snmpd"
 		RETVAL=$1
+		return
 	fi
+
+	stop
+	start
 }
 
 RETVAL=0
