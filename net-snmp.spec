@@ -487,7 +487,7 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,%{_libdir}/snmp/dlmod}
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
@@ -507,7 +507,7 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 #	$RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
 cd perl
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
