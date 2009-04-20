@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	5
+Release:	6
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -49,6 +49,7 @@ Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-subcontainer.patch
 Patch14:	%{name}-snmpnetstat-getbulk.patch
 Patch15:	%{name}-netlink.patch
+Patch16:	%{name}-src-dst-confusion.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -421,6 +422,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%patch16 -p3
 
 %build
 %{__libtoolize}
@@ -481,7 +483,7 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,%{_libdir}/snmp/dlmod}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -539,6 +541,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
 %endif
 
+touch $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/.index
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -588,6 +592,9 @@ fi
 %attr(640,root,root) %config(missingok,noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.local.conf
 
 %attr(755,root,root) %{_sbindir}/snmpd
+
+%dir %{_libdir}/snmp
+%dir %{_libdir}/snmp/dlmod
 
 %{_mandir}/man5/snmpd.conf.5*
 %{_mandir}/man5/snmpd.examples.5*
@@ -656,6 +663,7 @@ fi
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
 %{_datadir}/snmp/mibs
+%ghost %{_datadir}/snmp/mibs/.index
 
 %files snmptrapd
 %defattr(644,root,root,755)
