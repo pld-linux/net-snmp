@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	7
+Release:	6
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -46,20 +46,19 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
-Patch14:	%{name}-lm_sensors_3.patch
-Patch15:	%{name}-subcontainer.patch
-Patch16:	%{name}-netlink.patch
-Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
-Patch18:	%{name}-src-dst-confusion.patch
+Patch13:	%{name}-subcontainer.patch
+Patch14:	%{name}-snmpnetstat-getbulk.patch
+Patch15:	%{name}-netlink.patch
+Patch16:	%{name}-src-dst-confusion.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-%{?with_kerberos5:BuildRequires:	krb5-devel}
-BuildRequires:	libnl-devel >= 1:1.1
+%{?with_kerberos5:BuildRequires:	heimdal-devel}
+BuildRequires:	libnl-devel >= 0.5.0
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-%{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -158,9 +157,9 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
-%{?with_kerberos5:Requires:	krb5-devel}
+%{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
-%{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
 
@@ -420,11 +419,10 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch14 -p0
+%patch13 -p1
+%patch14 -p1
 %patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch18 -p3
+%patch16 -p3
 
 %build
 %{__libtoolize}
@@ -453,7 +451,7 @@ cp -f /usr/share/automake/config.sub .
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
-			ucd-snmp/lmsensorsMib \
+			ucd-snmp/lmSensors \
 %endif
 %endif
 			disman/event disman/schedule ucd-snmp/diskio \
@@ -485,7 +483,7 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,%{_libdir}/snmp/dlmod}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -543,6 +541,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
 %endif
 
+touch $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/.index
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -592,6 +592,9 @@ fi
 %attr(640,root,root) %config(missingok,noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.local.conf
 
 %attr(755,root,root) %{_sbindir}/snmpd
+
+%dir %{_libdir}/snmp
+%dir %{_libdir}/snmp/dlmod
 
 %{_mandir}/man5/snmpd.conf.5*
 %{_mandir}/man5/snmpd.examples.5*
@@ -660,6 +663,7 @@ fi
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
 %{_datadir}/snmp/mibs
+%ghost %{_datadir}/snmp/mibs/.index
 
 %files snmptrapd
 %defattr(644,root,root,755)
@@ -768,5 +772,4 @@ fi
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
