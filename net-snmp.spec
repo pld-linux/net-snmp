@@ -1,6 +1,3 @@
-# TODO
-# - package or remove:
-#   %{_datadir}/snmp/snmp_perl.pl
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -52,6 +49,9 @@ Patch16:	%{name}-netlink.patch
 Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch18:	%{name}-src-dst-confusion.patch
 URL:		http://www.net-snmp.org/
+# https://rhn.redhat.com/errata/RHSA-2009-1124.html
+# Needs review:
+BuildRequires:	security(CVE-2009-1887/RHSA-2009-1124)
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
