@@ -49,13 +49,10 @@ Patch16:	%{name}-netlink.patch
 Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch18:	%{name}-src-dst-confusion.patch
 URL:		http://www.net-snmp.org/
-# https://rhn.redhat.com/errata/RHSA-2009-1124.html
-# Needs review:
-BuildRequires:	security(CVE-2009-1887/RHSA-2009-1124)
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
-%{?with_kerberos5:BuildRequires:	krb5-devel}
+%{?with_kerberos5:BuildRequires:	heimdal-devel}
 BuildRequires:	libnl-devel >= 1:1.1
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
@@ -158,7 +155,7 @@ Summary(uk.UTF-8):	Середовище розробки для проекту U
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
-%{?with_kerberos5:Requires:	krb5-devel}
+%{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
 Requires:	openssl-devel >= 0.9.7c
