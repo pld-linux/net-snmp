@@ -62,7 +62,9 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
 %if %{with python}
 BuildRequires:	python-devel
+BuildRequires:	python-modules
 BuildRequires:	python-setuptools
+BuildRequires:	rpm-pythonprov
 %endif
 %if %{with rpm}
 BuildRequires:	rpm
