@@ -9,7 +9,7 @@
           {LOADMAXVAL}},
          {LOADAVEINT, ASN_INTEGER, RONLY, var_extensible_loadave, 1,
           {LOADAVEINT}},
-@@ -309,6 +309,40 @@
+@@ -309,6 +309,63 @@
      return 0;
  }
  
@@ -20,37 +20,60 @@
 +                          size_t var_val_len,
 +                          u_char * statP, oid * name, size_t name_len)
 +{
-+    if (var_val_type != ASN_OCTET_STR) {
-+        DEBUGMSGTL(("ucd-snmp/loadave",
-+                    "write to laConfig not ASN_OCTET_STR\n"));
-+        return SNMP_ERR_WRONGTYPE;
-+    }
-+    /* allow max value of 65536.00 */
-+    if (var_val_len > 8) {
-+        DEBUGMSGTL(("ucd-snmp/loadave",
-+                    "write to laConfig: bad length\n"));
-+        return SNMP_ERR_WRONGLENGTH;
-+    }
-+    if (action == COMMIT) {
-+        if (var_val_len != 0) {
++    static double laConfig = 0;
++
++    switch (action) {
++    case RESERVE1:
++        if (var_val_type != ASN_OCTET_STR) {
++            DEBUGMSGTL(("ucd-snmp/loadave",
++                        "write to laConfig not ASN_OCTET_STR\n"));
++            return SNMP_ERR_WRONGTYPE;
++        }
++        if (var_val_len > 8 || var_val_len <= 0) {
++            DEBUGMSGTL(("ucd-snmp/loadave",
++                        "write to laConfig: bad length\n"));
++            return SNMP_ERR_WRONGLENGTH;
++        }
++        break;
++
++    case RESERVE2:
++        {
++            u_char buf[8];
++            int old_errno = errno;
 +            double val;
-+            if (sscanf(var_val, "%7lf", &val) == 1) {
-+                int idx = name[name_len - 1] - 1;
-+                maxload[idx] = val;
-+            } else {
++            char *endp;
++
++            strncpy(buf, var_val, var_val_len);
++            buf[var_val_len] = '\0';
++            val = strtod(buf, &endp);
++
++            if (errno == ERANGE || *endp != '\0' || val < 0 || val > 65536.00) {
++                errno = old_errno;
 +                DEBUGMSGTL(("ucd-snmp/loadave",
 +                            "write to laConfig: invalid value\n"));
 +                return SNMP_ERR_WRONGVALUE;
 +            }
++
++            errno = old_errno;
++
++            laConfig = val;
++        }
++        break;
++
++    case COMMIT:
++        {
++            int idx = name[name_len - 1] - 1;
++            maxload[idx] = laConfig;
 +        }
 +    }
++
 +    return SNMP_ERR_NOERROR;
 +}
 +
  u_char         *
  var_extensible_loadave(struct variable * vp,
                         oid * name,
-@@ -328,6 +362,10 @@
+@@ -328,6 +385,10 @@
      case MIBINDEX:
          long_ret = name[*length - 1];
          return ((u_char *) (&long_ret));
