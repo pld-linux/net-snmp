@@ -665,7 +665,7 @@ fi
 %files mibs
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
-%{_datadir}/snmp/mibs
+%{_datadir}/snmp/mibs/*.txt
 %ghost %{_datadir}/snmp/mibs/.index
 
 %files snmptrapd
