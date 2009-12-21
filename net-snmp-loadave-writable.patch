@@ -1,6 +1,22 @@
 --- net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/loadave.c~	2009-12-21 21:00:10.094254079 +0200
 +++ net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/loadave.c	2009-12-21 22:02:45.398903148 +0200
-@@ -152,7 +152,7 @@
+@@ -137,6 +137,15 @@
+ 
+ double          maxload[3];
+ 
++static int
++loadave_store_config(int a, int b, void *c, void *d)
++{
++    char line[SNMP_MAXBUF_SMALL];
++    snprintf(line, SNMP_MAXBUF_SMALL, "load %.02f %.02f %.02f", maxload[0], maxload[1], maxload[2]);
++    snmpd_store_config(line);
++    return SNMPERR_SUCCESS;
++}
++
+ void
+ init_loadave(void)
+ {
+@@ -152,7 +161,7 @@
           {ERRORNAME}},
          {LOADAVE, ASN_OCTET_STR, RONLY, var_extensible_loadave, 1,
           {LOADAVE}},
@@ -9,7 +25,22 @@
           {LOADMAXVAL}},
          {LOADAVEINT, ASN_INTEGER, RONLY, var_extensible_loadave, 1,
           {LOADAVEINT}},
-@@ -309,6 +309,63 @@
+@@ -182,6 +191,14 @@
+     snmpd_register_config_handler("load", loadave_parse_config,
+                                   loadave_free_config,
+                                   "max1 [max5] [max15]");
++
++
++    /*
++     * we need to be called back later
++     */
++    snmp_register_callback(SNMP_CALLBACK_LIBRARY, SNMP_CALLBACK_STORE_DATA,
++                                       loadave_store_config, NULL);
++
+ }
+ 
+ void
+@@ -309,6 +326,63 @@
      return 0;
  }
  
@@ -73,7 +104,7 @@
  u_char         *
  var_extensible_loadave(struct variable * vp,
                         oid * name,
-@@ -328,6 +385,10 @@
+@@ -328,6 +402,10 @@
      case MIBINDEX:
          long_ret = name[*length - 1];
          return ((u_char *) (&long_ret));
