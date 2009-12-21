@@ -1,0 +1,63 @@
+--- net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/loadave.c~	2009-12-21 21:00:10.094254079 +0200
++++ net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/loadave.c	2009-12-21 22:02:45.398903148 +0200
+@@ -152,7 +152,7 @@
+          {ERRORNAME}},
+         {LOADAVE, ASN_OCTET_STR, RONLY, var_extensible_loadave, 1,
+          {LOADAVE}},
+-        {LOADMAXVAL, ASN_OCTET_STR, RONLY, var_extensible_loadave, 1,
++        {LOADMAXVAL, ASN_OCTET_STR, RWRITE, var_extensible_loadave, 1,
+          {LOADMAXVAL}},
+         {LOADAVEINT, ASN_INTEGER, RONLY, var_extensible_loadave, 1,
+          {LOADAVEINT}},
+@@ -309,6 +309,40 @@
+     return 0;
+ }
+ 
++static int
++write_laConfig(int action,
++                          u_char * var_val,
++                          u_char var_val_type,
++                          size_t var_val_len,
++                          u_char * statP, oid * name, size_t name_len)
++{
++    if (var_val_type != ASN_OCTET_STR) {
++        DEBUGMSGTL(("ucd-snmp/loadave",
++                    "write to laConfig not ASN_OCTET_STR\n"));
++        return SNMP_ERR_WRONGTYPE;
++    }
++	/* allow max value of 65536.00 */
++    if (var_val_len > 8) {
++        DEBUGMSGTL(("ucd-snmp/loadave",
++                    "write to laConfig: bad length\n"));
++        return SNMP_ERR_WRONGLENGTH;
++    }
++    if (action == COMMIT) {
++        if (var_val_len != 0) {
++			double val;
++			if (sscanf(var_val, "%7lf", &val) == 1) {
++				int idx = name[name_len - 1] - 1;
++				maxload[idx] = val;
++			} else {
++				DEBUGMSGTL(("ucd-snmp/loadave",
++							"write to laConfig: invalid value\n"));
++				return SNMP_ERR_WRONGVALUE;
++			}
++		}
++    }
++    return SNMP_ERR_NOERROR;
++}
++
+ u_char         *
+ var_extensible_loadave(struct variable * vp,
+                        oid * name,
+@@ -328,6 +362,10 @@
+     case MIBINDEX:
+         long_ret = name[*length - 1];
+         return ((u_char *) (&long_ret));
++    case LOADMAXVAL:
++		/* setup write method, but don't return yet */
++		*write_method = write_laConfig;
++		break;
+     case ERRORNAME:
+         sprintf(errmsg, "Load-%d", ((name[*length - 1] == 1) ? 1 :
+                                     ((name[*length - 1] == 2) ? 5 : 15)));
