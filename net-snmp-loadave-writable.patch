@@ -25,7 +25,7 @@
 +                    "write to laConfig not ASN_OCTET_STR\n"));
 +        return SNMP_ERR_WRONGTYPE;
 +    }
-+	/* allow max value of 65536.00 */
++    /* allow max value of 65536.00 */
 +    if (var_val_len > 8) {
 +        DEBUGMSGTL(("ucd-snmp/loadave",
 +                    "write to laConfig: bad length\n"));
@@ -33,16 +33,16 @@
 +    }
 +    if (action == COMMIT) {
 +        if (var_val_len != 0) {
-+			double val;
-+			if (sscanf(var_val, "%7lf", &val) == 1) {
-+				int idx = name[name_len - 1] - 1;
-+				maxload[idx] = val;
-+			} else {
-+				DEBUGMSGTL(("ucd-snmp/loadave",
-+							"write to laConfig: invalid value\n"));
-+				return SNMP_ERR_WRONGVALUE;
-+			}
-+		}
++            double val;
++            if (sscanf(var_val, "%7lf", &val) == 1) {
++                int idx = name[name_len - 1] - 1;
++                maxload[idx] = val;
++            } else {
++                DEBUGMSGTL(("ucd-snmp/loadave",
++                            "write to laConfig: invalid value\n"));
++                return SNMP_ERR_WRONGVALUE;
++            }
++        }
 +    }
 +    return SNMP_ERR_NOERROR;
 +}
@@ -55,9 +55,9 @@
          long_ret = name[*length - 1];
          return ((u_char *) (&long_ret));
 +    case LOADMAXVAL:
-+		/* setup write method, but don't return yet */
-+		*write_method = write_laConfig;
-+		break;
++        /* setup write method, but don't return yet */
++        *write_method = write_laConfig;
++        break;
      case ERRORNAME:
          sprintf(errmsg, "Load-%d", ((name[*length - 1] == 1) ? 1 :
                                      ((name[*length - 1] == 2) ? 5 : 15)));
