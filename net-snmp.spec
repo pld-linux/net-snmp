@@ -603,6 +603,8 @@ fi
 %{_mandir}/man5/variables.5*
 %{_mandir}/man8/snmpd.8*
 
+%dir %attr(700,root,root) /var/lib/net-snmp
+
 %attr(640,root,root) %ghost %{logfile}
 
 %files libs
