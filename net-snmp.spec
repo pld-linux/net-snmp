@@ -1,3 +1,6 @@
+# TODO
+# - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
+# - make it scan for mibs (if not yet) in /usr/share/mibs (and legacy /usr/share/snmp/mibs)
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -17,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	11
+Release:	13
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -48,6 +51,7 @@ Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
 Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch18:	%{name}-src-dst-confusion.patch
+Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -424,6 +428,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch16 -p1
 %patch17 -p1
 %patch18 -p3
+%patch19 -p1
 
 %build
 %{__libtoolize}
