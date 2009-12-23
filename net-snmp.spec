@@ -1,6 +1,6 @@
 # TODO
-# - package or remove:
-#   %{_datadir}/snmp/snmp_perl.pl
+# - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
+# - make it scan for mibs (if not yet) in /usr/share/mibs (and legacy /usr/share/snmp/mibs)
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -20,7 +20,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	6
+Release:	12
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -50,6 +50,7 @@ Patch13:	%{name}-subcontainer.patch
 Patch14:	%{name}-snmpnetstat-getbulk.patch
 Patch15:	%{name}-netlink.patch
 Patch16:	%{name}-src-dst-confusion.patch
+Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -64,7 +65,9 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	perl-devel >= 1:5.8.0
 %if %{with python}
 BuildRequires:	python-devel
+BuildRequires:	python-modules
 BuildRequires:	python-setuptools
+BuildRequires:	rpm-pythonprov
 %endif
 %if %{with rpm}
 BuildRequires:	rpm
@@ -423,6 +426,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch14 -p1
 %patch15 -p1
 %patch16 -p3
+%patch17 -p1
 
 %build
 %{__libtoolize}
@@ -483,9 +487,9 @@ perl -pi -e 's@LD_RUN_PATH="\$\(LD_RUN_PATH\)" @@' */Makefile */*/Makefile
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,%{_libdir}/snmp/dlmod}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,/var/lib/net-snmp,%{_libdir}/snmp/dlmod}
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
@@ -505,7 +509,7 @@ install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 #	$RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
 cd perl
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
@@ -602,6 +606,8 @@ fi
 %{_mandir}/man5/variables.5*
 %{_mandir}/man8/snmpd.8*
 
+%dir %attr(700,root,root) /var/lib/net-snmp
+
 %attr(640,root,root) %ghost %{logfile}
 
 %files libs
@@ -662,7 +668,7 @@ fi
 %files mibs
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
-%{_datadir}/snmp/mibs
+%{_datadir}/snmp/mibs/*.txt
 %ghost %{_datadir}/snmp/mibs/.index
 
 %files snmptrapd
