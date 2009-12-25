@@ -1,4 +1,6 @@
 # TODO
+# - package or remove:
+#   %{_datadir}/snmp/snmp_perl.pl
 # - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
 # - make it scan for mibs (if not yet) in /usr/share/mibs (and legacy /usr/share/snmp/mibs)
 #
@@ -20,7 +22,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	13
+Release:	14
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -46,6 +48,7 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
+Patch13:	%{name}-snmpnetstat-getbulk.patch
 Patch14:	%{name}-lm_sensors_3.patch
 Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
@@ -423,6 +426,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 %patch14 -p0
 %patch15 -p1
 %patch16 -p1
