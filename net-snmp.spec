@@ -46,10 +46,10 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
-Patch13:	%{name}-subcontainer.patch
-Patch14:	%{name}-snmpnetstat-getbulk.patch
-Patch15:	%{name}-netlink.patch
-Patch16:	%{name}-src-dst-confusion.patch
+Patch13:	%{name}-snmpnetstat-getbulk.patch
+Patch15:	%{name}-subcontainer.patch
+Patch16:	%{name}-netlink.patch
+Patch18:	%{name}-src-dst-confusion.patch
 Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
@@ -423,9 +423,9 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 %patch15 -p1
-%patch16 -p3
+%patch16 -p1
+%patch18 -p3
 %patch19 -p1
 
 %build
