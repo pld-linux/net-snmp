@@ -1,3 +1,8 @@
+# TODO
+# - package or remove:
+#   %{_datadir}/snmp/snmp_perl.pl
+# - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
+# - make it scan for mibs (if not yet) in /usr/share/mibs (and legacy /usr/share/snmp/mibs)
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -17,7 +22,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	11
+Release:	13
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -43,20 +48,20 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
-Patch14:	%{name}-lm_sensors_3.patch
+Patch13:	%{name}-snmpnetstat-getbulk.patch
 Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
-Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch18:	%{name}-src-dst-confusion.patch
+Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 %{?with_kerberos5:BuildRequires:	heimdal-devel}
-BuildRequires:	libnl-devel >= 1:1.1
+BuildRequires:	libnl-devel >= 0.5.0
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-%{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -159,7 +164,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 %{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
-%{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
 
@@ -419,11 +424,11 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
-%patch14 -p0
+%patch13 -p1
 %patch15 -p1
 %patch16 -p1
-%patch17 -p1
 %patch18 -p3
+%patch19 -p1
 
 %build
 %{__libtoolize}
@@ -452,7 +457,7 @@ cp -f /usr/share/automake/config.sub .
 	--with-mib-modules="host agentx smux mibII/mta_sendmail \
 %ifarch %{ix86} %{x8664}
 %if %{with lm_sensors}
-			ucd-snmp/lmsensorsMib \
+			ucd-snmp/lmSensors \
 %endif
 %endif
 			disman/event disman/schedule ucd-snmp/diskio \
@@ -665,6 +670,7 @@ fi
 %files mibs
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
+%dir %{_datadir}/snmp/mibs
 %{_datadir}/snmp/mibs/*.txt
 %ghost %{_datadir}/snmp/mibs/.index
 
@@ -775,5 +781,4 @@ fi
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
