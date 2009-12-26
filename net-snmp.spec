@@ -1,4 +1,6 @@
 # TODO
+# - package or remove:
+#   %{_datadir}/snmp/snmp_perl.pl
 # - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
 # - make it scan for mibs (if not yet) in /usr/share/mibs (and legacy /usr/share/snmp/mibs)
 #
@@ -20,7 +22,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	12
+Release:	13
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -668,6 +670,7 @@ fi
 %files mibs
 %defattr(644,root,root,755)
 %dir %{_datadir}/snmp
+%dir %{_datadir}/snmp/mibs
 %{_datadir}/snmp/mibs/*.txt
 %ghost %{_datadir}/snmp/mibs/.index
 
