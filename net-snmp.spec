@@ -1,8 +1,8 @@
 # TODO
 # - package or remove:
 #   %{_datadir}/snmp/snmp_perl.pl
-# - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
-# - make it scan for mibs (if not yet) in /usr/share/mibs (and legacy /usr/share/snmp/mibs)
+# - make noarch -n mibs-net-snmp package (need separate .spec then)
+# - FHS: #define NETSNMP_AGENTX_SOCKET "/var/agentx/master"
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -12,7 +12,11 @@
 %bcond_without	perl		# don't include Perl modules and utils
 %bcond_without	python		# don't include Python modules
 %bcond_without	static_libs	# don't build static library
-#
+
+%ifnarch %{ix86} %{x8664}
+%undefine	with_lm_sensors
+%endif
+
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es.UTF-8):	Agente SNMP de la UCD
@@ -22,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	13
+Release:	14
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -78,8 +82,8 @@ BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	%{name}-mibs = %{version}-%{release}
 Requires:	/usr/bin/setsid
+Requires:	mibs-%{name} = %{version}-%{release}
 Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
 Obsoletes:	cmu-snmp
@@ -142,7 +146,7 @@ SNMP, утиліти для запросу та встановлення інф�
 Summary:	NET SNMP libraries
 Summary(pl.UTF-8):	Biblioteki SNMP
 Group:		Libraries
-Requires:	%{name}-mibs
+Suggests:	mibs-%{name}
 Obsoletes:	net-snmp-compat-libs
 Obsoletes:	ucd-snmp-libs
 
@@ -273,16 +277,18 @@ Statyczne biblioteki UCD-SNMP.
 %description compat-static -l pt_BR.UTF-8
 Bibliotecas estáticas para desenvolvimento com ucd-snmp.
 
-%package mibs
-Summary:	MIB database
+%package -n mibs-net-snmp
+Summary:	Net-SNMP provided MIBs
 Summary(pl.UTF-8):	Baza danych MIB
 Group:		Applications/System
+Requires:	mibs-dirs
+Obsoletes:	net-snmp-mibs
 Conflicts:	ucd-snmp-libs
 
-%description mibs
-MIB database.
+%description -n mibs-net-snmp
+Net-SNMP provided MIBs (Management Information Base).
 
-%description mibs -l pl.UTF-8
+%description -n mibs-net-snmp -l pl.UTF-8
 Baza danych MIB.
 
 %package snmptrapd
@@ -310,7 +316,7 @@ Summary(ru.UTF-8):	Утилиты управления сетью по SNMP из
 Summary(uk.UTF-8):	Утиліти керування мережею по SNMP з проекту NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	%{name}-mibs = %{version}-%{release}
+Suggests:	mibs-%{name} = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils
 
@@ -436,6 +442,20 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %{__autoconf}
 %{__autoheader}
 cp -f /usr/share/automake/config.sub .
+
+MIBS="\
+host agentx smux \
+mibII/mta_sendmail \
+disman/event disman/schedule \
+ucd-snmp/diskio \
+target \
+misc/ipfwacc \
+"
+
+%if %{with lm_sensors}
+MIBS="$MIBS ucd-snmp/lmSensors"
+%endif
+
 %configure \
 	--disable-debugging \
 	--enable-as-needed \
@@ -454,14 +474,8 @@ cp -f /usr/share/automake/config.sub .
 	--with%{!?with_perl:out}-perl-modules \
 	--with%{!?with_python:out}-python-modules \
 	--enable-local-smux \
-	--with-mib-modules="host agentx smux mibII/mta_sendmail \
-%ifarch %{ix86} %{x8664}
-%if %{with lm_sensors}
-			ucd-snmp/lmSensors \
-%endif
-%endif
-			disman/event disman/schedule ucd-snmp/diskio \
-			target misc/ipfwacc" \
+	--with-mibdirs='$HOME/.snmp/mibs:/usr/share/mibs:%{_datadir}/snmp/mibs' \
+	--with-mib-modules="$MIBS" \
 	%{?with_kerberos5:--with-security-modules="ksm"} \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
@@ -492,6 +506,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,/var/lib/net-snmp,%{_libdir}/snmp/dlmod}
 
 %{__make} -j1 install \
+	mibdir=%{_datadir}/mibs \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
@@ -506,9 +521,6 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
 install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
-
-#install agent/mibgroup/ipfwchains/IPFWCHAINS-MIB.txt \
-#	$RPM_BUILD_ROOT%{_datadir}/snmp/mibs
 
 cd perl
 %{__make} -j1 install \
@@ -546,8 +558,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %{__rm} -r $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/tests
 %{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
 %endif
-
-touch $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/.index
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -667,12 +677,9 @@ fi
 %{_libdir}/libsnmp.a
 %endif
 
-%files mibs
+%files -n mibs-net-snmp
 %defattr(644,root,root,755)
-%dir %{_datadir}/snmp
-%dir %{_datadir}/snmp/mibs
-%{_datadir}/snmp/mibs/*.txt
-%ghost %{_datadir}/snmp/mibs/.index
+%{_datadir}/mibs/*.txt
 
 %files snmptrapd
 %defattr(644,root,root,755)
