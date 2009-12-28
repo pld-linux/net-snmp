@@ -1,7 +1,7 @@
 # TODO
 # - package or remove:
 #   %{_datadir}/snmp/snmp_perl.pl
-# - make noarch -n mibs-net-snmp package, most of the files are same as libsmi packages
+# - make noarch -n mibs-net-snmp package (need separate .spec then)
 # - FHS: #define NETSNMP_AGENTX_SOCKET "/var/agentx/master"
 #
 # Conditional build:
@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	15.6
+Release:	16
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -84,8 +84,8 @@ BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	mibs-%{name} = %{version}-%{release}
 Requires:	/usr/bin/setsid
+Requires:	mibs-%{name} = %{version}-%{release}
 Requires:	rc-scripts >= 0.2.0
 Provides:	snmpd
 Obsoletes:	cmu-snmp
@@ -148,7 +148,7 @@ SNMP, утиліти для запросу та встановлення інф�
 Summary:	NET SNMP libraries
 Summary(pl.UTF-8):	Biblioteki SNMP
 Group:		Libraries
-Requires:	mibs-%{name}
+Suggests:	mibs-%{name}
 Obsoletes:	net-snmp-compat-libs
 Obsoletes:	ucd-snmp-libs
 
@@ -318,7 +318,7 @@ Summary(ru.UTF-8):	Утилиты управления сетью по SNMP из
 Summary(uk.UTF-8):	Утиліти керування мережею по SNMP з проекту NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	mibs-%{name} = %{version}-%{release}
+Suggests:	mibs-%{name} = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils
 
