@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.4.2.1
-Release:	16
+Release:	15
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -53,10 +53,8 @@ Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-snmpnetstat-getbulk.patch
-Patch14:	%{name}-lm_sensors_3.patch
 Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
-Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch18:	%{name}-src-dst-confusion.patch
 Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
@@ -64,10 +62,10 @@ BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 %{?with_kerberos5:BuildRequires:	heimdal-devel}
-BuildRequires:	libnl-devel >= 1:1.1
+BuildRequires:	libnl-devel >= 0.5.0
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
-%{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:BuildRequires:	lm_sensors-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
@@ -170,7 +168,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 %{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libwrap-devel
-%{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
+%{?with_lm_sensors:Requires:	lm_sensors-devel}
 Requires:	openssl-devel >= 0.9.7c
 Obsoletes:	ucd-snmp-devel
 
@@ -433,10 +431,8 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p0
 %patch15 -p1
 %patch16 -p1
-%patch17 -p1
 %patch18 -p3
 %patch19 -p1
 
@@ -457,7 +453,7 @@ misc/ipfwacc \
 "
 
 %if %{with lm_sensors}
-MIBS="$MIBS ucd-snmp/lmsensorsMib"
+MIBS="$MIBS ucd-snmp/lmSensors"
 %endif
 
 %configure \
@@ -792,5 +788,4 @@ fi
 %dir %{py_sitedir}/netsnmp
 %attr(755,root,root) %{py_sitedir}/netsnmp/*.so
 %{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
