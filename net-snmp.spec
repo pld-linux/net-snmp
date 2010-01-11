@@ -630,6 +630,7 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/snmp
+%dir %{_datadir}/snmp
 %attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
