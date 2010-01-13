@@ -1,3 +1,11 @@
+This patch makes "load X Y Z" snmpsettable via snmpset,
+
+it behaves the same as sysName.0, once written in snmpd.conf, it becames
+readonly.
+
+Signed-off-by: Elan Ruusamäe <glen@delfi.ee>
+Upstream-Tracker: https://sourceforge.net/tracker/?func=detail&aid=2931446&group_id=12694&atid=312694
+
 --- net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/loadave.c~	2009-12-21 21:00:10.094254079 +0200
 +++ net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/loadave.c	2009-12-21 22:02:45.398903148 +0200
 @@ -135,7 +135,19 @@
