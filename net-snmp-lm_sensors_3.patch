@@ -2,19 +2,6 @@
 Source: upstream, svn diff -r 16736:16739
 Reviewed-By: Jan Safranek <jsafrane@redhat.com>
 
-Index: configure
-===================================================================
---- configure	(revision 16736)
-+++ configure	(revision 16739)
-@@ -32628,7 +32628,7 @@
- fi
- 
- # LM-SENSORS-MIB support
--echo " $module_list " | grep " ucd-snmp/lmSensors " > /dev/null
-+echo " $module_list " | $GREP -i "ucd-snmp/lmsensor" > /dev/null
- if test $? -eq 0 ; then
-         { echo "$as_me:$LINENO: checking for sensors support" >&5
- echo $ECHO_N "checking for sensors support... $ECHO_C" >&6; }
 Index: include/net-snmp/agent/hardware/sensors.h
 ===================================================================
 --- include/net-snmp/agent/hardware/sensors.h	(revision 0)
@@ -68,19 +55,6 @@ Index: include/net-snmp/agent/hardware/sensors.h
 +netsnmp_sensor_info *sensor_by_name( char *, int );
 +NetsnmpCacheLoad     netsnmp_sensor_load;
 +NetsnmpCacheFree     netsnmp_sensor_free;
-Index: configure.in
-===================================================================
---- configure.in	(revision 16736)
-+++ configure.in	(revision 16739)
-@@ -2885,7 +2885,7 @@
- fi
- 
- # LM-SENSORS-MIB support
--echo " $module_list " | grep " ucd-snmp/lmSensors " > /dev/null
-+echo " $module_list " | $GREP -i "ucd-snmp/lmsensor" > /dev/null
- if test $? -eq 0 ; then
-         AC_MSG_CHECKING([for sensors support])
-         case $target_os in
 Index: agent/mibgroup/ucd-snmp/lmsensorsMib.c
 ===================================================================
 --- agent/mibgroup/ucd-snmp/lmsensorsMib.c	(revision 0)

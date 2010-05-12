@@ -1,5 +1,5 @@
---- net-snmp-5.4.1/configure.in	2007-09-08 16:13:11.531748373 +0200
-+++ net-snmp-5.4.1-ac/configure.in	2007-11-14 20:58:16.361317122 +0200
+--- net-snmp-5.4.1/configure.ac	2007-09-08 16:13:11.531748373 +0200
++++ net-snmp-5.4.1-ac/configure.ac	2007-11-14 20:58:16.361317122 +0200
 @@ -1726,16 +1726,18 @@
  rebuilt_new_with_security=
  already_checked_krb5=no
