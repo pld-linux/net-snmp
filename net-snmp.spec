@@ -166,6 +166,7 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 %{?with_kerberos5:Requires:	heimdal-devel}
+Requires:	libnl-devel >= 1:1.1
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
 Requires:	openssl-devel >= 0.9.7c
