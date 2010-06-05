@@ -18,6 +18,8 @@
 %undefine	with_lm_sensors
 %endif
 
+%define	so_version	20
+
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es.UTF-8):	Agente SNMP de la UCD
@@ -27,7 +29,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.5
-Release:	0.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -53,7 +55,9 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
+Patch13:	net-snmp-5.5-missing-bcast.patch
 Patch14:	%{name}-lm_sensors_3.patch
+Patch15:	net-snmp-5.5-tcp-pid.patch
 Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
@@ -427,11 +431,11 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
-# check me
 %patch11 -p1
 %patch12 -p1
-# check me
-%patch14 -p0
+%patch13 -p1
+%patch14 -p1
+%patch15 -p1
 %patch17 -p1
 %patch19 -p1
 
@@ -607,10 +611,12 @@ fi
 %attr(640,root,root) %config(missingok,noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.local.conf
 
 %attr(755,root,root) %{_sbindir}/snmpd
+%attr(755,root,root) %{_bindir}/net-snmp-create-v3-user
 
 %dir %{_libdir}/snmp
 %dir %{_libdir}/snmp/dlmod
 
+%{_mandir}/man1/net-snmp-create-v3-user.1*
 %{_mandir}/man5/snmpd.conf.5*
 %{_mandir}/man5/snmpd.examples.5*
 %{_mandir}/man5/snmpd.internal.5*
@@ -630,11 +636,11 @@ fi
 %attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.15
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.15
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.15
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.15
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.15
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.%{so_version}
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.%{so_version}
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.%{so_version}
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.%{so_version}
 
 %files devel
 %defattr(644,root,root,755)
