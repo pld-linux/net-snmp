@@ -1,0 +1,40 @@
+--- net-snmp-5.4.2.1/agent/mibgroup/hardware/cpu/cpu_linux.c~	2008-08-27 16:39:38.000000000 +0300
++++ net-snmp-5.4.2.1/agent/mibgroup/hardware/cpu/cpu_linux.c	2010-01-15 10:57:53.491162294 +0200
+@@ -261,7 +261,7 @@
+             cpu->pageOut = (unsigned long)pout;
+ 	} else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
++		snmp_log(LOG_DEBUG, "No page line in %s\n", STAT_FILE);
+             cpu->pageIn  = cpu->pageOut = 0;
+ 	}
+ 	b = strstr(buff, "swap ");
+@@ -271,7 +271,7 @@
+             cpu->swapOut = (unsigned long)swpout;
+ 	} else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
++		snmp_log(LOG_DEBUG, "No swap line in %s\n", STAT_FILE);
+             cpu->swapIn  = cpu->swapOut = 0;
+ 	}
+     }
+--- net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/vmstat_linux.c~	2006-09-15 03:48:50.000000000 +0300
++++ net-snmp-5.4.2.1/agent/mibgroup/ucd-snmp/vmstat_linux.c	2010-01-15 10:58:55.859906415 +0200
+@@ -316,7 +316,7 @@
+ 	    sscanf(b, "page %u %u", pin, pout);
+ 	else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
++		snmp_log(LOG_DEBUG, "No page line in %s\n", STAT_FILE);
+ 	    *pin = *pout = 0;
+ 	}
+ 	b = strstr(buff, "swap ");
+@@ -324,7 +324,7 @@
+ 	    sscanf(b, "swap %u %u", swpin, swpout);
+ 	else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
++		snmp_log(LOG_DEBUG, "No swap line in %s\n", STAT_FILE);
+ 	    *swpin = *swpout = 0;
+ 	}
+     }

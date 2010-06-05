@@ -1,0 +1,111 @@
+#!/bin/sh
+#
+# snmpd			Simple Network Management Protocol (SNMP) Daemon
+#
+# chkconfig:		345 50 50
+#
+# description:		Simple Network Management Protocol (SNMP) Daemon
+# description(es.UTF-8):	Servidor SNMP (Simple Network Management Protocol)
+# description(pt_BR.UTF-8):	Servidor SNMP (Simple Network Management Protocol)
+# description(ru.UTF-8):	Демон SNMP (Simple Network Management Protocol)
+# description(uk.UTF-8):	Демон SNMP (Simple Network Management Protocol)
+#
+# processname:		snmpd
+# config:		/etc/snmp/snmpd.local.conf
+# config:		/etc/snmp/snmpd.conf
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+CONF_FILE=""
+LOG_WARNINGS_MESSAGES_TO_SYSLOG="yes"
+SNMPD_LISTEN_ADDRS=""
+
+# Get service config
+[ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down "snmpd"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/snmpd ]; then
+		msg_already_running "snmpd"
+		return
+	fi
+
+	msg_starting "snmpd"
+	daemon /usr/bin/setsid /usr/sbin/snmpd \
+		$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
+		$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-LSid" ) \
+		-p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS </dev/null
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmpd
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/snmpd ]; then
+		msg_not_running "snmpd"
+		return
+	fi
+
+	msg_stopping "snmpd"
+	killproc snmpd
+	rm -f /var/lock/subsys/snmpd >/dev/null 2>&1
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/snmpd ]; then
+		msg_not_running "snmpd"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  reload|force-reload)
+	if [ -f /var/lock/subsys/snmpd ]; then
+		msg_reloading "snmpd"
+		killproc snmpd -HUP
+	else
+		msg_not_running "snmpd"
+	fi
+	;;
+  status)
+	status snmpd
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL

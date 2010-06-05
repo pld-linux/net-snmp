@@ -1,0 +1,61 @@
+--- net-snmp-5.5/EXAMPLE.conf.def.org	2009-06-01 15:11:07.000000000 +0200
++++ net-snmp-5.5/EXAMPLE.conf.def	2010-06-05 20:02:19.658299931 +0200
+@@ -74,8 +74,8 @@
+ 
+ #  Note that setting these values here, results in the corresponding MIB objects being 'read-only'
+ #  See snmpd.conf(5) for more details
+-sysLocation    Sitting on the Dock of the Bay
+-sysContact     Me <me@example.org>
++sysLocation    Unknown (configure /etc/snmp/snmpd.local.conf)
++sysContact     Root <root@localhost> (configure /etc/snmp/snmpd.local.conf)
+                                                  # Application + End-to-End layers
+ sysServices    72
+ 
+@@ -84,11 +84,11 @@
+ #  Process Monitoring
+ #
+                                # At least one  'mountd' process
+-proc  mountd
++#proc  mountd
+                                # No more than 4 'ntalkd' processes - 0 is OK
+-proc  ntalkd    4
++#proc  ntalkd    4
+                                # At least one 'sendmail' process, but no more than 10
+-proc  sendmail 10 1
++#proc  sendmail 10 1
+ 
+ #  Walk the UCD-SNMP-MIB::prTable to see the resulting output
+ #  Note that this table will be empty if there are no "proc" entries in the snmpd.conf file
+@@ -98,9 +98,9 @@
+ #  Disk Monitoring
+ #
+                                # 10MBs required on root disk, 5% free on /var, 10% free on all other disks
+-disk       /     10000
+-disk       /var  5%
+-includeAllDisks  10%
++#disk       /     10000
++#disk       /var  5%
++#includeAllDisks  10%
+ 
+ #  Walk the UCD-SNMP-MIB::dskTable to see the resulting output
+ #  Note that this table will be empty if there are no "disk" entries in the snmpd.conf file
+@@ -110,7 +110,7 @@
+ #  System Load
+ #
+                                # Unacceptable 1-, 5-, and 15-minute load averages
+-load   12 10 5
++#load   12 10 5
+ 
+ #  Walk the UCD-SNMP-MIB::laTable to see the resulting output
+ #  Note that this table *will* be populated, even without a "load" entry in the snmpd.conf file
+@@ -154,8 +154,8 @@
+ #
+ #  Arbitrary extension commands
+ #
+- extend    test1   /bin/echo  Hello, world!
+- extend-sh test2   echo Hello, world! ; echo Hi there ; exit 35
++#extend    test1   /bin/echo  Hello, world!
++#extend-sh test2   echo Hello, world! ; echo Hi there ; exit 35
+ #extend-sh test3   /bin/sh /tmp/shtest
+ 
+ #  Note that this last entry requires the script '/tmp/shtest' to be created first,
