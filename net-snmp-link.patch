@@ -80,3 +80,14 @@
  #
  # internal test objects
  #
+--- net-snmp-5.5/snmplib/Makefile.in~	2010-06-05 20:17:39.941541617 +0200
++++ net-snmp-5.5/snmplib/Makefile.in	2010-06-06 09:25:54.332457357 +0200
+@@ -194,7 +194,7 @@
+ 
+ # how to build the libraries.
+ libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    $(TOBJS)
+-	$(LIB_LD_CMD) $@ $(TOBJS) $(LDFLAGS) @LNETSNMPLIBS@
++	$(LIB_LD_CMD) $@ $(TOBJS) $(LDFLAGS) @LNETSNMPLIBS@ @LIBS@
+ 	$(RANLIB) $@
+ 
+ #
