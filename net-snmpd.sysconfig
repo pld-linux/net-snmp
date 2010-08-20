@@ -13,3 +13,7 @@ LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
 
 # Addresses snmpd should listen too. See snmpd(8)
 #SNMPD_LISTEN_ADDRS="udp:127.0.0.1"
+
+# Module names that should (not) be loaded, see '-I' snmpd option
+# for example we don't want diskio inside vserver (no /proc/diskstats or /proc partitions)
+#SNMPD_INITLIST="-diskio"

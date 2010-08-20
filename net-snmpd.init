@@ -47,6 +47,7 @@ start() {
 	msg_starting "snmpd"
 	daemon /usr/bin/setsid /usr/sbin/snmpd \
 		$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
+		$([ -n "$SNMPD_INITLIST" ] && echo "-I \"$SNMPD_INITLIST\"") \
 		$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-LSid" ) \
 		-p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS </dev/null
 	RETVAL=$?
