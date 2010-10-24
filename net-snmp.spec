@@ -58,7 +58,7 @@ Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch14:	%{name}-nodebug.patch
 URL:		http://www.net-snmp.org/
-BuildRequires:	autoconf >= 2.61-3
+BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 %{?with_kerberos5:BuildRequires:	heimdal-devel}
