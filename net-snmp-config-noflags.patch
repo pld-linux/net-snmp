@@ -1,15 +1,15 @@
---- net-snmp-5.2.1/net-snmp-config.in.orig	2005-01-05 16:12:52.000000000 +0100
-+++ net-snmp-5.2.1/net-snmp-config.in	2005-02-26 14:58:33.779999232 +0100
+--- net-snmp-5.6/net-snmp-config.in.orig	2010-05-30 22:19:04.000000000 +0200
++++ net-snmp-5.6/net-snmp-config.in	2010-10-24 10:12:12.899734339 +0200
 @@ -46,7 +46,7 @@
  includedir=@includedir@
  libdir=@libdir@
  datarootdir=@datarootdir@
 -NSC_LDFLAGS="@LDFLAGS@"
 +NSC_LDFLAGS=""
+ NSC_LNETSNMPLIBS="@LNETSNMPLIBS@"
  NSC_INCLUDEDIR=${includedir}
  NSC_LIBDIR=-L${libdir}
- NSC_LIBS="@LIBS@"
-@@ -89,10 +89,10 @@
+@@ -124,10 +124,10 @@
        ;;
      #################################################### compile
      --base-cflags)
@@ -22,7 +22,7 @@
        ;;
      --srcdir)
        echo $NSC_SRCDIR
-@@ -445,7 +445,7 @@
+@@ -585,7 +585,7 @@
          echo "Ack.  Can't create $tmpfile."
  	exit 1
        fi

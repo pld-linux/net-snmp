@@ -18,7 +18,7 @@
 %undefine	with_lm_sensors
 %endif
 
-%define	so_version	20
+%define	so_version	25
 
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
@@ -28,12 +28,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.5
-Release:	5
+Version:	5.6
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	5b2551e7bd024fbbee84dca22a5f13a1
+Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
+# Source0-md5:	89b3a7a77e68daef925abee43a3f7018
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -55,11 +55,8 @@ Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
-Patch13:	net-snmp-5.5-missing-bcast.patch
-Patch14:	%{name}-lm_sensors_3.patch
-Patch15:	net-snmp-5.5-tcp-pid.patch
-Patch17:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
-Patch19:	%{name}-loadave-writable.patch
+Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
+Patch14:	%{name}-nodebug.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
 BuildRequires:	automake
@@ -435,9 +432,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
-%patch15 -p1
-%patch17 -p1
-%patch19 -p1
 
 %build
 %{__libtoolize}
@@ -631,11 +625,11 @@ fi
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/snmp
 %dir %{_datadir}/snmp
-%attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*.*
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.%{so_version}
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.%{so_version}
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
@@ -668,7 +662,11 @@ fi
 %if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libnet*.a
+%{_libdir}/libnetsnmp.a
+%{_libdir}/libnetsnmpagent.a
+%{_libdir}/libnetsnmphelpers.a
+%{_libdir}/libnetsnmpmibs.a
+%{_libdir}/libnetsnmptrapd.a
 %endif
 
 %files compat-devel
@@ -701,6 +699,7 @@ fi
 
 %files utils
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/agentxtrap
 %attr(755,root,root) %{_bindir}/encode_keychange
 %attr(755,root,root) %{_bindir}/snmpbulkget
 %attr(755,root,root) %{_bindir}/snmpbulkwalk
@@ -719,6 +718,7 @@ fi
 %attr(755,root,root) %{_bindir}/snmpusm
 %attr(755,root,root) %{_bindir}/snmpvacm
 %attr(755,root,root) %{_bindir}/snmpwalk
+%{_mandir}/man1/agentxtrap.1*
 %{_mandir}/man1/encode_keychange.1*
 %{_mandir}/man1/snmpbulkget.1*
 %{_mandir}/man1/snmpbulkwalk.1*
@@ -769,9 +769,12 @@ fi
 %files utils-perl
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/fixproc
+%attr(755,root,root) %{_bindir}/net-snmp-cert
+%attr(755,root,root) %{_bindir}/snmp-bridge-mib
 %attr(755,root,root) %{_bindir}/snmpcheck
 %attr(755,root,root) %{_bindir}/traptoemail
 %{_mandir}/man1/fixproc.1*
+%{_mandir}/man1/snmp-bridge-mib.1*
 %{_mandir}/man1/traptoemail.1*
 %endif
 

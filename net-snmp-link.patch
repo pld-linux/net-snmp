@@ -1,27 +1,25 @@
---- net-snmp-5.4.1/agent/Makefile.in.orig	2007-07-05 01:26:56.000000000 +0200
-+++ net-snmp-5.4.1/agent/Makefile.in	2007-09-08 16:50:07.310018380 +0200
-@@ -74,8 +74,8 @@
+--- net-snmp-5.6/agent/Makefile.in.orig	2010-06-08 23:05:11.000000000 +0200
++++ net-snmp-5.6/agent/Makefile.in	2010-10-24 10:33:36.007741043 +0200
+@@ -108,7 +108,7 @@
  #
  # how to build it info
  #
 -USELIBS		= ../snmplib/libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
--HELPERLIB	= helpers/libnetsnmphelpers.$(LIB_EXTENSION)$(LIB_VERSION)
 +USELIBS		= $(top_builddir)/snmplib/libnetsnmp.la
-+HELPERLIB	= $(top_builddir)/agent/helpers/libnetsnmphelpers.la
  AGENTLIB	= libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION)
  MIBLIB		= libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION)
  
-@@ -143,11 +143,11 @@
+@@ -249,11 +249,11 @@
  
  
  libnetsnmpagent.$(LIB_EXTENSION)$(LIB_VERSION):    ${LLIBAGENTOBJS} $(USELIBS)
--	$(LIB_LD_CMD) $(AGENTLIB) ${LLIBAGENTOBJS} $(USELIBS) ${LAGENTLIBS} $(LDFLAGS) $(PERLLDOPTS_FOR_LIBS) $(LIB_LD_LIBS)
-+	$(LIB_LD_CMD) $(AGENTLIB) ${LLIBAGENTOBJS} $(USELIBS) $(LDFLAGS) ${LAGENTLIBS} $(PERLLDOPTS_FOR_LIBS) $(LIB_LD_LIBS)
+-	$(LIB_LD_CMD) $(AGENTLIB) ${LLIBAGENTOBJS} $(USELIBS) ${LAGENTLIBS} @LD_NO_UNDEFINED@ $(LDFLAGS) $(PERLLDOPTS_FOR_LIBS) $(LIB_LD_LIBS) @AGENTLIBS@
++	$(LIB_LD_CMD) $(AGENTLIB) ${LLIBAGENTOBJS} $(USELIBS) $(LDFLAGS) ${LAGENTLIBS} @LD_NO_UNDEFINED@ $(PERLLDOPTS_FOR_LIBS) $(LIB_LD_LIBS) @AGENTLIBS@
  	$(RANLIB) $(AGENTLIB)
  
- libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION): ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS)
--	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS) $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS)
-+	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(HELPERLIB) $(AGENTLIB) $(USELIBS) $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS)
+ libnetsnmpmibs.$(LIB_EXTENSION)$(LIB_VERSION): ${LMIBOBJS} $(AGENTLIB) $(USELIBS)
+-	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(AGENTLIB) $(USELIBS) @LD_NO_UNDEFINED@ $(LDFLAGS) ${LMIBLIBS} $(LIB_LD_LIBS) @AGENTLIBS@
++	$(LIB_LD_CMD) $(MIBLIB) ${LMIBOBJS} $(LDFLAGS) $(AGENTLIB) $(USELIBS) @LD_NO_UNDEFINED@ ${LMIBLIBS} $(LIB_LD_LIBS) @AGENTLIBS@
  	$(RANLIB) $(MIBLIB)
  
  agentlib: $(AGENTLIB)
@@ -59,9 +57,9 @@
  
  installsubdirlibs:
  	@if test "$(SUBDIRS)" != ""; then \
---- net-snmp-5.4.1/snmplib/Makefile.in.orig	2007-06-18 23:34:43.000000000 +0200
-+++ net-snmp-5.4.1/snmplib/Makefile.in	2007-09-08 16:48:42.425181069 +0200
-@@ -128,7 +128,6 @@
+--- net-snmp-5.6/snmplib/Makefile.in.orig	2010-05-27 06:06:32.000000000 +0200
++++ net-snmp-5.6/snmplib/Makefile.in	2010-10-24 10:35:59.615743558 +0200
+@@ -134,7 +134,6 @@
  
  # libraries
  INSTALLLIBS=libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION)
@@ -69,25 +67,16 @@
  
  #
  # Things to build
-@@ -191,10 +190,6 @@
- 	$(LIB_LD_CMD) $@ $(TOBJS) $(LDFLAGS) @LNETSNMPLIBS@
- 	$(RANLIB) $@
- 
--libsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    $(TOBJS)
--	$(LIB_LD_CMD) $@ $(TOBJS) $(LDFLAGS) @LNETSNMPLIBS@
--	$(RANLIB) $@
--
- #
- # internal test objects
- #
---- net-snmp-5.5/snmplib/Makefile.in~	2010-06-05 20:17:39.941541617 +0200
-+++ net-snmp-5.5/snmplib/Makefile.in	2010-06-06 09:25:54.332457357 +0200
-@@ -194,7 +194,7 @@
+@@ -200,11 +199,7 @@
  
  # how to build the libraries.
  libnetsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    $(TOBJS)
--	$(LIB_LD_CMD) $@ $(TOBJS) $(LDFLAGS) @LNETSNMPLIBS@
-+	$(LIB_LD_CMD) $@ $(TOBJS) $(LDFLAGS) @LNETSNMPLIBS@ @LIBS@
+-	$(LIB_LD_CMD) $@ $(TOBJS) @LD_NO_UNDEFINED@ $(LDFLAGS) @LNETSNMPLIBS@
+-	$(RANLIB) $@
+-
+-libsnmp.$(LIB_EXTENSION)$(LIB_VERSION):    $(TOBJS)
+-	$(LIB_LD_CMD) $@ $(TOBJS) @LD_NO_UNDEFINED@ $(LDFLAGS) @LNETSNMPLIBS@
++	$(LIB_LD_CMD) $@ $(TOBJS) @LD_NO_UNDEFINED@ $(LDFLAGS) @LNETSNMPLIBS@ @LIBS@
  	$(RANLIB) $@
  
  #

@@ -11,9 +11,9 @@
  void
  init_hr_swinst(void)
  {
---- net-snmp-5.5/configure.d/config_os_libs~	2010-05-12 14:31:17.751301337 +0200
-+++ net-snmp-5.5/configure.d/config_os_libs	2010-05-12 14:34:11.694627717 +0200
-@@ -261,20 +261,34 @@
+--- net-snmp-5.6/configure.d/config_os_libs.orig	2010-10-24 10:37:25.527741043 +0200
++++ net-snmp-5.6/configure.d/config_os_libs	2010-10-24 10:40:56.519744396 +0200
+@@ -425,20 +425,34 @@
  #   RPM checks
  #
  ##
@@ -28,55 +28,51 @@
 -  else
 -    with_rpm=no
 -  fi
--fi
--
- #
-+# check if we can use rpm hrmib export                                                                                                                      
-+if test "$with_rpm" != "no" ; then                                                                                                                          
-+       AC_PATH_PROG([RPM], rpm)                                                                                                                             
-+       if test -n "$RPM"; then                                                                                                                              
-+               changequote(, )                                                                                                                              
-+               RPM_HRMIB_PATH=$($RPM -E %{_hrmib_path} | sed -e 's,/[^/]\+$,,')                                                                             
-+               changequote([, ])                                                                                                                            
-+               if test -n "$RPM_HRMIB_PATH"; then                                                                                                           
-+                       AC_DEFINE_UNQUOTED([RPM_HRMIB_PATH], ["$RPM_HRMIB_PATH"], [Directory where RPM exports packages hrmib information])                  
-+               fi                                                                                                                                           
-+       fi                                                                                                                                                   
-+fi    
-+# otherwise try binary linkin                                                                                                                               
-+if test -z "$RPM_HRMIB_PATH"; then                                                                                                                          
-+       AC_CHECK_HEADERS(rpm/rpmlib.h rpm/header.h)                                                                                                          
-+                                                                                                                                                            
-+       AC_CHECK_HEADER(rpm/rpmlib.h,rpmlib_h=yes,rpmlib_h=no)                                                                                               
-+       AC_CHECK_HEADER(rpm/header.h,rpmheader_h=yes,rpmheader_h=no)                                                                                         
-+                                                                                                                                                            
-+       if test "x$rpmheader_h" = "xno" -o "x$rpmlib_h" = "xno" ; then                                                                                       
-+         if test "x$with_rpm" = "xyes" ; then                                                                                                               
-+               AC_MSG_ERROR([Could not find either the RPM header files needed and was specifically asked to use RPM support])                              
-+         else                                                                                                                                               
-+               with_rpm=no                                                                                                                                  
-+         fi                                                                                                                                                 
-+       fi 
++#
++# check if we can use rpm hrmib export
++if test "$with_rpm" != "no" ; then
++       AC_PATH_PROG([RPM], rpm)
++       if test -n "$RPM"; then
++               changequote(, )
++               RPM_HRMIB_PATH=$($RPM -E %{_hrmib_path} | sed -e 's,/[^/]\+$,,')
++               changequote([, ])
++               if test -n "$RPM_HRMIB_PATH"; then
++                       AC_DEFINE_UNQUOTED([RPM_HRMIB_PATH], ["$RPM_HRMIB_PATH"], [Directory where RPM exports packages hrmib information])
++               fi
++       fi
+ fi
++# otherwise try binary linkin
++if test -z "$RPM_HRMIB_PATH"; then
++       AC_CHECK_HEADERS(rpm/rpmlib.h rpm/header.h)
 +
++       AC_CHECK_HEADER(rpm/rpmlib.h,rpmlib_h=yes,rpmlib_h=no)
++       AC_CHECK_HEADER(rpm/header.h,rpmheader_h=yes,rpmheader_h=no)
++
++       if test "x$rpmheader_h" = "xno" -o "x$rpmlib_h" = "xno" ; then
++         if test "x$with_rpm" = "xyes" ; then
++               AC_MSG_ERROR([Could not find either the RPM header files needed and was specifically asked to use RPM support])
++         else
++               with_rpm=no
++         fi
++       fi
+ 
+-#
  # rpm libraries only needed for the host resources mib software
  # installed tables (on linux in particular)
  #
-@@ -319,7 +333,14 @@
-     LMIBLIBS="$_rpmlibs $LMIBLIBS"
-     CFLAGS="$CFLAGS -I/usr/include/rpm"
-   ],, $LMIBLIBS, _rpmlibs)
--fi
-+  OLDLIBS=$LIBS                                                                                                                                             
-+  LIBS=$LMIBLIBS                                                                                                                                            
-+  AC_CHECK_FUNCS(rpmGetPath)                                                                                                                                
+@@ -490,6 +504,12 @@
+     AC_DEFINE([_RPM_4_4_COMPAT], [], [Define if you have RPM 4.6 or newer to turn on legacy API]),
+     [[#include <rpm/rpmlib.h>]]
+   )
++
++  OLDLIBS=$LIBS
++  LIBS=$LMIBLIBS
++  AC_CHECK_FUNCS([rpmGetPath])
 +  LIBS=$OLDLIBS
-+
 + fi
-+
-+fi # with rpmlib
+ fi
  
  ##
- #   mysql
 --- net-snmp-5.5/configure.d/config_os_functions~	2009-07-26 20:20:55.000000000 +0200
 +++ net-snmp-5.5/configure.d/config_os_functions	2010-05-12 14:35:39.421276242 +0200
 @@ -67,15 +67,6 @@
