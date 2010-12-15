@@ -18,8 +18,7 @@
 %undefine	with_lm_sensors
 %endif
 
-%define	so_version	25
-
+%define		so_version	25
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es.UTF-8):	Agente SNMP de la UCD
@@ -29,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.6
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -465,7 +464,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 	%{!?with_kerberos5:--without-krb5} \
 	--with-openssl=%{_prefix} \
 	--with-libwrap=%{_prefix} \
-	--with-logfile="%{logfile}" \
+	--with-logfile=%{logfile} \
 	--with-zlib=%{_prefix} \
 	--with-bzip2=%{_prefix} \
 	--with%{!?with_perl:out}-perl-modules \
@@ -485,7 +484,6 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 %{__make} -j1
 
 cd perl
-
 %{__perl} Makefile.PL \
 	-NET-SNMP-IN-SOURCE=true \
 	INSTALLDIRS=vendor \
@@ -506,25 +504,25 @@ install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,/var/lib/n
 	mibdir=%{_datadir}/mibs \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
+cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmp.conf
 :> $RPM_BUILD_ROOT%{logfile}
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
+cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
+cp -a %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
 
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
-install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
-install %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
+install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
+cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
+cp -a %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 
 cd perl
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
-install SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
+install -p SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version}
 cd ..
 
 # IP-Filter (non-Linux)
