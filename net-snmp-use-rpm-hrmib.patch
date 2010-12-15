@@ -102,14 +102,25 @@
  #elif defined(hpux9)
      snprintf( pkg_directory, SNMP_MAXPATH, "/system" );
  #elif defined(hpux10) ||  defined(hpux11) 
---- net-snmp-5.6/agent/mibgroup/host/data_access/swinst.h~	2010-04-07 03:38:13.000000000 +0300
-+++ net-snmp-5.6/agent/mibgroup/host/data_access/swinst.h	2010-12-16 00:14:13.634392176 +0200
-@@ -24,7 +24,7 @@
+--- net-snmp-5.6/agent/mibgroup/host/data_access/swinst.h	2010-12-16 00:14:13.634392176 +0200
++++ net-snmp-5.6/agent/mibgroup/host/data_access/swinst.h	2010-12-16 01:27:48.195543278 +0200
+@@ -11,6 +11,10 @@
+ #ifndef NETSNMP_ACCESS_SWINST_CONFIG_H
+ #define NETSNMP_ACCESS_SWINST_CONFIG_H
+ 
++// quick fix: this file is consulted before RPM_HRMIB_PATH check is made in configure, hardcode a define for now
++#define RPM_HRMIB_PATH "/var/cache/hrmib"
++
++
+ /*
+  * all platforms use this generic code
+  */
+@@ -24,7 +28,7 @@
      config_require(host/data_access/swinst_darwin)
  #elif defined( HAVE_LIBRPM ) && defined( linux )
      config_require(host/data_access/swinst_rpm)
 -#elif defined( HAVE_PKGLOCS_H ) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 )
-+#elif defined( HAVE_PKGLOCS_H ) || defined (RPM_HRMIB_PATH) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 )
++#elif defined( HAVE_PKGLOCS_H ) || defined( RPM_HRMIB_PATH ) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 )
      config_require(host/data_access/swinst_pkginfo)
  #else
      config_warning(This platform does not yet support hrSWInstalledTable rewrites)
