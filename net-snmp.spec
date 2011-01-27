@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.6
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -83,7 +83,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
 Requires:	mibs-%{name} = %{version}-%{release}
-Requires:	rc-scripts >= 0.2.0
+Requires:	rc-scripts >= 0.4.3.0
 Provides:	snmpd
 Obsoletes:	cmu-snmp
 Obsoletes:	snmpd
