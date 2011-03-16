@@ -27,12 +27,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.6
-Release:	4
+Version:	5.6.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	89b3a7a77e68daef925abee43a3f7018
+# Source0-md5:	b4e30ead5783b0bb1d280172c6095ea4
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -55,7 +55,6 @@ Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
-Patch14:	%{name}-nodebug.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -430,7 +429,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 
 %build
 %{__libtoolize}
@@ -467,6 +465,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 	--with-logfile=%{logfile} \
 	--with-zlib=%{_prefix} \
 	--with-bzip2=%{_prefix} \
+	--with-nl \
 	--with%{!?with_perl:out}-perl-modules \
 	--with%{!?with_python:out}-python-modules \
 	--enable-local-smux \
@@ -479,6 +478,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 	--with-persistent-directory="/var/lib/net-snmp" \
 	--enable-ucd-snmp-compatibility \
 	--enable-ipv6 \
+	%{!?debug:--disable-debugging} \
 	--with%{!?with_rpm:out}-rpm
 
 %{__make} -j1

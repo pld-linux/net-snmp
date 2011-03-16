@@ -1,5 +1,5 @@
---- net-snmp-5.5/configure.d/config_os_libs~	2009-07-11 23:04:37.000000000 +0200
-+++ net-snmp-5.5/configure.d/config_os_libs	2010-05-12 14:24:23.649259395 +0200
+--- net-snmp-5.5/configure.d/config_os_libs1~	2009-07-11 23:04:37.000000000 +0200
++++ net-snmp-5.5/configure.d/config_os_libs1	2010-05-12 14:24:23.649259395 +0200
 @@ -310,18 +310,6 @@
      NETSNMP_SEARCH_LIBS(BZ2_bzread, bz2,,, $LMIBLIBS, _rpmlibs)
    fi
