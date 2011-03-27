@@ -22,7 +22,7 @@
 +	if ((err = nl_connect(nl, NETLINK_INET_DIAG)) < 0) {
 +		DEBUGMSGTL(("mibII/tcpTable", "Failed to connect to netlink: %s\n", nl_geterror(err)));
 +		snmp_log(LOG_ERR, "snmpd: Couldn't connect to netlink: %s\n", nl_geterror(err));
-+		nl_close(nl);
++		nl_socket_free(nl);
  		return -1;
  	}
  
@@ -37,7 +37,7 @@
 +	if ((err = nl_send_auto_complete(nl, nm)) < 0) {
 +		DEBUGMSGTL(("mibII/tcpTable", "nl_send_autocomplete(): %s\n", nl_geterror(err)));
 +		snmp_log(LOG_ERR, "snmpd: nl_send_autocomplete(): %s\n", nl_geterror(err));
-+		nl_close(nl);
++		nl_socket_free(nl);
  		return -1;
  	}
  	nlmsg_free(nm);
@@ -50,7 +50,7 @@
 -			nl_handle_destroy(nl);
 +			DEBUGMSGTL(("mibII/tcpTable", "nl_recv(): %s\n", nl_geterror(len)));
 +			snmp_log(LOG_ERR, "snmpd: nl_recv(): %s\n", nl_geterror(len));
-+			nl_close(nl);
++			nl_socket_free(nl);
  			return -1;
  		}
  
@@ -59,7 +59,7 @@
  	}
  
 -	nl_handle_destroy(nl);
-+	nl_close(nl);
++	nl_socket_free(nl);
  
  	if (tcp_head) {
  		DEBUGMSGTL(("mibII/tcpTable", "Loaded TCP Table using netlink\n"));
