@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.6.1
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -41,6 +41,7 @@ Source5:	%{name}trapd.conf
 Source6:	%{name}trapd.sysconfig
 Source7:	ucd-ipchains.tar.gz
 # Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
+Source8:	snmpd.upstart
 Patch0:		%{name}-acfix.patch
 Patch1:		%{name}-rpm-implicit-libs.patch
 Patch2:		%{name}-config-noflags.patch
@@ -519,6 +520,9 @@ install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
 cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
 cp -a %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 
+install -d $RPM_BUILD_ROOT/etc/init
+cp -p %{SOURCE8} $RPM_BUILD_ROOT/etc/init/snmpd.conf
+
 cd perl
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -600,6 +604,7 @@ fi
 
 %attr(754,root,root) /etc/rc.d/init.d/snmpd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmpd
+%config(noreplace) %verify(not md5 mtime size) /etc/init/snmpd.conf
 
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.conf
 %attr(640,root,root) %config(missingok,noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.local.conf
