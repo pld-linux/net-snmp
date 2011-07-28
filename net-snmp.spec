@@ -27,12 +27,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.6.1
-Release:	5
+Version:	5.6.1.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	b4e30ead5783b0bb1d280172c6095ea4
+# Source0-md5:	79e2b9cac947567a01ae2cc67ad8fe53
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -79,7 +79,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpm
 BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.527
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
@@ -453,36 +453,37 @@ misc/ipfwacc \
 MIBS="$MIBS ucd-snmp/lmsensorsMib"
 %endif
 
+# ksm must be first in --with-security-modules
+# usm is always enabled
 %configure \
 	--disable-debugging \
 	--enable-as-needed \
-	%{!?with_static_libs:--disable-static} \
+	%{__disable static_libs static} \
 	--with-cflags="%{rpmcflags} %{rpmcppflags} -I/usr/include/et" \
 	--with-ldflags="%{rpmldflags}" \
 	--with-defaults \
 	--with-default-snmp-version=3 \
-	%{?with_kerberos5:--with-krb5=%{_prefix}} \
-	%{!?with_kerberos5:--without-krb5} \
-	--with-openssl=%{_prefix} \
-	--with-libwrap=%{_prefix} \
+	%{__with_without kerberos5 krb5} \
+	--with-openssl \
+	--with-libwrap \
 	--with-logfile=%{logfile} \
-	--with-zlib=%{_prefix} \
-	--with-bzip2=%{_prefix} \
+	--with-zlib\
+	--with-bzip2 \
 	--with-nl \
-	--with%{!?with_perl:out}-perl-modules \
-	--with%{!?with_python:out}-python-modules \
+	%{__with_without perl perl-modules} \
+	%{__with_without python python-modules} \
 	--enable-local-smux \
 	--with-mibdirs='$HOME/.snmp/mibs:/usr/share/mibs:%{_datadir}/snmp/mibs' \
 	--with-mib-modules="$MIBS" \
-	%{?with_kerberos5:--with-security-modules="ksm"} \
+	--with-security-modules="%{?with_kerberos5:ksm }tsm" \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
-	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback" \
+	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback Alias DTLSUDP TLSTCP" \
 	--with-persistent-directory="/var/lib/net-snmp" \
 	--enable-ucd-snmp-compatibility \
 	--enable-ipv6 \
 	%{!?debug:--disable-debugging} \
-	--with%{!?with_rpm:out}-rpm
+	%{__with_without rpm}
 
 %{__make} -j1
 
@@ -718,6 +719,7 @@ fi
 %attr(755,root,root) %{_bindir}/snmpstatus
 %attr(755,root,root) %{_bindir}/snmptable
 %attr(755,root,root) %{_bindir}/snmptest
+%attr(755,root,root) %{_bindir}/snmptls
 %attr(755,root,root) %{_bindir}/snmptranslate
 %attr(755,root,root) %{_bindir}/snmptrap
 %attr(755,root,root) %{_bindir}/snmpusm
