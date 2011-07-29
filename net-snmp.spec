@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.6.1.1
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -227,7 +227,7 @@ Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para desenvolvimento n
 Summary(ru.UTF-8):	Среда разработки для проекта UCD-SNMP
 Summary(uk.UTF-8):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-devel = %{version}-%{release}
 Requires:	openssl-devel >= 0.9.7d
 Obsoletes:	cmu-snmp-devel
 Obsoletes:	ucd-snmp-devel
@@ -533,10 +533,10 @@ install -p SNMP/examples/*.pl $RPM_BUILD_ROOT%{_examplesdir}/perl-SNMP-%{version
 cd ..
 
 # IP-Filter (non-Linux)
-rm -f $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
 rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
-rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
+%{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
 %if %{with static_libs}
@@ -553,7 +553,7 @@ for a in $RPM_BUILD_ROOT%{_libdir}/libnet*.a; do
 	fi
 done
 %else
-rm -f $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libsnmp.a
 %endif
 
 %if %{with python}
