@@ -6,9 +6,9 @@
  datarootdir=@datarootdir@
 -NSC_LDFLAGS="@LDFLAGS@"
 +NSC_LDFLAGS=""
+ 
+ NSC_LIBS="@LIBS@"
  NSC_LNETSNMPLIBS="@LNETSNMPLIBS@"
- NSC_INCLUDEDIR=${includedir}
- NSC_LIBDIR=-L${libdir}
 @@ -124,10 +124,10 @@
        ;;
      #################################################### compile

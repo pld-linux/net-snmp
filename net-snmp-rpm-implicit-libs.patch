@@ -1,20 +1,11 @@
---- net-snmp-5.5/configure.d/config_os_libs1~	2009-07-11 23:04:37.000000000 +0200
-+++ net-snmp-5.5/configure.d/config_os_libs1	2010-05-12 14:24:23.649259395 +0200
-@@ -310,18 +310,6 @@
-     NETSNMP_SEARCH_LIBS(BZ2_bzread, bz2,,, $LMIBLIBS, _rpmlibs)
-   fi
+--- net-snmp-5.7/configure.d/config_os_libs1~	2011-07-02 00:35:46.000000000 +0200
++++ net-snmp-5.7/configure.d/config_os_libs1	2011-07-30 21:24:38.780738542 +0200
+@@ -33,9 +33,6 @@
+   # FWIW librpm.la, librpmio.la, and libpopt.la have correct dependencies.
+   _rpmlibs=""
  
--  # two variants of db1 need checking.
--  NETSNMP_SEARCH_LIBS(dbopen, [db1 db],,, $LMIBLIBS, _rpmlibs)
--
--  # two variants of db3 need checking.
--  NETSNMP_SEARCH_LIBS(db_create, [db-3.1 db-3.0],,, $LMIBLIBS, _rpmlibs)
--  
--  # rpm-3.0.5 and later needs popt.
--  NETSNMP_SEARCH_LIBS(poptParseArgvString, popt,,, $LMIBLIBS, _rpmlibs)
--  
 -  # rpm-4.0.x needs rpmio.
--  NETSNMP_SEARCH_LIBS(Fopen, rpmio,,, $LMIBLIBS, _rpmlibs)
+-  NETSNMP_SEARCH_LIBS(rpmGetPath, rpmio,,, $LMIBLIBS, _rpmlibs)
 -  
    # rpm-4.0.3 librpmdb actually contains what we need.
    NETSNMP_SEARCH_LIBS(rpmdbOpen, rpmdb,,, $LMIBLIBS, _rpmlibs)

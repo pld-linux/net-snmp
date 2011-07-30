@@ -18,7 +18,7 @@
 %undefine	with_lm_sensors
 %endif
 
-%define		so_version	25
+%define		so_version	30
 %include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es.UTF-8):	Agente SNMP de la UCD
@@ -27,12 +27,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.6.1.1
-Release:	3
+Version:	5.7
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	79e2b9cac947567a01ae2cc67ad8fe53
+# Source0-md5:	1038e960d6d616c64c0979180daf0e19
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
