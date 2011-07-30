@@ -1,6 +1,6 @@
 description "SNMP Daemon"
 
-start on local-filesystems and pld.network-started and started SERVICE=syslog
+start on local-filesystems and pld.network-started and started SERVICE_syslog=y
 stop on pld.shutdown-started
 
 env SNMPD_LISTEN_ADDRS=
@@ -10,7 +10,7 @@ respawn
 script
 	# Source old-style snmpd service configuration
 	[ -f /etc/sysconfig/snmpd ] && . /etc/sysconfig/snmpd
-		
+
 	SNMPD_LISTEN_ADDRS=""
 	exec /usr/sbin/snmpd -f -p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS
 end script

@@ -28,7 +28,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.6.1.1
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -508,18 +508,18 @@ install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,/var/lib/n
 	mibdir=%{_datadir}/mibs \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.local.conf
 :> $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmp.conf
 :> $RPM_BUILD_ROOT%{logfile}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmpd
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
-cp -a %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmpd.conf
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
 
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
-cp -a %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
-cp -a %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
+cp -p %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
 
 install -d $RPM_BUILD_ROOT/etc/init
 cp -p %{SOURCE8} $RPM_BUILD_ROOT/etc/init/snmpd.conf
