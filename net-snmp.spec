@@ -1,6 +1,4 @@
 # TODO
-# - package or remove:
-#   %{_datadir}/snmp/snmp_perl.pl
 # - make noarch -n mibs-net-snmp package (need separate .spec then)
 # - FHS: #define NETSNMP_AGENTX_SOCKET "/var/agentx/master"
 # - php-snmp (and likely other bindings) use only %{_libdir}/libnetsnmp.so.*, move other libs back to main (daemon) package?
@@ -63,10 +61,12 @@ BuildRequires:	automake
 BuildRequires:	elfutils-devel
 %{?with_kerberos5:BuildRequires:	heimdal-devel}
 BuildRequires:	libnl-devel >= 1:3.0
+BuildRequires:	libssh2-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
 %{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	pciutils-devel
 %{?with_autodeps:BuildRequires:	perl-Term-ReadKey}
 BuildRequires:	perl-devel >= 1:5.8.0
 %if %{with python}
@@ -478,7 +478,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 	--with-security-modules="%{?with_kerberos5:ksm }tsm" \
 	--with-sys-contact="root@localhost" \
 	--with-sys-location="Unknown" \
-	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback Alias DTLSUDP TLSTCP" \
+	--with-transports="UDP UDPIPv6 TCP TCPIPv6 Unix Callback Alias DTLSUDP TLSTCP SSH" \
 	--with-persistent-directory="/var/lib/net-snmp" \
 	--enable-ucd-snmp-compatibility \
 	--enable-ipv6 \
@@ -535,8 +535,9 @@ cd ..
 # IP-Filter (non-Linux)
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
-rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
 %{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
+%{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/NetSNMP.{bs,so}
+rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
 %if %{with static_libs}
@@ -599,9 +600,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc README local
-%doc ChangeLog EXAMPLE.conf.def EXAMPLE.conf
-%doc FAQ NEWS PORTING README.snmpv3 TODO AGENT.txt
+%doc AGENT.txt CHANGES COPYING ChangeLog EXAMPLE.conf{,.def} FAQ NEWS README{,.agent-mibs,.agentx,.snmpv3,.sql,.thread} TODO local
 
 %attr(754,root,root) /etc/rc.d/init.d/snmpd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmpd
@@ -612,10 +611,10 @@ fi
 
 %attr(755,root,root) %{_sbindir}/snmpd
 %attr(755,root,root) %{_bindir}/net-snmp-create-v3-user
-
+%attr(755,root,root) %{_bindir}/sshtosnmp
 %dir %{_libdir}/snmp
 %dir %{_libdir}/snmp/dlmod
-
+%attr(755,root,root) %{_datadir}/snmp/snmp_perl.pl
 %{_mandir}/man1/net-snmp-create-v3-user.1*
 %{_mandir}/man5/snmpd.conf.5*
 %{_mandir}/man5/snmpd.examples.5*
@@ -629,8 +628,6 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%dir %{_sysconfdir}/snmp
-%dir %{_datadir}/snmp
 %attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*.*
@@ -641,6 +638,8 @@ fi
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.%{so_version}
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.%{so_version}
+%dir %{_sysconfdir}/snmp
+%dir %{_datadir}/snmp
 
 %files devel
 %defattr(644,root,root,755)
