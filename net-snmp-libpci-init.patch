@@ -11,9 +11,9 @@
 +  va_list args;
 +
 +  va_start(args, msg);
-+  fputs("pcilib: ", stderr);
-+  vfprintf(stderr, msg, args);
-+  fputc('\n', stderr);
++  snmp_log(LOG_ERR, "pcilib: ");
++  snmp_vlog(LOG_ERR, msg, args);
++  snmp_log(LOG_ERR, "\n");
 +  _net_snmp_pci_status = 0;
 +}
  #endif
