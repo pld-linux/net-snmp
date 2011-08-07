@@ -19,7 +19,7 @@
  #endif
  
  #ifdef HAVE_LINUX_ETHTOOL_H
-@@ -146,9 +158,14 @@
+@@ -146,9 +158,15 @@
  
  #ifdef HAVE_PCI_LOOKUP_NAME
      pci_access = pci_alloc();
@@ -31,6 +31,7 @@
 +	if (_net_snmp_pci_status == 0) {
 +	    pci_cleanup(pci_access);
 +	    pci_access = NULL;
++	    snmp_log(LOG_ERR, "Unable to create pci access method (libpci)\n");
 +	}
 +    } else
  	snmp_log(LOG_ERR, "Unable to create pci access method\n");
