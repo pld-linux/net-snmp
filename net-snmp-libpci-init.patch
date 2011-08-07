@@ -1,0 +1,37 @@
+--- net-snmp-5.7/agent/mibgroup/if-mib/data_access/interface_linux.c.orig	2011-07-02 00:35:46.000000000 +0200
++++ net-snmp-5.7/agent/mibgroup/if-mib/data_access/interface_linux.c	2011-08-07 21:10:45.760672551 +0200
+@@ -19,6 +19,18 @@
+ #ifdef HAVE_PCI_LOOKUP_NAME
+ #include <pci/pci.h>
+ static struct pci_access *pci_access;
++static int _net_snmp_pci_status = 1;
++
++static void _net_snmp_pci_error(char *msg, ...)
++{
++  va_list args;
++
++  va_start(args, msg);
++  fputs("pcilib: ", stderr);
++  vfprintf(stderr, msg, args);
++  fputc('\n', stderr);
++  _net_snmp_pci_status = 0;
++}
+ #endif
+ 
+ #ifdef HAVE_LINUX_ETHTOOL_H
+@@ -146,9 +158,13 @@
+ 
+ #ifdef HAVE_PCI_LOOKUP_NAME
+     pci_access = pci_alloc();
+-    if (pci_access)
++    if (pci_access) {
+ 	pci_init(pci_access);
+-    else
++	if (_net_snmp_pci_status == 0) {
++	    pci_cleanup(pci_access);
++	    pci_access = NULL;
++	}
++    } else
+ 	snmp_log(LOG_ERR, "Unable to create pci access method\n");
+ #endif
+ }
