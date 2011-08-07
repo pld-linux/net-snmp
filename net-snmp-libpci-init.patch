@@ -19,12 +19,13 @@
  #endif
  
  #ifdef HAVE_LINUX_ETHTOOL_H
-@@ -146,9 +158,13 @@
+@@ -146,9 +158,14 @@
  
  #ifdef HAVE_PCI_LOOKUP_NAME
      pci_access = pci_alloc();
 -    if (pci_access)
 +    if (pci_access) {
++	pci_access->error = _net_snmp_pci_error;
  	pci_init(pci_access);
 -    else
 +	if (_net_snmp_pci_status == 0) {
