@@ -25,12 +25,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.7
-Release:	4
+Version:	5.7.1
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	1038e960d6d616c64c0979180daf0e19
+# Source0-md5:	c95d08fd5d93df0c11a2e1bdf0e01e0b
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -540,7 +540,6 @@ cd ..
 %{__rm} $RPM_BUILD_ROOT%{_bindir}/ipf-mod.pl
 
 %{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/Bundle/Makefile.subs.pl
-%{__rm} $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/NetSNMP.{bs,so}
 rm -f $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod
 rm -f $RPM_BUILD_ROOT%{perl_vendorarch}/auto/Bundle/NetSNMP/.packlist
 
