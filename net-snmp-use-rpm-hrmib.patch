@@ -11,9 +11,9 @@
  void
  init_hr_swinst(void)
  {
---- net-snmp-5.4.1/configure.in	2008-05-15 13:05:07.559306690 +0300
-+++ net-snmp-5.4.1.hrmib/configure.in	2008-05-15 13:04:24.684830570 +0300
-@@ -2768,25 +2768,41 @@
+--- net-snmp-5.4.4/configure.in	2011-09-28 21:27:25.805107131 +0300
++++ net-snmp-5.4.4/configure.in	2011-09-28 21:32:32.285940150 +0300
+@@ -2800,19 +2800,35 @@
    fi
  ])
  
@@ -55,45 +55,33 @@
 +		with_rpm=no
 +	  fi
 +	fi
++
  #
  # rpm libraries only needed for the host resources mib software
  # installed tables (on linux in particular)
- #
- if test "x$with_rpm" != "xno" && \
-         echo " $module_list " | grep " host/hr_swinst " > /dev/null; then
-+
-   # ARG.  RPM is a real pain.
-   # FWIW librpm.la, librpmio.la, and libpopt.la have correct dependencies.
-   _rpmlibs=""
-@@ -2835,7 +2851,14 @@
-       CFLAGS="$CFLAGS -I/usr/include/rpm"
-     ],,-lrpm $_rpmlibs)
-   ])
-+
-+  OLDLIBS=$LIBS
-+  LIBS=$LMIBLIBS
-+  AC_CHECK_FUNCS(rpmGetPath)
-+  LIBS=$OLDLIBS
+@@ -2848,6 +2864,8 @@
+   )
  fi
-+
+ 
 +fi # with rpmlib
-   
++
  # libkvm
  AC_CHECK_LIB(kvm, kvm_read, [_libkvm="-lkvm"])
-@@ -3406,12 +3429,6 @@
+ AC_CHECK_FUNC(kvm_openfiles, AC_DEFINE(HAVE_KVM_OPENFILES, 1, [Define to 1 if you have the `kvm_openfiles' function.]),
+@@ -3423,12 +3441,6 @@
  # table_array helper support
  AC_CHECK_HEADERS(search.h)
  
 -# RPM subdirectory path (sigh)
 -if test "x$with_rpm" != "xno" && \
 -        echo " $module_list " | grep " host/hr_swinst " > /dev/null; then
--  AC_CHECK_HEADERS(rpm/rpmdb.h)
+-  AC_CHECK_HEADERS(rpm/rpmts.h, [], [], [[#include <rpm/rpmlib.h>]])
 -fi
 -
  # OpenBSD 2.6 needs netinet/in.h before netinet/in_pcb.h
  AC_MSG_CHECKING([[for netinet/in_pcb.h]])
  AC_CACHE_VAL(cv_have_netinet_in_pcb_h,
-@@ -3633,13 +3650,6 @@
+@@ -3650,14 +3662,6 @@
  AC_CHECK_FUNCS(random lrand48 rand)
  AC_CHECK_FUNCS(execv system fork getpid strncasecmp sigalrm)
  AC_CHECK_FUNCS(lseek64 pread64)
@@ -104,6 +92,7 @@
 -  AC_CHECK_FUNCS(rpmGetPath)
 -  LIBS=$OLDLIBS
 -fi
- 
+-
  AC_CHECK_FUNCS(getloadavg)
  AC_CHECK_FUNCS(getaddrinfo getipnodebyname gai_strerror)
+ # BSDi2 functions differ

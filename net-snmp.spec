@@ -4,6 +4,11 @@
 # - make noarch -n mibs-net-snmp package (need separate .spec then)
 # - FHS: #define NETSNMP_AGENTX_SOCKET "/var/agentx/master"
 # - php-snmp (and likely other bindings) use only %{_libdir}/libnetsnmp.so.*, move other libs back to main (daemon) package?
+#   /usr/lib64/python2.4/site-packages/netsnmp_python-1.0a1-py2.4.egg-info/PKG-INFO
+#   /usr/lib64/python2.4/site-packages/netsnmp_python-1.0a1-py2.4.egg-info/SOURCES.txt
+#   /usr/lib64/python2.4/site-packages/netsnmp_python-1.0a1-py2.4.egg-info/dependency_links.txt
+#   /usr/lib64/python2.4/site-packages/netsnmp_python-1.0a1-py2.4.egg-info/top_level.txt
+#   /usr/share/snmp/snmp_perl.pl
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -26,12 +31,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.4.2.1
-Release:	15
+Version:	5.4.4
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	984932520143f0c8bf7b7ce1fc9e1da1
+# Source0-md5:	95aa054f3c99a1ce242807d7eaf98619
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -41,7 +46,6 @@ Source6:	%{name}trapd.sysconfig
 Source7:	ucd-ipchains.tar.gz
 # Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
 Patch0:		%{name}-acfix.patch
-Patch1:		%{name}-rpm-implicit-libs.patch
 Patch2:		%{name}-config-noflags.patch
 Patch3:		%{name}-manpage.patch
 Patch4:		%{name}-link.patch
@@ -54,9 +58,7 @@ Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
 Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-snmpnetstat-getbulk.patch
-Patch15:	%{name}-subcontainer.patch
 Patch16:	%{name}-netlink.patch
-Patch18:	%{name}-src-dst-confusion.patch
 Patch19:	%{name}-loadave-writable.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.61-3
@@ -419,7 +421,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %prep
 %setup -q -a7
 %patch0 -p1
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -432,9 +433,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch15 -p1
 %patch16 -p1
-%patch18 -p3
 %patch19 -p1
 
 %build
@@ -486,7 +485,8 @@ MIBS="$MIBS ucd-snmp/lmSensors"
 	--enable-ipv6 \
 	--with%{!?with_rpm:out}-rpm
 
-%{__make} -j1
+%{__make} -j1 \
+	 PYMAKE='CFLAGS="%{rpmcflags} -DPy_ssize_t=int" python setup.py'
 
 cd perl
 

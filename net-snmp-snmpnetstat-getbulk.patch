@@ -1,13 +1,13 @@
---- net-snmp-5.4.2.1-dev/apps/snmpnetstat/inet.c	2009-01-22 18:26:23.264301468 +0200
-+++ net-snmp-5.4.2.1-dev/apps/snmpnetstat/inet.c	2009-01-22 18:48:30.400620330 +0200
-@@ -106,20 +106,65 @@
+--- net-snmp-5.4.4/apps/snmpnetstat/inet.c	2011-09-28 19:53:10.037278736 +0300
++++ net-snmp-5.4.4/apps/snmpnetstat/inet.c	2011-09-28 19:55:41.894279292 +0300
+@@ -106,20 +106,63 @@
  };
  #define TCP_NSTATES 11
  
 -void
 -tcpprotopr(const char *name)
 +static void
-+tcpprotoprint_line(const char *name, netsnmp_variable_list *vp, int *first)
++tcpprotoprint_line(const char *name, netsnmp_variable_list *vp, int *firstp)
  {
 -    netsnmp_variable_list *var, *vp;
 -    oid    tcpConnState_oid[] = { 1,3,6,1,2,1,6,13,1,1 };
@@ -23,11 +23,10 @@
 -    char  *cp;
 +
 +	state = *vp->val.integer;
-+	if (!aflag && state == MIB_TCPCONNSTATE_LISTEN) {
++	if (!aflag && state == MIB_TCPCONNSTATE_LISTEN)
 +		return;
-+	}
 +
-+	if (*first) {
++	if (*firstp) {
 +		printf("Active Internet (%s) Connections", name);
 +		if (aflag)
 +			printf(" (including servers)");
@@ -36,7 +35,7 @@
 +		printf("%-5.5s %*.*s %*.*s %s\n",
 +			   "Proto", -width, width, "Local Address",
 +						-width, width, "Remote Address", "(state)");
-+		*first = 0;
++		*firstp=0;
 +	}
 +	
 +	/* Extract the local/remote information from the index values */
@@ -46,23 +45,22 @@
 +	cp[2] = vp->name[ 12 ] & 0xff;
 +	cp[3] = vp->name[ 13 ] & 0xff;
 +	localAddr.s_addr = tmpAddr.addr.s_addr;
-+	localPort        = ntohs(vp->name[ 14 ]);
++	localPort        = ntohs((u_short)(vp->name[ 14 ]));
 +	cp = tmpAddr.data;
 +	cp[0] = vp->name[ 15 ] & 0xff;
 +	cp[1] = vp->name[ 16 ] & 0xff;
 +	cp[2] = vp->name[ 17 ] & 0xff;
 +	cp[3] = vp->name[ 18 ] & 0xff;
 +	remoteAddr.s_addr = tmpAddr.addr.s_addr;
-+	remotePort        = ntohs(vp->name[ 19 ]);
++	remotePort        = ntohs((u_short)(vp->name[ 19 ]));
 +
 +	printf("%-5.5s", name);
 +	inetprint(&localAddr,  localPort,  name, 1);
 +	inetprint(&remoteAddr, remotePort, name, 0);
-+	if (state < 1 || state > TCP_NSTATES) {
++	if ( state < 1 || state > TCP_NSTATES )
 +		printf("%d\n", state );
-+	} else {
-+		printf("%s\n", tcpstates[state]);
-+	}
++	else
++		printf("%s\n", tcpstates[ state ]);
 +}
 +
 +static void
@@ -72,7 +70,7 @@
      int    first = 1;
  
      /*
-@@ -127,7 +172,7 @@
+@@ -127,7 +170,7 @@
       *   the necessary information.
       */
      var = NULL;
@@ -81,7 +79,8 @@
                                     ASN_NULL, NULL,  0);
      if (!var)
          return;
-@@ -137,45 +182,111 @@
+@@ -136,47 +179,114 @@
+ 
      for (vp = var; vp ; vp=vp->next_variable) {
 -        state = *vp->val.integer;
 -        if (!aflag && state == MIB_TCPCONNSTATE_LISTEN)
@@ -106,14 +105,14 @@
 -        cp[2] = vp->name[ 12 ] & 0xff;
 -        cp[3] = vp->name[ 13 ] & 0xff;
 -        localAddr.s_addr = tmpAddr.addr.s_addr;
--        localPort        = ntohs(vp->name[ 14 ]);
+-        localPort        = ntohs((u_short)(vp->name[ 14 ]));
 -        cp = tmpAddr.data;
 -        cp[0] = vp->name[ 15 ] & 0xff;
 -        cp[1] = vp->name[ 16 ] & 0xff;
 -        cp[2] = vp->name[ 17 ] & 0xff;
 -        cp[3] = vp->name[ 18 ] & 0xff;
 -        remoteAddr.s_addr = tmpAddr.addr.s_addr;
--        remotePort        = ntohs(vp->name[ 19 ]);
+-        remotePort        = ntohs((u_short)(vp->name[ 19 ]));
 -
 -        printf("%-5.5s", name);
 -        inetprint(&localAddr,  localPort,  name, 1);
@@ -231,7 +230,9 @@
 +	}
 +}
 +
++
  /*
+  * Print a summary of UDP "connections"
 --- net-snmp-5.4.2.1/man/snmpnetstat.1.def	2009-01-22 18:43:30.073986008 +0200
 +++ net-snmp-5.4.2.1-dev/man/snmpnetstat.1.def	2009-01-22 18:57:34.170565184 +0200
 @@ -92,6 +92,12 @@

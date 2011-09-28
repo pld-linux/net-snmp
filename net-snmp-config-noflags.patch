@@ -1,14 +1,14 @@
---- net-snmp-5.2.1/net-snmp-config.in.orig	2005-01-05 16:12:52.000000000 +0100
-+++ net-snmp-5.2.1/net-snmp-config.in	2005-02-26 14:58:33.779999232 +0100
+--- net-snmp-5.4.4/net-snmp-config.in~	2011-09-28 19:26:54.000000000 +0300
++++ net-snmp-5.4.4/net-snmp-config.in	2011-09-28 19:27:55.470793542 +0300
 @@ -31,7 +31,7 @@
  exec_prefix=@exec_prefix@
  includedir=@includedir@
  libdir=@libdir@
 -NSC_LDFLAGS="@LDFLAGS@"
 +NSC_LDFLAGS=""
- NSC_INCLUDEDIR=${includedir}
- NSC_LIBDIR=-L${libdir}
- NSC_LIBS="@LIBS@ @WRAPLIBS@"
+ 
+ NSC_LIBS="@LIBS@"
+ NSC_LNETSNMPLIBS="@LNETSNMPLIBS@"
 @@ -89,10 +89,10 @@
        ;;
      #################################################### compile
