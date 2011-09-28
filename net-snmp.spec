@@ -3,6 +3,7 @@
 #   %{_datadir}/snmp/snmp_perl.pl
 # - make noarch -n mibs-net-snmp package (need separate .spec then)
 # - FHS: #define NETSNMP_AGENTX_SOCKET "/var/agentx/master"
+# - php-snmp (and likely other bindings) use only %{_libdir}/libnetsnmp.so.*, move other libs back to main (daemon) package?
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -625,6 +626,7 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/snmp
+%dir %{_datadir}/snmp
 %attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*
 %attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*
