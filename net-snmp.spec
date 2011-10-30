@@ -62,7 +62,7 @@ BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
 BuildRequires:	elfutils-devel
 %{?with_kerberos5:BuildRequires:	heimdal-devel}
-BuildRequires:	libnl-devel >= 1:3.0
+BuildRequires:	libnl-devel >= 1:3.2
 BuildRequires:	libssh2-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	libwrap-devel
@@ -170,7 +170,7 @@ Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 %{?with_kerberos5:Requires:	heimdal-devel}
-Requires:	libnl-devel >= 1:1.1
+Requires:	libnl-devel >= 1:3.2
 Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
 Requires:	openssl-devel >= 0.9.7c

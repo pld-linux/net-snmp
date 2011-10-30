@@ -63,3 +63,18 @@
  
  	if (tcp_head) {
  		DEBUGMSGTL(("mibII/tcpTable", "Loaded TCP Table using netlink\n"));
+--- net-snmp-5.7.1/configure.d/config_os_libs2.orig	2011-09-28 06:53:47.000000000 +0200
++++ net-snmp-5.7.1/configure.d/config_os_libs2	2011-10-30 12:25:15.940463045 +0100
+@@ -222,10 +222,11 @@
+ #
+ 
+ if test "x$with_nl" != "xno"; then
++    CPPFLAGS="$CPPFLAGS -I/usr/include/libnl3"
+     case $target_os in
+     linux*) # Check for libnl (linux)
+ 	NETSNMP_SEARCH_LIBS(
+-	    nl_connect, nl,
++	    nl_connect, nl-3,
+ 	    [AC_CHECK_HEADERS(netlink/netlink.h)],,, LMIBLIBS)
+     ;;
+     esac
