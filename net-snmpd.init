@@ -50,7 +50,7 @@ start() {
 	daemon /usr/bin/setsid /usr/sbin/snmpd \
 		$([ -n "$CONF_FILE" ] && echo "-C -c $CONF_FILE") \
 		$([ -n "$SNMPD_INITLIST" ] && echo "-I \"$SNMPD_INITLIST\"") \
-		$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-LSid" ) \
+		$(is_yes "$LOG_WARNINGS_MESSAGES_TO_SYSLOG" && echo "-LS0-4d" ) \
 		-p /var/run/snmpd.pid $SNMPD_LISTEN_ADDRS </dev/null
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snmpd
