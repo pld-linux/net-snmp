@@ -1,0 +1,45 @@
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=475158
+snmpd: keeps complaining on missing /proc/ stats inside vserver flooding syslog
+
+diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c net-snmp-5.4.1~dfsg.puck/agent/mibgroup/hardware/cpu/cpu_linux.c
+--- net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c	2007-02-16 00:09:45.000000000 +1300
++++ net-snmp-5.4.1~dfsg.puck/agent/mibgroup/hardware/cpu/cpu_linux.c	2009-05-04 14:35:53.000000000 +1200
+@@ -249,7 +249,7 @@
+             cpu->pageOut = (unsigned long)pout;
+ 	} else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
++		snmp_log(LOG_INFO, "No page line in %s\n", STAT_FILE);
+             cpu->pageIn  = cpu->pageOut = 0;
+ 	}
+ 	b = strstr(buff, "swap ");
+@@ -259,7 +259,7 @@
+             cpu->swapOut = (unsigned long)swpout;
+ 	} else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
++		snmp_log(LOG_INFO, "No swap line in %s\n", STAT_FILE);
+             cpu->swapIn  = cpu->swapOut = 0;
+ 	}
+     }
+diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5.4.1~dfsg.puck/agent/mibgroup/ucd-snmp/vmstat_linux.c
+--- net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c	2006-09-15 12:48:50.000000000 +1200
++++ net-snmp-5.4.1~dfsg.puck/agent/mibgroup/ucd-snmp/vmstat_linux.c	2009-05-04 14:35:32.000000000 +1200
+@@ -316,7 +316,7 @@
+ 	    sscanf(b, "page %u %u", pin, pout);
+ 	else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
++		snmp_log(LOG_INFO, "No page line in %s\n", STAT_FILE);
+ 	    *pin = *pout = 0;
+ 	}
+ 	b = strstr(buff, "swap ");
+@@ -324,7 +324,7 @@
+ 	    sscanf(b, "swap %u %u", swpin, swpout);
+ 	else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
++		snmp_log(LOG_INFO, "No swap line in %s\n", STAT_FILE);
+ 	    *swpin = *swpout = 0;
+ 	}
+     }
