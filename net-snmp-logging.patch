@@ -53,3 +53,28 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5
 +	first = 0;
  }
  
+--- net-snmp-5.7.1/./agent/mibgroup/ucd-snmp/diskio.c~	2011-09-28 07:53:47.000000000 +0300
++++ net-snmp-5.7.1/./agent/mibgroup/ucd-snmp/diskio.c	2011-12-27 16:33:10.128099629 +0200
+@@ -979,7 +979,8 @@
+ {
+     FILE* parts;
+     time_t now;
+-    
++    static int first = 1;
++
+     now = time(NULL);
+     if (cache_time + CACHE_TIMEOUT > now) {
+         return 0;
+@@ -1024,7 +1025,11 @@
+ 	int rc;
+ 	parts = fopen("/proc/partitions", "r");
+ 	if (!parts) {
+-	    snmp_log_perror("/proc/partitions");
++	    if (first) {
++		// log error only once
++		snmp_log_perror("/proc/partitions");
++		first = 0;
++	    }
+ 	    return 1;
+ 	}
+ 
