@@ -43,3 +43,13 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5
  	    *swpin = *swpout = 0;
  	}
      }
+--- net-snmp-5.4.1~dfsg.orig/agent/mibgroup/hardware/cpu/cpu_linux.c
++++ net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c
+@@ -284,6 +284,6 @@
+            snmp_log(LOG_ERR, "No ctxt line in %s\n", STAT_FILE);
+     }
+ 
+-
++  first = 0;
+ }
+
