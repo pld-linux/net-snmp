@@ -15,5 +15,6 @@ LOG_WARNINGS_MESSAGES_TO_SYSLOG=yes
 #SNMPD_LISTEN_ADDRS="udp:127.0.0.1"
 
 # Module names that should (not) be loaded, see '-I' snmpd option
+# To get compiled in list, invoke: 'net-snmp-config --snmpd-module-list'
 # for example we don't want diskio inside vserver (no /proc/diskstats or /proc partitions)
 #SNMPD_INITLIST="-diskio"
