@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.7.1
-Release:	5
+Release:	6
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -463,6 +463,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 # ksm must be first in --with-security-modules
 # usm is always enabled
 %configure \
+	ac_cv_path_DPKG_QUERY_PATH= \
 	--disable-debugging \
 	--enable-as-needed \
 	%{__disable static_libs static} \
