@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.7.1
-Release:	6
+Release:	7
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -57,7 +57,8 @@ Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch14:	%{name}-libnl.patch
 Patch15:	%{name}-libpci-init.patch
 Patch16:	%{name}-recognize-reiserfs.patch
-Patch17:	net-snmp-logging.patch
+Patch17:	%{name}-logging.patch
+Patch18:	bug-3460364.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -439,6 +440,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch15 -p1
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 %build
 %{__libtoolize}
