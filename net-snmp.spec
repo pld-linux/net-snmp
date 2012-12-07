@@ -25,12 +25,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.7.1
-Release:	7
+Version:	5.7.2
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	c95d08fd5d93df0c11a2e1bdf0e01e0b
+# Source0-md5:	5bddd02e2f82b62daa79f82717737a14
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -56,9 +56,8 @@ Patch12:	%{name}-use-rpm-hrmib.patch
 Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch14:	%{name}-libnl.patch
 Patch15:	%{name}-libpci-init.patch
-Patch16:	%{name}-recognize-reiserfs.patch
+
 Patch17:	%{name}-logging.patch
-Patch18:	bug-3460364.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -438,9 +437,8 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
-%patch16 -p1
+
 %patch17 -p1
-%patch18 -p1
 
 %build
 %{__libtoolize}

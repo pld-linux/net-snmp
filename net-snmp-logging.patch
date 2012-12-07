@@ -43,16 +43,6 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5
  	    *swpin = *swpout = 0;
  	}
      }
---- net-snmp-5.7.1/./agent/mibgroup/hardware/cpu/cpu_linux.c~	2011-12-27 15:05:21.000000000 +0200
-+++ net-snmp-5.7.1/./agent/mibgroup/hardware/cpu/cpu_linux.c	2011-12-27 15:06:39.795180506 +0200
-@@ -320,5 +320,7 @@
- 	if (first)
- 	    snmp_log(LOG_ERR, "No ctxt line in %s\n", STAT_FILE);
-     }
-+
-+	first = 0;
- }
- 
 --- net-snmp-5.7.1/./agent/mibgroup/ucd-snmp/diskio.c~	2011-09-28 07:53:47.000000000 +0300
 +++ net-snmp-5.7.1/./agent/mibgroup/ucd-snmp/diskio.c	2011-12-27 16:33:10.128099629 +0200
 @@ -979,7 +979,8 @@
