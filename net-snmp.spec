@@ -464,7 +464,6 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 # usm is always enabled
 %configure \
 	ac_cv_path_DPKG_QUERY_PATH= \
-	--disable-debugging \
 	--enable-as-needed \
 	%{__disable static_libs static} \
 	--with-cflags="%{rpmcflags} %{rpmcppflags} -I/usr/include/et" \
