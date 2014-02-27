@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.7.2
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -480,7 +480,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 	%{__with_without perl perl-modules} \
 	%{__with_without python python-modules} \
 	--enable-local-smux \
-	--with-mibdirs='$HOME/.snmp/mibs:/usr/share/mibs:%{_datadir}/snmp/mibs' \
+	--with-mibdirs='$HOME/.snmp/mibs:/usr/share/mibs' \
 	--with-mib-modules="$MIBS" \
 	--with-security-modules="%{?with_kerberos5:ksm }tsm" \
 	--with-sys-contact="root@localhost" \
