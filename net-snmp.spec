@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.7.2.1
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -764,16 +764,13 @@ fi
 %{perl_vendorarch}/NetSNMP
 %dir %{perl_vendorarch}/auto/SNMP
 %{perl_vendorarch}/auto/SNMP/autosplit.ix
-%{perl_vendorarch}/auto/SNMP/SNMP.bs
 %attr(755,root,root) %{perl_vendorarch}/auto/SNMP/SNMP.so
 %dir %{perl_vendorarch}/auto/NetSNMP
 %dir %{perl_vendorarch}/auto/NetSNMP/*
 %{perl_vendorarch}/auto/NetSNMP/*/autosplit.ix
-%{perl_vendorarch}/auto/NetSNMP/*/*.bs
 %attr(755,root,root) %{perl_vendorarch}/auto/NetSNMP/*/*.so
 %dir %{perl_vendorarch}/auto/NetSNMP/agent/default_store
 %{perl_vendorarch}/auto/NetSNMP/agent/default_store/autosplit.ix
-%{perl_vendorarch}/auto/NetSNMP/agent/default_store/default_store.bs
 %attr(755,root,root) %{perl_vendorarch}/auto/NetSNMP/agent/default_store/default_store.so
 %{_mandir}/man3/NetSNMP::*.3*
 %{_mandir}/man3/SNMP.3*
