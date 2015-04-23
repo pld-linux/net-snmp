@@ -12,7 +12,7 @@
 %bcond_without	python		# don't include Python modules
 %bcond_without	static_libs	# don't build static library
 
-%ifnarch %{ix86} %{x8664}
+%ifnarch %{ix86} %{x8664} x32
 %undefine	with_lm_sensors
 %endif
 
@@ -26,7 +26,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.7.3
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
