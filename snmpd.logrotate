@@ -1,0 +1,10 @@
+/var/log/snmpd.log
+{
+	create 640 root root
+	postrotate
+		. /etc/sysconfig/snmpd
+		if [ "${LOG_WARNINGS_MESSAGES_TO_SYSLOG:-yes}" = "no" ]; then
+			/sbin/service snmpd reload >/dev/null
+		fi
+	endscript
+}
