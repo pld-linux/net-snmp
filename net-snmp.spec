@@ -40,6 +40,7 @@ Source6:	%{name}trapd.sysconfig
 Source7:	ucd-ipchains.tar.gz
 # Source7-md5:	29949f1008f1a04d6efefd5b3ea607da
 Source8:	snmpd.upstart
+Source9:	snmpd.logrotate
 Patch0:		%{name}-acfix.patch
 Patch1:		%{name}-rpm-implicit-libs.patch
 Patch2:		%{name}-config-noflags.patch
@@ -510,7 +511,7 @@ bd=$(cd ..; pwd)
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,sysconfig,snmp},/var/log,/var/lib/net-snmp,%{_libdir}/snmp/dlmod}
+install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,logrotate.d,sysconfig,snmp},/var/log,/var/lib/net-snmp,%{_libdir}/snmp/dlmod}
 
 %{__make} -j1 install \
 	mibdir=%{_datadir}/mibs \
@@ -528,6 +529,8 @@ cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/snmpd
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d/snmptrapd
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/snmp/snmptrapd.conf
 cp -p %{SOURCE6} $RPM_BUILD_ROOT/etc/sysconfig/snmptrapd
+
+cp -p %{SOURCE9} $RPM_BUILD_ROOT/etc/logrotate.d/snmpd
 
 install -d $RPM_BUILD_ROOT/etc/init
 cp -p %{SOURCE8} $RPM_BUILD_ROOT/etc/init/snmpd.conf
@@ -611,6 +614,7 @@ fi
 
 %attr(754,root,root) /etc/rc.d/init.d/snmpd
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/snmpd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/snmpd
 %config(noreplace) %verify(not md5 mtime size) /etc/init/snmpd.conf
 
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snmp/snmpd.conf
