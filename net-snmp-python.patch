@@ -5,7 +5,7 @@
  
  pythoninstall:
 -	@(dir=`pwd`; cd python; $(PYMAKE) install --basedir=$$dir) ; \
-+	@(dir=`pwd`; cd python; $(PYMAKE) install --optimize=2 --root=$(DESTDIR) --basedir=$$dir) ; \
++	@(dir=`pwd`; cd python; $(PYMAKE) install --optimize=2 --root=$(DESTDIR) --prefix=$(prefix) --basedir=$$dir) ; \
          if test $$? != 0 ; then \
             exit 1 ; \
          fi
