@@ -56,14 +56,14 @@ Signed-Off-By: Elan Ruusamäe <glen@pld-linux.org>
 +    char arch[SNMP_MAXBUF];
      char status[SNMP_MAXBUF];
      char buf[BUFSIZ];
-+    struct stat	stat_buf;
++    struct stat stat_buf;
      netsnmp_swinst_entry *entry;
 +    u_char *date_buf;
 +    size_t date_len;
      int i = 0;
  
      if (p == NULL) {
-@@ -78,20 +86,37 @@
+@@ -78,20 +86,39 @@
              continue;   /* error already logged by function */
          CONTAINER_INSERT(container, entry);
  
@@ -92,9 +92,11 @@ Signed-Off-By: Elan Ruusamäe <glen@pld-linux.org>
 +        } else {
 +            /* somewhy some files include :arch in .list name */
 +            snprintf(file, sizeof(file), "%s/%s:%s.list", pkg_directory, package, arch);
-+            date_buf = date_n_time(&stat_buf.st_mtime, &date_len);
-+            entry->swDate_len = date_len;
-+            memcpy(entry->swDate, date_buf, entry->swDate_len);
++            if(stat(file, &stat_buf) != -1) {
++                date_buf = date_n_time(&stat_buf.st_mtime, &date_len);
++                entry->swDate_len = date_len;
++                memcpy(entry->swDate, date_buf, entry->swDate_len);
++            }
 +        }
 +        /* FIXME, or fallback to whatever nonsesnse was here before, or leave it uninitialied?
 +             else {
