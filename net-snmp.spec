@@ -1,7 +1,6 @@
 # TODO
 # - make noarch -n mibs-net-snmp package (need separate .spec then)
 # - FHS: #define NETSNMP_AGENTX_SOCKET "/var/agentx/master"
-# - php-snmp (and likely other bindings) use only %{_libdir}/libnetsnmp.so.*, move other libs back to main (daemon) package?
 #
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages only for deps resolving
@@ -26,7 +25,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.7.3
-Release:	8
+Release:	9
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -82,6 +81,7 @@ BuildRequires:	rpm-perlprov >= 3.0.3-16
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.527
 Requires(post,preun):	/sbin/chkconfig
+Requires:	%{name}-agent-libs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/usr/bin/setsid
 Requires:	mibs-%{name} = %{version}-%{release}
@@ -158,6 +158,15 @@ NET SNMP libraries.
 %description libs -l pl.UTF-8
 Biblioteki SNMP.
 
+%package agent-libs
+Summary:	The NET-SNMP runtime agent libraries
+Group:		Libraries
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description agent-libs
+The net-snmp-agent-libs package contains the runtime agent libraries
+for shared binaries and applications.
+
 %package devel
 Summary:	The development environment for the net-snmp project
 Summary(es.UTF-8):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
@@ -166,6 +175,7 @@ Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para desenvolvimento n
 Summary(ru.UTF-8):	Среда разработки для проекта UCD-SNMP
 Summary(uk.UTF-8):	Середовище розробки для проекту UCD-SNMP
 Group:		Development/Libraries
+Requires:	%{name}-agent-libs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 %{?with_kerberos5:Requires:	heimdal-devel}
@@ -323,6 +333,7 @@ Summary(ru.UTF-8):	Утилиты управления сетью по SNMP из
 Summary(uk.UTF-8):	Утиліти керування мережею по SNMP з проекту NET-SNMP
 Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-agent-libs = %{version}-%{release}
 Suggests:	mibs-%{name} = %{version}-%{release}
 Obsoletes:	cmu-snmp-utils
 Obsoletes:	ucd-snmp-utils
@@ -355,6 +366,7 @@ como: snmpwalk, snmptest e outros.
 Summary:	SNMP and NetSNMP::* Perl modules
 Summary(pl.UTF-8):	Moduły Perla SNMP oraz NetSNMP::*
 Group:		Development/Languages/Perl
+Requires:	%{name}-agent-libs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Conflicts:	ucd-snmp-utils-perl
 
@@ -586,6 +598,9 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
+%post	agent-libs -p /sbin/ldconfig
+%postun	agent-libs -p /sbin/ldconfig
+
 %triggerpostun -- ucd-snmp
 /sbin/chkconfig --add snmpd
 
@@ -635,17 +650,20 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*.*
-%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.%{so_version}
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.%{so_version}
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.%{so_version}
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.%{so_version}
 %dir %{_sysconfdir}/snmp
 %dir %{_datadir}/snmp
+
+%files agent-libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.%{so_version}
+%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
+%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.%{so_version}
+%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.%{so_version}
 
 %files devel
 %defattr(644,root,root,755)
