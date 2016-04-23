@@ -47,7 +47,7 @@ Signed-Off-By: Elan Ruusamäe <glen@pld-linux.org>
  netsnmp_swinst_arch_load( netsnmp_container *container, u_int flags)
  {
 -    FILE *p = popen("dpkg-query --show --showformat '${Package}#${Version}#${Section}#${Priority}#${Essential}#${Status}\n'", "r");
-+    FILE *p = popen("dpkg-query --show --showformat '${Package}#${Version}#${Section}#${Priority}#${Essential}#${Archidecture}#${Status}\n'", "r");
++    FILE *p = popen("dpkg-query --show --showformat '${Package}#${Version}#${Section}#${Priority}#${Essential}#${Architecture}#${Status}\n'", "r");
      char package[SNMP_MAXBUF];
      char version[SNMP_MAXBUF];
      char section[SNMP_MAXBUF];
