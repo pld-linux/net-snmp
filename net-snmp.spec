@@ -24,6 +24,7 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
+# NOTE: 5.7.x is LTS version
 Version:	5.7.3
 Release:	9
 License:	BSD-like
@@ -47,7 +48,7 @@ Patch4:		%{name}-link.patch
 Patch5:		%{name}-llinterfaces.patch
 Patch6:		%{name}-kernel_headers.patch
 Patch7:		%{name}-rpmpath.patch
-
+Patch8:		swinst_apt.patch
 Patch9:		%{name}-python.patch
 Patch10:	%{name}-lvalue.patch
 Patch11:	%{name}-defaultconfig.patch
