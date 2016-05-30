@@ -1,6 +1,7 @@
 /var/log/snmpd.log
 {
 	create 640 root root
+	delaycompress
 	postrotate
 		. /etc/sysconfig/snmpd
 		if [ "${LOG_WARNINGS_MESSAGES_TO_SYSLOG:-yes}" = "no" ]; then
