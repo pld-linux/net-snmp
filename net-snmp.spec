@@ -162,6 +162,7 @@ Biblioteki SNMP.
 
 %package agent-libs
 Summary:	The NET-SNMP runtime agent libraries
+Summary(pl.UTF-8):	Biblioteki uruchomieniowe agenta NET-SNMP
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -169,13 +170,16 @@ Requires:	%{name}-libs = %{version}-%{release}
 The net-snmp-agent-libs package contains the runtime agent libraries
 for shared binaries and applications.
 
+%description agent-libs -l pl.UTF-8
+Ten pakiet zawiera biblioteki uruchomieniowe agenta SNMP.
+
 %package devel
 Summary:	The development environment for the net-snmp project
 Summary(es.UTF-8):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
 Summary(pl.UTF-8):	Pliki dla programistów używających bibliotek net-snmp
 Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
-Summary(ru.UTF-8):	Среда разработки для проекта UCD-SNMP
-Summary(uk.UTF-8):	Середовище розробки для проекту UCD-SNMP
+Summary(ru.UTF-8):	Среда разработки для проекта NET-SNMP
+Summary(uk.UTF-8):	Середовище розробки для проекту NET-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-agent-libs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
@@ -235,12 +239,12 @@ Statyczne biblioteki net-snmp.
 Bibliotecas estáticas para desenvolvimento com net-snmp.
 
 %package compat-devel
-Summary:	The development environment for the UCD-SNMP project
+Summary:	The development environment for the NET-SNMP project
 Summary(es.UTF-8):	Archivos de inclusión y bibliotecas para desarrollo en el SNMP de la UCD
-Summary(pl.UTF-8):	Pliki dla programistów używających bibliotek UCD-SNMP
+Summary(pl.UTF-8):	Pliki dla programistów używających bibliotek NET-SNMP
 Summary(pt_BR.UTF-8):	Arquivos de inclusão e bibliotecas para desenvolvimento no SNMP da UCD
-Summary(ru.UTF-8):	Среда разработки для проекта UCD-SNMP
-Summary(uk.UTF-8):	Середовище розробки для проекту UCD-SNMP
+Summary(ru.UTF-8):	Среда разработки для проекта NET-SNMP
+Summary(uk.UTF-8):	Середовище розробки для проекту NET-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	openssl-devel >= 0.9.7d
@@ -249,7 +253,7 @@ Obsoletes:	ucd-snmp-devel
 
 %description compat-devel
 The ucd-snmp-devel package contains the development libraries and
-header files for use with the UCD-SNMP project's network management
+header files for use with the NET-SNMP project's network management
 tools.
 
 %description compat-devel -l es.UTF-8
@@ -268,27 +272,27 @@ para uso no gerenciamento de redes.
 
 %description compat-devel -l ru.UTF-8
 Пакет ucd-snmp-devel содержит библиотеки разработчика и хедера для
-использования с утилитами управления сетью проекта UCD-SNMP.
+использования с утилитами управления сетью проекта NET-SNMP.
 
 %description compat-devel -l uk.UTF-8
 Пакет ucd-snmp-devel містить бібліотеки програміста та хедери для
-використання з утилітами керування мережею проекту UCD-SNMP.
+використання з утилітами керування мережею проекту NET-SNMP.
 
 %package compat-static
-Summary:	Static UCD-SNMP libraries
-Summary(pl.UTF-8):	Statyczne biblioteki UCD-SNMP
+Summary:	Static NET-SNMP libraries
+Summary(pl.UTF-8):	Statyczne biblioteki NET-SNMP
 Summary(pt_BR.UTF-8):	Bibliotecas estáticas para desenvolvimento com ucd-snmp
-Summary(ru.UTF-8):	Статические библиотеки для проекта UCD-SNMP
-Summary(uk.UTF-8):	Статичні бібліотеки для проекту UCD-SNMP
+Summary(ru.UTF-8):	Статические библиотеки для проекта NET-SNMP
+Summary(uk.UTF-8):	Статичні бібліотеки для проекту NET-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-compat-devel = %{version}-%{release}
 Obsoletes:	ucd-snmp-static
 
 %description compat-static
-Static UCD-SNMP libraries.
+Static NET-SNMP libraries.
 
 %description compat-static -l pl.UTF-8
-Statyczne biblioteki UCD-SNMP.
+Statyczne biblioteki NET-SNMP.
 
 %description compat-static -l pt_BR.UTF-8
 Bibliotecas estáticas para desenvolvimento com ucd-snmp.
