@@ -1,0 +1,24 @@
+Bug 1314610 - snmpd complaining twice "Cannot statfs net:[********]#***: No such file or directory" every 10 minutes
+https://bugzilla.redhat.com/show_bug.cgi?id=1314610
+
+diff -urNp old/agent/mibgroup/hardware/fsys/fsys_mntctl.c new/agent/mibgroup/hardware/fsys/fsys_mntctl.c
+--- old/agent/mibgroup/hardware/fsys/fsys_mntctl.c	2017-10-11 14:54:48.111065174 +0200
++++ new/agent/mibgroup/hardware/fsys/fsys_mntctl.c	2017-10-11 15:11:16.996918197 +0200
+@@ -88,7 +88,6 @@ netsnmp_fsys_arch_load( void )
+     char          *path;
+     struct statfs  stat_buf;
+     netsnmp_fsys_info *entry;
+-    char               tmpbuf[1024];
+ 
+     /*
+      * Retrieve information about the currently mounted filesystems...
+@@ -160,8 +159,7 @@ netsnmp_fsys_arch_load( void )
+             continue;
+ 
+         if ( statfs( entry->path, &stat_buf ) < 0 ) {
+-            snprintf( tmpbuf, sizeof(tmpbuf), "Cannot statfs %s", entry->path );
+-            snmp_log_perror( tmpbuf );
++            NETSNMP_LOGONCE(( LOG_ERROR, "Cannot statfs %s", entry->path ));
+             continue;
+         }
+         entry->units =  stat_buf.f_bsize;

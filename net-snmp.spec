@@ -26,7 +26,7 @@ Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від
 Name:		net-snmp
 # NOTE: 5.7.x is LTS version
 Version:	5.7.3
-Release:	14
+Release:	15
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -57,6 +57,7 @@ Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch14:	%{name}-logging.patch
 Patch15:	%{name}-Remove-U64-typedef.patch
 Patch16:	%{name}-Fix-Makefile-PL.patch
+Patch17:	1314610.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -458,6 +459,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
+%patch17 -p1
 
 %build
 %{__libtoolize}
