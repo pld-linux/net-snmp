@@ -11,14 +11,14 @@
  void
  init_hr_swinst(void)
  {
---- net-snmp-5.6/configure.d/config_os_libs1.orig	2010-10-24 10:37:25.527741043 +0200
-+++ net-snmp-5.6/configure.d/config_os_libs1	2010-10-24 10:40:56.519744396 +0200
-@@ -425,20 +425,34 @@
+--- net-snmp-5.8/configure.d/config_os_libs1.orig	2018-08-25 22:50:35.841023154 +0200
++++ net-snmp-5.8/configure.d/config_os_libs1	2018-08-26 08:07:04.487308581 +0200
+@@ -11,18 +11,33 @@
  #   RPM checks
  #
  ##
 -AC_CHECK_HEADERS(rpm/rpmlib.h rpm/header.h)
--
+ 
 -AC_CHECK_HEADER(rpm/rpmlib.h,rpmlib_h=yes,rpmlib_h=no)
 -AC_CHECK_HEADER(rpm/header.h,rpmheader_h=yes,rpmheader_h=no)
 -
@@ -28,7 +28,6 @@
 -  else
 -    with_rpm=no
 -  fi
-+#
 +# check if we can use rpm hrmib export
 +if test "$with_rpm" != "no" ; then
 +       AC_PATH_PROG([RPM], rpm)
@@ -56,23 +55,21 @@
 +         fi
 +       fi
  
--#
- # rpm libraries only needed for the host resources mib software
- # installed tables (on linux in particular)
  #
-@@ -490,6 +504,12 @@
-     AC_DEFINE([_RPM_4_4_COMPAT], [], [Define if you have RPM 4.6 or newer to turn on legacy API]),
-     [[#include <rpm/rpmlib.h>]]
-   )
+ # rpm libraries only needed for the host resources mib software
+@@ -46,6 +61,12 @@
+   NETSNMP_SEARCH_LIBS(headerGet,, [
+     AC_DEFINE(HAVE_HEADERGET, 1,
+       [Define to 1 if you have the headerGet function.])],, $LMIBLIBS)
 +
 +  OLDLIBS=$LIBS
 +  LIBS=$LMIBLIBS
 +  AC_CHECK_FUNCS([rpmGetPath])
 +  LIBS=$OLDLIBS
-+ fi
++fi
  fi
  
- ##
+ #
 --- net-snmp-5.5/configure.d/config_os_functions~	2009-07-26 20:20:55.000000000 +0200
 +++ net-snmp-5.5/configure.d/config_os_functions	2010-05-12 14:35:39.421276242 +0200
 @@ -114,15 +114,6 @@
