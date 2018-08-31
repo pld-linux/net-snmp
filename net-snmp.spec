@@ -47,13 +47,14 @@ Patch4:		%{name}-link.patch
 Patch5:		%{name}-llinterfaces.patch
 Patch6:		%{name}-kernel_headers.patch
 Patch7:		%{name}-rpmpath.patch
-Patch9:		%{name}-python.patch
-Patch10:	%{name}-lvalue.patch
-Patch11:	%{name}-defaultconfig.patch
-Patch12:	%{name}-use-rpm-hrmib.patch
-Patch13:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
-Patch14:	%{name}-logging.patch
-Patch17:	1314610.patch
+Patch8:		%{name}-python.patch
+Patch9:	%{name}-lvalue.patch
+Patch10:	%{name}-defaultconfig.patch
+Patch11:	%{name}-use-rpm-hrmib.patch
+Patch12:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
+Patch13:	%{name}-logging.patch
+Patch14:	%{name}-Remove-U64-typedef.patch
+Patch15:	1314610.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -449,13 +450,14 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
-%patch17 -p1
+%patch15 -p1
 
 %build
 %{__libtoolize}
