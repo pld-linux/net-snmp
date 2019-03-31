@@ -25,7 +25,7 @@ Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від
 Name:		net-snmp
 # NOTE: 5.7.x is LTS version
 Version:	5.8
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
