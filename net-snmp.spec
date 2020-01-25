@@ -15,7 +15,6 @@
 %endif
 
 %define		so_version	35
-%include	/usr/lib/rpm/macros.perl
 Summary:	A collection of SNMP protocol tools
 Summary(es.UTF-8):	Agente SNMP de la UCD
 Summary(pl.UTF-8):	Kolekcja narzędzi do obsługi protokołu SNMP
