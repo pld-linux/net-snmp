@@ -458,6 +458,9 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch14 -p1
 %patch15 -p1
 
+%{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+perl(\s|$),#!%{__perl}\1,' \
+      perl/SNMP/examples/pingmib.pl
+
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
