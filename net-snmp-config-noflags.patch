@@ -1,15 +1,15 @@
---- net-snmp-5.6/net-snmp-config.in.orig	2010-05-30 22:19:04.000000000 +0200
-+++ net-snmp-5.6/net-snmp-config.in	2010-10-24 10:12:12.899734339 +0200
-@@ -46,7 +46,7 @@
- includedir=@includedir@
+--- net-snmp-5.9/net-snmp-config.in.orig	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/net-snmp-config.in	2020-10-04 16:22:22.709873262 +0200
+@@ -49,7 +49,7 @@
  libdir=@libdir@
- datarootdir=@datarootdir@
+ # Avoid that configure complains that this script ignores @datarootdir@
+ echo "@datarootdir@" >/dev/null
 -NSC_LDFLAGS="@LDFLAGS@"
 +NSC_LDFLAGS=""
  
  NSC_LIBS="@LIBS@"
  NSC_LNETSNMPLIBS="@LNETSNMPLIBS@"
-@@ -124,10 +124,10 @@
+@@ -143,10 +143,10 @@
        ;;
      #################################################### compile
      --base-cflags)
@@ -22,12 +22,12 @@
        ;;
      --srcdir)
        echo $NSC_SRCDIR
-@@ -585,7 +585,7 @@
+@@ -660,7 +660,7 @@
          echo "Ack.  Can't create $tmpfile."
  	exit 1
        fi
 -      cmd="@CC@ $cflags @CFLAGS@ @DEVFLAGS@ -I. -I${NSC_INCLUDEDIR} -o $outname $tmpfile $cfiles $NSC_LDFLAGS $NSC_LIBDIR $NSC_BASE_AGENT_LIBS $NSC_AGENTLIBS $ldflags"
 +      cmd="@CC@ $cflags @DEVFLAGS@ -I. -I${NSC_INCLUDEDIR} -o $outname $tmpfile $cfiles $NSC_LDFLAGS $NSC_LIBDIR $NSC_BASE_AGENT_LIBS $NSC_AGENTLIBS $ldflags"
        echo "running: $cmd"
-       `$cmd`
-       if test "x$norm" != "x1" ; then
+       echo `$cmd`
+       result=$?
