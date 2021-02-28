@@ -308,9 +308,7 @@ Group:		Applications/System
 Requires:	mibs-dirs
 Obsoletes:	net-snmp-mibs
 Conflicts:	ucd-snmp-libs
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description -n mibs-net-snmp
 Net-SNMP provided MIBs (Management Information Base).
