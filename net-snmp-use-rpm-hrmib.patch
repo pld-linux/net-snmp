@@ -1,7 +1,43 @@
---- net-snmp-5.4.1/agent/mibgroup/host/hr_swinst.c	2008-05-15 13:05:07.575307614 +0300
-+++ net-snmp-5.4.1.hrmib/agent/mibgroup/host/hr_swinst.c	2008-05-15 13:04:24.676830108 +0300
-@@ -183,6 +183,10 @@
- #define	_PATH_HRSW_directory	"/var/db/pkg"
+diff -urNp -x '*.orig' net-snmp-5.9.org/agent/mibgroup/host/data_access/swinst.h net-snmp-5.9/agent/mibgroup/host/data_access/swinst.h
+--- net-snmp-5.9.org/agent/mibgroup/host/data_access/swinst.h	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/agent/mibgroup/host/data_access/swinst.h	2021-02-28 14:29:14.950860864 +0100
+@@ -11,6 +11,10 @@
+ #ifndef NETSNMP_ACCESS_SWINST_CONFIG_H
+ #define NETSNMP_ACCESS_SWINST_CONFIG_H
+ 
++// quick fix: this file is consulted before RPM_HRMIB_PATH check is made in configure, hardcode a define for now
++#define RPM_HRMIB_PATH "/var/cache/hrmib"
++
++
+ /*
+  * all platforms use this generic code
+  */
+@@ -25,7 +29,7 @@ config_exclude(host/hr_swinst)
+     config_require(host/data_access/swinst_apt)
+ #elif defined( HAVE_LIBRPM ) && defined( linux )
+     config_require(host/data_access/swinst_rpm)
+-#elif defined( HAVE_PKGLOCS_H ) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 ) || defined( linux ) || defined( openbsd )
++#elif defined( HAVE_PKGLOCS_H ) || defined( RPM_HRMIB_PATH ) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 ) || defined( linux ) || defined( openbsd )
+     config_require(host/data_access/swinst_pkginfo)
+ #else
+     config_warning(This platform does not yet support hrSWInstalledTable rewrites)
+diff -urNp -x '*.orig' net-snmp-5.9.org/agent/mibgroup/host/data_access/swinst_pkginfo.c net-snmp-5.9/agent/mibgroup/host/data_access/swinst_pkginfo.c
+--- net-snmp-5.9.org/agent/mibgroup/host/data_access/swinst_pkginfo.c	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/agent/mibgroup/host/data_access/swinst_pkginfo.c	2021-02-28 14:29:14.950860864 +0100
+@@ -61,6 +61,8 @@ netsnmp_swinst_arch_init(void)
+ {
+ #if defined(PKGLOC)
+     snprintf( pkg_directory, SNMP_MAXPATH, "%s", PKGLOC );
++#elif defined(RPM_HRMIB_PATH)
++    snprintf( pkg_directory, SNMP_MAXPATH, "%s", RPM_HRMIB_PATH);
+ #elif defined(hpux9)
+     snprintf( pkg_directory, SNMP_MAXPATH, "/system" );
+ #elif defined(hpux10) ||  defined(hpux11) 
+diff -urNp -x '*.orig' net-snmp-5.9.org/agent/mibgroup/host/hr_swinst.c net-snmp-5.9/agent/mibgroup/host/hr_swinst.c
+--- net-snmp-5.9.org/agent/mibgroup/host/hr_swinst.c	2021-02-28 14:29:14.640851176 +0100
++++ net-snmp-5.9/agent/mibgroup/host/hr_swinst.c	2021-02-28 14:29:14.950860864 +0100
+@@ -196,6 +196,10 @@ oid             hrswinst_variables_oid[]
+ #define	_PATH_HRSW_directory	"/var/cache/hrmib"
  #endif
  
 +#if defined(RPM_HRMIB_PATH)
@@ -11,8 +47,28 @@
  void
  init_hr_swinst(void)
  {
---- net-snmp-5.8/configure.d/config_os_libs1.orig	2018-08-25 22:50:35.841023154 +0200
-+++ net-snmp-5.8/configure.d/config_os_libs1	2018-08-26 08:07:04.487308581 +0200
+diff -urNp -x '*.orig' net-snmp-5.9.org/configure.d/config_os_functions net-snmp-5.9/configure.d/config_os_functions
+--- net-snmp-5.9.org/configure.d/config_os_functions	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/configure.d/config_os_functions	2021-02-28 14:29:14.950860864 +0100
+@@ -188,15 +188,6 @@ AC_CHECK_FUNCS([if_freenameindex
+ #           (Agent)
+ ##
+ 
+-#       rpmGetPath check needs clean LIBS environment   (Linux)
+-#
+-if test "x$with_rpm" != "xno"; then
+-    OLDLIBS=$LIBS
+-    LIBS=$LMIBLIBS
+-    AC_CHECK_FUNCS(rpmGetPath)
+-    LIBS=$OLDLIBS
+-fi
+-
+ #       statfs( char *, struct fs_data* )               (Ultrix)
+ #
+ AC_MSG_CHECKING([[for two-argument statfs with struct fs_data (Ultrix)]])
+diff -urNp -x '*.orig' net-snmp-5.9.org/configure.d/config_os_libs1 net-snmp-5.9/configure.d/config_os_libs1
+--- net-snmp-5.9.org/configure.d/config_os_libs1	2021-02-28 14:29:14.630850863 +0100
++++ net-snmp-5.9/configure.d/config_os_libs1	2021-02-28 14:29:14.950860864 +0100
 @@ -11,18 +11,33 @@
  #   RPM checks
  #
@@ -57,7 +113,7 @@
  
  #
  # rpm libraries only needed for the host resources mib software
-@@ -46,6 +61,12 @@
+@@ -46,6 +61,12 @@ if test "x$with_rpm" != "xno"; then
    NETSNMP_SEARCH_LIBS(headerGet,, [
      AC_DEFINE(HAVE_HEADERGET, 1,
        [Define to 1 if you have the headerGet function.])],, $LMIBLIBS)
@@ -70,54 +126,3 @@
  fi
  
  #
---- net-snmp-5.5/configure.d/config_os_functions~	2009-07-26 20:20:55.000000000 +0200
-+++ net-snmp-5.5/configure.d/config_os_functions	2010-05-12 14:35:39.421276242 +0200
-@@ -114,15 +114,6 @@
- #           (Agent)
- ##
- 
--#       rpmGetPath check needs clean LIBS environment   (Linux)
--#
--if test "x$with_rpm" != "xno"; then
--    OLDLIBS=$LIBS
--    LIBS=$LMIBLIBS
--    AC_CHECK_FUNCS(rpmGetPath)
--    LIBS=$OLDLIBS
--fi
--
- #       statfs( char *, struct fs_data* )               (Ultrix)
- #
- AC_MSG_CHECKING([[for two-argument statfs with struct fs_data (Ultrix)]])
---- net-snmp-5.6/agent/mibgroup/host/data_access/swinst_pkginfo.c~	2010-01-26 23:24:14.000000000 +0200
-+++ net-snmp-5.6/agent/mibgroup/host/data_access/swinst_pkginfo.c	2010-12-16 00:13:22.027247692 +0200
-@@ -52,6 +52,8 @@
- {
- #if defined(PKGLOC)
-     snprintf( pkg_directory, SNMP_MAXPATH, "%s", PKGLOC );
-+#elif defined(RPM_HRMIB_PATH)
-+    snprintf( pkg_directory, SNMP_MAXPATH, "%s", RPM_HRMIB_PATH);
- #elif defined(hpux9)
-     snprintf( pkg_directory, SNMP_MAXPATH, "/system" );
- #elif defined(hpux10) ||  defined(hpux11) 
---- net-snmp-5.6/agent/mibgroup/host/data_access/swinst.h	2010-12-16 00:14:13.634392176 +0200
-+++ net-snmp-5.6/agent/mibgroup/host/data_access/swinst.h	2010-12-16 01:27:48.195543278 +0200
-@@ -11,6 +11,10 @@
- #ifndef NETSNMP_ACCESS_SWINST_CONFIG_H
- #define NETSNMP_ACCESS_SWINST_CONFIG_H
- 
-+// quick fix: this file is consulted before RPM_HRMIB_PATH check is made in configure, hardcode a define for now
-+#define RPM_HRMIB_PATH "/var/cache/hrmib"
-+
-+
- /*
-  * all platforms use this generic code
-  */
-@@ -29,7 +29,7 @@
-     config_require(host/data_access/swinst_apt)
- #elif defined( HAVE_LIBRPM ) && defined( linux )
-     config_require(host/data_access/swinst_rpm)
--#elif defined( HAVE_PKGLOCS_H ) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 ) || defined( linux ) || defined( openbsd )
-+#elif defined( HAVE_PKGLOCS_H ) || defined( RPM_HRMIB_PATH ) || defined( hpux9 ) || defined( hpux10 ) || defined( hpux11 ) || defined( freebsd2 ) || defined( linux ) || defined( openbsd )
-     config_require(host/data_access/swinst_pkginfo)
- #else
-     config_warning(This platform does not yet support hrSWInstalledTable rewrites)

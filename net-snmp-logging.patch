@@ -1,11 +1,11 @@
 http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=475158
 snmpd: keeps complaining on missing /proc/ stats inside vserver flooding syslog
 
-diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c net-snmp-5.4.1~dfsg.puck/agent/mibgroup/hardware/cpu/cpu_linux.c
---- net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c	2007-02-16 00:09:45.000000000 +1300
-+++ net-snmp-5.4.1~dfsg.puck/agent/mibgroup/hardware/cpu/cpu_linux.c	2009-05-04 14:35:53.000000000 +1200
-@@ -249,7 +249,7 @@
-             cpu->pageOut = (unsigned long)pout;
+diff -urNp -x '*.orig' net-snmp-5.9.org/agent/mibgroup/hardware/cpu/cpu_linux.c net-snmp-5.9/agent/mibgroup/hardware/cpu/cpu_linux.c
+--- net-snmp-5.9.org/agent/mibgroup/hardware/cpu/cpu_linux.c	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/agent/mibgroup/hardware/cpu/cpu_linux.c	2021-02-28 14:29:33.661445570 +0100
+@@ -309,7 +309,7 @@ void _cpu_load_swap_etc( char *buff, net
+             cpu->pageOut = (unsigned long long)pout;
  	} else {
  	    if (first)
 -		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
@@ -13,8 +13,8 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c net-snmp-
              cpu->pageIn  = cpu->pageOut = 0;
  	}
  	b = strstr(buff, "swap ");
-@@ -259,7 +259,7 @@
-             cpu->swapOut = (unsigned long)swpout;
+@@ -319,7 +319,7 @@ void _cpu_load_swap_etc( char *buff, net
+             cpu->swapOut = (unsigned long long)swpout;
  	} else {
  	    if (first)
 -		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
@@ -22,31 +22,11 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/hardware/cpu/cpu_linux.c net-snmp-
              cpu->swapIn  = cpu->swapOut = 0;
  	}
      }
-diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5.4.1~dfsg.puck/agent/mibgroup/ucd-snmp/vmstat_linux.c
---- net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c	2006-09-15 12:48:50.000000000 +1200
-+++ net-snmp-5.4.1~dfsg.puck/agent/mibgroup/ucd-snmp/vmstat_linux.c	2009-05-04 14:35:32.000000000 +1200
-@@ -316,7 +316,7 @@
- 	    sscanf(b, "page %u %u", pin, pout);
- 	else {
- 	    if (first)
--		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
-+		snmp_log(LOG_INFO, "No page line in %s\n", STAT_FILE);
- 	    *pin = *pout = 0;
- 	}
- 	b = strstr(buff, "swap ");
-@@ -324,7 +324,7 @@
- 	    sscanf(b, "swap %u %u", swpin, swpout);
- 	else {
- 	    if (first)
--		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
-+		snmp_log(LOG_INFO, "No swap line in %s\n", STAT_FILE);
- 	    *swpin = *swpout = 0;
- 	}
-     }
---- net-snmp-5.7.1/./agent/mibgroup/ucd-snmp/diskio.c~	2011-09-28 07:53:47.000000000 +0300
-+++ net-snmp-5.7.1/./agent/mibgroup/ucd-snmp/diskio.c	2011-12-27 16:33:10.128099629 +0200
-@@ -979,7 +979,8 @@
- {
+diff -urNp -x '*.orig' net-snmp-5.9.org/agent/mibgroup/ucd-snmp/diskio.c net-snmp-5.9/agent/mibgroup/ucd-snmp/diskio.c
+--- net-snmp-5.9.org/agent/mibgroup/ucd-snmp/diskio.c	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/agent/mibgroup/ucd-snmp/diskio.c	2021-02-28 14:29:33.661445570 +0100
+@@ -1367,7 +1367,8 @@ getstats(void)
+     struct stat stbuf;
      FILE* parts;
      time_t now;
 -    
@@ -55,7 +35,7 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5
      now = time(NULL);
      if (cache_time + CACHE_TIMEOUT > now) {
          return 0;
-@@ -1024,7 +1025,11 @@
+@@ -1423,7 +1424,11 @@ getstats(void)
  	int rc;
  	parts = fopen("/proc/partitions", "r");
  	if (!parts) {
@@ -68,3 +48,24 @@ diff -r -u net-snmp-5.4.1~dfsg/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5
  	    return 1;
  	}
  
+diff -urNp -x '*.orig' net-snmp-5.9.org/agent/mibgroup/ucd-snmp/vmstat_linux.c net-snmp-5.9/agent/mibgroup/ucd-snmp/vmstat_linux.c
+--- net-snmp-5.9.org/agent/mibgroup/ucd-snmp/vmstat_linux.c	2020-08-14 23:41:47.000000000 +0200
++++ net-snmp-5.9/agent/mibgroup/ucd-snmp/vmstat_linux.c	2021-02-28 14:29:33.661445570 +0100
+@@ -337,7 +337,7 @@ getstat(unsigned long *cuse, unsigned lo
+ 	    sscanf(b, "page %u %u", pin, pout);
+ 	else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No page line in %s\n", STAT_FILE);
++		snmp_log(LOG_INFO, "No page line in %s\n", STAT_FILE);
+ 	    *pin = *pout = 0;
+ 	}
+ 	b = strstr(buff, "swap ");
+@@ -345,7 +345,7 @@ getstat(unsigned long *cuse, unsigned lo
+ 	    sscanf(b, "swap %u %u", swpin, swpout);
+ 	else {
+ 	    if (first)
+-		snmp_log(LOG_ERR, "No swap line in %s\n", STAT_FILE);
++		snmp_log(LOG_INFO, "No swap line in %s\n", STAT_FILE);
+ 	    *swpin = *swpout = 0;
+ 	}
+     }
