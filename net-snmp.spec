@@ -4,6 +4,7 @@
 #
 # Conditional build:
 %bcond_without	rpm		# RPM support
+%bcond_with	rpm5		# Use RPM5 provided /var/cache/hrmib for hrSWInstalledTable data
 %bcond_without	kerberos5	# Kerberos support
 %bcond_without	lm_sensors	# LM sensors support
 %bcond_without	perl		# Perl modules and utils
@@ -24,7 +25,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.9
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -84,6 +85,9 @@ BuildRequires:	rpm-pythonprov
 %if %{with rpm}
 BuildRequires:	rpm
 BuildRequires:	rpm-perlprov >= 3.0.3-16
+%if %{without rpm5}
+BuildRequires:	rpm-devel
+%endif
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.527
 Requires(post,preun):	/sbin/chkconfig
@@ -467,7 +471,9 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%if %{with rpm5}
 %patch11 -p1
+%endif
 %patch12 -p1
 %patch13 -p1
 %patch14 -p1
