@@ -25,7 +25,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.9
-Release:	5
+Release:	6
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -54,6 +54,7 @@ Patch12:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch13:	%{name}-logging.patch
 Patch14:	%{name}-Remove-U64-typedef.patch
 Patch15:	1314610.patch
+Patch16:	openssl3.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -478,6 +479,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 
 %{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+perl(\s|$),#!%{__perl}\1,' \
       perl/SNMP/examples/pingmib.pl
