@@ -98,9 +98,9 @@ Requires:	/usr/bin/setsid
 Requires:	mibs-%{name} = %{version}-%{release}
 Requires:	rc-scripts >= 0.4.3.0
 Provides:	snmpd
-Obsoletes:	cmu-snmp
+Obsoletes:	cmu-snmp < 4
 Obsoletes:	snmpd
-Obsoletes:	ucd-snmp
+Obsoletes:	ucd-snmp < 4.3
 Conflicts:	pciutils < 3.1.7-5
 Conflicts:	rpm < 4.4.9-43.11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -160,8 +160,8 @@ Summary:	NET SNMP libraries
 Summary(pl.UTF-8):	Biblioteki SNMP
 Group:		Libraries
 Suggests:	mibs-%{name}
-Obsoletes:	net-snmp-compat-libs
-Obsoletes:	ucd-snmp-libs
+Obsoletes:	net-snmp-compat-libs < 5.1.1
+Obsoletes:	ucd-snmp-libs < 4.3
 
 %description libs
 NET SNMP libraries.
@@ -199,7 +199,7 @@ Requires:	libwrap-devel
 %{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
 Requires:	openssl-devel >= 0.9.7c
 Requires:	pciutils-devel
-Obsoletes:	ucd-snmp-devel
+Obsoletes:	ucd-snmp-devel < 4.3
 
 %description devel
 The ucd-snmp-devel package contains the development libraries and
@@ -236,7 +236,7 @@ Summary(ru.UTF-8):	Статические библиотеки для проек
 Summary(uk.UTF-8):	Статичні бібліотеки для проекту net-snmp
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-Obsoletes:	ucd-snmp-static
+Obsoletes:	ucd-snmp-static < 4.3
 
 %description static
 Static net-snmp libraries.
@@ -257,8 +257,8 @@ Summary(uk.UTF-8):	Середовище розробки для проекту N
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	openssl-devel >= 0.9.7d
-Obsoletes:	cmu-snmp-devel
-Obsoletes:	ucd-snmp-devel
+Obsoletes:	cmu-snmp-devel < 4
+Obsoletes:	ucd-snmp-devel < 4.3
 
 %description compat-devel
 The ucd-snmp-devel package contains the development libraries and
@@ -295,7 +295,7 @@ Summary(ru.UTF-8):	Статические библиотеки для проек
 Summary(uk.UTF-8):	Статичні бібліотеки для проекту NET-SNMP
 Group:		Development/Libraries
 Requires:	%{name}-compat-devel = %{version}-%{release}
-Obsoletes:	ucd-snmp-static
+Obsoletes:	ucd-snmp-static < 4.3
 
 %description compat-static
 Static NET-SNMP libraries.
@@ -311,7 +311,7 @@ Summary:	Net-SNMP provided MIBs
 Summary(pl.UTF-8):	Baza danych MIB
 Group:		Applications/System
 Requires:	mibs-dirs
-Obsoletes:	net-snmp-mibs
+Obsoletes:	net-snmp-mibs < 5.4.2.1-16
 Conflicts:	ucd-snmp-libs
 BuildArch:	noarch
 
@@ -328,8 +328,8 @@ Group:		Applications/System
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name} = %{version}-%{release}
 Requires:	rc-scripts >= 0.2.0
-Obsoletes:	cmu-snmp-utils
-Obsoletes:	ucd-snmp-snmptrapd
+Obsoletes:	cmu-snmp-utils < 4
+Obsoletes:	ucd-snmp-snmptrapd < 4.3
 
 %description snmptrapd
 The ucd-snmp-snmptrapd package contains snmp trap daemon.
@@ -348,8 +348,8 @@ Group:		Applications/System
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	%{name}-agent-libs = %{version}-%{release}
 Suggests:	mibs-%{name} = %{version}-%{release}
-Obsoletes:	cmu-snmp-utils
-Obsoletes:	ucd-snmp-utils
+Obsoletes:	cmu-snmp-utils < 4
+Obsoletes:	ucd-snmp-utils < 4.3
 
 %description utils
 This package contains various utilities for managing your network
@@ -394,8 +394,8 @@ Summary:	Perl utilities for network management using SNMP
 Summary(pl.UTF-8):	Perlowe narzędzia używające protokołu SNMP
 Group:		Applications/System
 Requires:	perl-SNMP = %{version}-%{release}
-Obsoletes:	cmu-snmp-utils
-Obsoletes:	ucd-snmp-utils-perl
+Obsoletes:	cmu-snmp-utils < 4
+Obsoletes:	ucd-snmp-utils-perl < 4.3
 
 %description utils-perl
 This package contains various Perl utilities for managing your network
