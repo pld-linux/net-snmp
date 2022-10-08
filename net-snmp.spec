@@ -24,12 +24,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.9.1
-Release:	4
+Version:	5.9.3
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	e5ee202dfb15000342354d64f1837d19
+# Source0-md5:	11dc7dd91e3aadd6a6d953c7dd216574
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -54,7 +54,6 @@ Patch12:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
 Patch13:	%{name}-logging.patch
 Patch14:	%{name}-Remove-U64-typedef.patch
 Patch15:	1314610.patch
-Patch16:	openssl3.patch
 URL:		http://www.net-snmp.org/
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake
@@ -479,7 +478,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch13 -p1
 %patch14 -p1
 %patch15 -p1
-%patch16 -p1
 
 %{__sed} -E -i -e '1s,#!\s*/usr/bin/env\s+perl(\s|$),#!%{__perl}\1,' \
       perl/SNMP/examples/pingmib.pl
