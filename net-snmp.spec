@@ -24,12 +24,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.9.3
-Release:	2
+Version:	5.9.4
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	11dc7dd91e3aadd6a6d953c7dd216574
+# Source0-md5:	395f7988f1ee4fd9b61eebbbb0961245
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -47,7 +47,6 @@ Patch4:		%{name}-link.patch
 Patch6:		%{name}-kernel_headers.patch
 Patch7:		%{name}-rpmpath.patch
 Patch8:		%{name}-python.patch
-Patch9:		%{name}-lvalue.patch
 Patch10:	%{name}-defaultconfig.patch
 Patch11:	%{name}-use-rpm-hrmib.patch
 Patch12:	%{name}-TCP_STATS_CACHE_TIMEOUT.patch
@@ -469,7 +468,6 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
 %patch10 -p1
 %if %{with rpm5}
 %patch11 -p1
