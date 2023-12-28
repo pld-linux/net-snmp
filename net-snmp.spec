@@ -79,6 +79,7 @@ BuildRequires:	python-setuptools
 BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	python3-modules >= 1:3.2
 BuildRequires:	python3-setuptools
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
 %endif
 %if %{with rpm}
