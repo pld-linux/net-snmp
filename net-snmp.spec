@@ -88,7 +88,7 @@ BuildRequires:	rpm-perlprov >= 3.0.3-16
 BuildRequires:	rpm-devel
 %endif
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.527
+BuildRequires:	rpmbuild(macros) >= 1.714
 Requires(post,preun):	/sbin/chkconfig
 Requires:	%{name}-agent-libs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
