@@ -9,8 +9,7 @@
 %bcond_without	lm_sensors	# LM sensors support
 %bcond_without	perl		# Perl modules and utils
 %bcond_without	python		# Python (3.x) modules
-%bcond_without	python2		# Python 2.x modules
-%bcond_without	static_libs	# static library
+%bcond_without	static_libs	# static libraries
 
 %ifnarch %{ix86} %{x8664} x32
 %undefine	with_lm_sensors
@@ -25,7 +24,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.9.4
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -71,13 +70,8 @@ BuildRequires:	pcre-devel
 BuildRequires:	perl-devel >= 1:5.8.0
 BuildRequires:	pkgconfig >= 1:0.9.0
 %if %{with python}
-%if %{with python2}
-BuildRequires:	python-devel >= 1:2.5
-BuildRequires:	python-modules >= 1:2.5
-BuildRequires:	python-setuptools
-%endif
-BuildRequires:	python3-devel >= 1:3.2
-BuildRequires:	python3-modules >= 1:3.2
+BuildRequires:	python3-devel >= 1:3.3
+BuildRequires:	python3-modules >= 1:3.3
 BuildRequires:	python3-setuptools
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpm-pythonprov
@@ -433,25 +427,12 @@ MIB browser in Tk.
 %description tkmib -l pl.UTF-8
 Przeglądarka MIB-ów w Tk.
 
-%package -n python-netsnmp
-Summary:	Python 2 netsnmp extension module
-Summary(pl.UTF-8):	Moduł rozszerzenia netsnmp dla Pythona 2
-Group:		Libraries/Python
-Requires:	%{name}-libs = %{version}-%{release}
-
-%description -n python-netsnmp
-The 'netsnmp' Python extension module provides a full featured,
-tri-lingual SNMP (SNMPv3, SNMPv2c, SNMPv1) client API.
-
-%description -n python-netsnmp -l pl.UTF-8
-Moduł rozszerzenia netsnmp dla Pythona udostępnia pełne API klienckie
-SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
-
 %package -n python3-netsnmp
 Summary:	Python 3 netsnmp extension module
 Summary(pl.UTF-8):	Moduł rozszerzenia netsnmp dla Pythona 3
 Group:		Libraries/Python
 Requires:	%{name}-libs = %{version}-%{release}
+Obsoletes:	python-netsnmp < 5.9.4-3
 
 %description -n python3-netsnmp
 The 'netsnmp' Python extension module provides a full featured,
@@ -552,13 +533,6 @@ cd perl
 	LDFLAGS="%{rpmldflags} -L${TOPDIR}/snmplib/.libs/ -L${TOPDIR}/agent/.libs/"
 cd ..
 
-%if %{with python2}
-cd python
-%py_build \
-	--basedir=$TOPDIR
-cd ..
-%endif
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/etc/{rc.d/init.d,logrotate.d,sysconfig,snmp},/var/log,/var/lib/net-snmp,%{_libdir}/snmp/dlmod}
@@ -616,16 +590,6 @@ done
 
 %if %{with python}
 %{__rm} -r $RPM_BUILD_ROOT%{py3_sitedir}/netsnmp/tests
-%endif
-
-%if %{with python2}
-cd python
-%py_install \
-	--basedir=$TOPDIR
-cd ..
-
-%{__rm} -r $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/tests
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/netsnmp/*.py
 %endif
 
 %clean
@@ -873,15 +837,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/tkmib
 %{_mandir}/man1/tkmib.1*
-%endif
-
-%if %{with python2}
-%files -n python-netsnmp
-%defattr(644,root,root,755)
-%dir %{py_sitedir}/netsnmp
-%attr(755,root,root) %{py_sitedir}/netsnmp/client_intf.so
-%{py_sitedir}/netsnmp/*.py[co]
-%{py_sitedir}/netsnmp_python-*.egg-info
 %endif
 
 %if %{with python}
