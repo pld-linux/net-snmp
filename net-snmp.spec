@@ -24,7 +24,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.9.4
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -43,6 +43,7 @@ Patch1:		%{name}-rpm-implicit-libs.patch
 Patch2:		%{name}-config-noflags.patch
 Patch3:		%{name}-manpage.patch
 Patch4:		%{name}-link.patch
+Patch5:		newer-linux.patch
 Patch6:		%{name}-kernel_headers.patch
 Patch7:		%{name}-rpmpath.patch
 Patch8:		%{name}-python.patch
@@ -448,6 +449,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
