@@ -1,12 +1,12 @@
---- net-snmp-5.7/configure.d/config_os_libs1~	2011-07-02 00:35:46.000000000 +0200
-+++ net-snmp-5.7/configure.d/config_os_libs1	2011-07-30 21:24:38.780738542 +0200
-@@ -33,9 +33,6 @@
+--- net-snmp-5.9.5.2/configure.d/config_os_libs1~	2025-12-23 17:54:18.000000000 +0100
++++ net-snmp-5.9.5.2/configure.d/config_os_libs1	2025-12-25 11:19:20.179662970 +0100
+@@ -33,9 +33,6 @@ if test "x$with_rpm" != "xno"; then
    # FWIW librpm.la, librpmio.la, and libpopt.la have correct dependencies.
    _rpmlibs=""
  
 -  # rpm-4.0.x needs rpmio.
 -  NETSNMP_SEARCH_LIBS(rpmGetPath, rpmio,,, $LMIBLIBS, _rpmlibs)
 -  
-   # rpm-4.0.3 librpmdb actually contains what we need.
-   NETSNMP_SEARCH_LIBS(rpmdbOpen, rpmdb,,, $LMIBLIBS, _rpmlibs)
    # now check for rpm using the appropriate libraries.
+   NETSNMP_SEARCH_LIBS(rpmReadConfigFiles, rpm, [
+     AC_DEFINE(HAVE_LIBRPM, 1,

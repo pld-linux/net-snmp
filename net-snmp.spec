@@ -15,7 +15,7 @@
 %undefine	with_lm_sensors
 %endif
 
-%define		so_version	40
+%define		so_version	45
 Summary:	A collection of SNMP protocol tools
 Summary(es.UTF-8):	Agente SNMP de la UCD
 Summary(pl.UTF-8):	Kolekcja narzędzi do obsługi protokołu SNMP
@@ -23,12 +23,12 @@ Summary(pt_BR.UTF-8):	Agente SNMP da UCD
 Summary(ru.UTF-8):	Набор утилит для протокола SNMP от UC-Davis
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
-Version:	5.9.4
-Release:	10
+Version:	5.9.5.2
+Release:	1
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
-# Source0-md5:	395f7988f1ee4fd9b61eebbbb0961245
+# Source0-md5:	767407e160d02a4525079e91e40f7773
 Source1:	%{name}d.init
 Source2:	%{name}d.conf
 Source3:	%{name}d.sysconfig
@@ -43,7 +43,7 @@ Patch1:		%{name}-rpm-implicit-libs.patch
 Patch2:		%{name}-config-noflags.patch
 Patch3:		%{name}-manpage.patch
 Patch4:		%{name}-link.patch
-Patch5:		newer-linux.patch
+
 Patch6:		%{name}-kernel_headers.patch
 Patch7:		%{name}-rpmpath.patch
 Patch8:		%{name}-python.patch
@@ -449,7 +449,7 @@ SNMP dla trzech wersji tego protokołu (SNMPv3, SNMPv2c, SNMPv1).
 %patch -P2 -p1
 %patch -P3 -p1
 %patch -P4 -p1
-%patch -P5 -p1
+
 %patch -P6 -p1
 %patch -P7 -p1
 %patch -P8 -p1
