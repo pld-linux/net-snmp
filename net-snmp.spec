@@ -10,6 +10,7 @@
 %bcond_without	perl		# Perl modules and utils
 %bcond_without	python		# Python (3.x) modules
 %bcond_without	static_libs	# static libraries
+%bcond_with     tcp_wrappers # tcp_wrappers/libwrap support
 
 %ifnarch %{ix86} %{x8664} x32
 %undefine	with_lm_sensors
@@ -24,7 +25,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.9.5.2
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -62,7 +63,7 @@ BuildRequires:	libnl-devel >= 1:3.2
 BuildRequires:	libpcap-devel
 BuildRequires:	libssh2-devel
 BuildRequires:	libtool >= 1.4
-BuildRequires:	libwrap-devel
+%{?with_tcp_wrappers:BuildRequires:	libwrap-devel}
 %{?with_lm_sensors:BuildRequires:	lm_sensors-devel >= 3.0.1}
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -189,7 +190,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	elfutils-devel
 %{?with_kerberos5:Requires:	heimdal-devel}
 Requires:	libnl-devel >= 1:3.2
-Requires:	libwrap-devel
+%{?with_tcp_wrappers:Requires:	libwrap-devel}
 %{?with_lm_sensors:Requires:	lm_sensors-devel >= 3.0.1}
 Requires:	openssl-devel >= 0.9.7c
 Requires:	pciutils-devel
@@ -496,7 +497,7 @@ MIBS="$MIBS ucd-snmp/lmsensorsMib"
 	--with-default-snmp-version=3 \
 	%{__with_without kerberos5 krb5} \
 	--with-openssl \
-	--with-libwrap \
+	%{__with_without tcp_wrappers libwrap} \
 	--with-logfile=%{logfile} \
 	--with-zlib\
 	--with-bzip2 \
