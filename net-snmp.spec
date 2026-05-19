@@ -25,7 +25,7 @@ Summary(ru.UTF-8):	Набор утилит для протокола SNMP от U
 Summary(uk.UTF-8):	Набір утиліт для протоколу SNMP від UC-Davis
 Name:		net-snmp
 Version:	5.9.5.2
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Networking/Daemons
 Source0:	https://downloads.sourceforge.net/net-snmp/%{name}-%{version}.tar.gz
@@ -664,32 +664,32 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libnetsnmp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmp.so.%{so_version}
+%{_libdir}/libnetsnmp.so.*.*.*
+%ghost %{_libdir}/libnetsnmp.so.%{so_version}
 %dir %{_sysconfdir}/snmp
 %dir %{_datadir}/snmp
 
 %files agent-libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libnetsnmpagent.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmpagent.so.%{so_version}
-%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
-%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmpmibs.so.%{so_version}
-%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libnetsnmptrapd.so.%{so_version}
+%{_libdir}/libnetsnmpagent.so.*.*.*
+%ghost %{_libdir}/libnetsnmpagent.so.%{so_version}
+%{_libdir}/libnetsnmphelpers.so.*.*.*
+%ghost %{_libdir}/libnetsnmphelpers.so.%{so_version}
+%{_libdir}/libnetsnmpmibs.so.*.*.*
+%ghost %{_libdir}/libnetsnmpmibs.so.%{so_version}
+%{_libdir}/libnetsnmptrapd.so.*.*.*
+%ghost %{_libdir}/libnetsnmptrapd.so.%{so_version}
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mib2c
 %attr(755,root,root) %{_bindir}/mib2c-update
 %attr(755,root,root) %{_bindir}/net-snmp-config
-%attr(755,root,root) %{_libdir}/libnetsnmp.so
-%attr(755,root,root) %{_libdir}/libnetsnmpagent.so
-%attr(755,root,root) %{_libdir}/libnetsnmphelpers.so
-%attr(755,root,root) %{_libdir}/libnetsnmpmibs.so
-%attr(755,root,root) %{_libdir}/libnetsnmptrapd.so
+%{_libdir}/libnetsnmp.so
+%{_libdir}/libnetsnmpagent.so
+%{_libdir}/libnetsnmphelpers.so
+%{_libdir}/libnetsnmpmibs.so
+%{_libdir}/libnetsnmptrapd.so
 %{_libdir}/libnetsnmp.la
 %{_libdir}/libnetsnmpagent.la
 %{_libdir}/libnetsnmphelpers.la
@@ -717,7 +717,7 @@ fi
 
 %files compat-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libsnmp.so
+%{_libdir}/libsnmp.so
 %{_libdir}/libsnmp.la
 %{_includedir}/ucd-snmp
 
@@ -804,14 +804,14 @@ fi
 %{perl_vendorarch}/NetSNMP
 %dir %{perl_vendorarch}/auto/SNMP
 %{perl_vendorarch}/auto/SNMP/autosplit.ix
-%attr(755,root,root) %{perl_vendorarch}/auto/SNMP/SNMP.so
+%{perl_vendorarch}/auto/SNMP/SNMP.so
 %dir %{perl_vendorarch}/auto/NetSNMP
 %dir %{perl_vendorarch}/auto/NetSNMP/*
 %{perl_vendorarch}/auto/NetSNMP/*/autosplit.ix
-%attr(755,root,root) %{perl_vendorarch}/auto/NetSNMP/*/*.so
+%{perl_vendorarch}/auto/NetSNMP/*/*.so
 %dir %{perl_vendorarch}/auto/NetSNMP/agent/default_store
 %{perl_vendorarch}/auto/NetSNMP/agent/default_store/autosplit.ix
-%attr(755,root,root) %{perl_vendorarch}/auto/NetSNMP/agent/default_store/default_store.so
+%{perl_vendorarch}/auto/NetSNMP/agent/default_store/default_store.so
 %{_mandir}/man3/NetSNMP::*.3*
 %{_mandir}/man3/SNMP.3*
 %{_examplesdir}/perl-SNMP-%{version}
@@ -846,7 +846,7 @@ fi
 %files -n python3-netsnmp
 %defattr(644,root,root,755)
 %dir %{py3_sitedir}/netsnmp
-%attr(755,root,root) %{py3_sitedir}/netsnmp/client_intf.cpython-*.so
+%{py3_sitedir}/netsnmp/client_intf.cpython-*.so
 %{py3_sitedir}/netsnmp/*.py
 %{py3_sitedir}/netsnmp/__pycache__
 %{py3_sitedir}/netsnmp_python-*.egg-info
